@@ -70,7 +70,8 @@
           "name": "Mobile Legends",
           "desc": "Stalk akun Mobile Legends",
           "path": "/stalk/mlbb?userId=&zoneId="
-                {
+        },      
+          {
           "name": "Free Fire",
           "desc": "Stalk akun Free Fire",
           "path": "/stalk/ff?id="
