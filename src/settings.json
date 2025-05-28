@@ -1,6 +1,6 @@
 {
-  "name": "Rynn Api's",
-  "version": "Rynn UI",
+  "name": "Ryuu Api",
+  "version": "Ryuu Api",
   "description": "Simple and Easy-to-Use API Documentation",
   "header": {
     "status": "Online!",
@@ -60,6 +60,16 @@
           "name": "YouTube",
           "desc": "Video search",
           "path": "/search/youtube?q="
+        }
+      ]
+    },
+    {
+      "name": "Stalk",
+      "items": [
+        {
+          "name": "Mobile Legends",
+          "desc": "Stalk akun Mobile Legends",
+          "path": "/stalk/mlbb?userId=&zoneId="
         }
       ]
     }
