@@ -1,20 +1,14 @@
+
 const settings = {
-  header: {
-    status: "Online!",
-    imageSrc: [
-      "https://media4.giphy.com/media/l0Iy33dWjmywkCnNS/giphy.gif?cid=6c09b952p3mt40j1mgznfi9rwwtccbjl7mtc2kvfugymeinr&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g"
-    ],
-    imageSize: {
-      mobile: "80%",
-      tablet: "40%",
-      desktop: "40%"
-    }
-  },
   categories: [
     {
       name: "AI (Artificial Intelligence)",
       items: [
-        { name: "Chatgpt", desc: "Talk Chatgpt", path: "/ai/gptturbo?text=" },
+        {
+          name: "Chatgpt",
+          desc: "Talk Chatgpt",
+          path: "/ai/gptturbo?text="
+        },
         {
           name: "HydroMind",
           desc: "Talk with hydromind",
@@ -25,38 +19,79 @@ const settings = {
     },
     {
       name: "Random",
-      items: [{ name: "Blue Archive", desc: "Blue Archive Random Images", path: "/random/ba" }]
+      items: [
+        {
+          name: "Blue Archive",
+          desc: "Blue Archive Random Images",
+          path: "/random/ba"
+        }
+      ]
     },
     {
       name: "Search Tools",
-      items: [{ name: "YouTube", desc: "Video search", path: "/search/youtube?q=" }]
+      items: [
+        {
+          name: "YouTube",
+          desc: "Video search",
+          path: "/search/youtube?q="
+        }
+      ]
     },
     {
       name: "Stalk",
       items: [
-        { name: "Mobile Legends", desc: "Stalk akun Mobile Legends", path: "/stalk/mlbb?userId=&zoneId=" },
-        { name: "Free Fire", desc: "Stalk akun Free Fire", path: "/stalk/ff?id=" }
+        {
+          name: "Mobile Legends",
+          desc: "Stalk akun Mobile Legends",
+          path: "/stalk/mlbb?userId=&zoneId="
+        },
+        {
+          name: "Free Fire",
+          desc: "Stalk akun Free Fire",
+          path: "/stalk/ff?id="
+        }
       ]
     },
     {
       name: "Tools",
       items: [
-        { name: "Fake NGL Generator", desc: "Generate pertanyaan dan jawaban gaya NGL", path: "/tools/ngl?title=&text=" },
-        { name: "Fake TikTok Generator", desc: "Buat profil TikTok palsu dengan nama dan foto", path: "/tools/faketiktok?name=&username=&pp=" }
+        {
+          name: "Fake NGL Generator",
+          desc: "Generate pertanyaan dan jawaban gaya NGL",
+          path: "/tools/ngl?title=&text="
+        },
+        {
+          name: "Fake TikTok Generator",
+          desc: "Buat profil TikTok palsu dengan nama dan foto",
+          path: "/tools/faketiktok?name=&username=&pp="
+        }
       ]
     }
   ]
 };
 
-document.getElementById("status").textContent = settings.header.status;
-document.getElementById("headerImage").src = settings.header.imageSrc[0];
+const buttonsContainer = document.getElementById("category-buttons");
+const contentContainer = document.getElementById("category-content");
 
-const categoriesDiv = document.getElementById("categories");
-settings.categories.forEach(category => {
-  const categoryDiv = document.createElement("div");
-  categoryDiv.className = "category";
-  categoryDiv.innerHTML = `<h2>${category.name}</h2><ul>` +
-    category.items.map(item => `<li><strong>${item.name}:</strong> ${item.desc}</li>`).join("") +
-    `</ul>`;
-  categoriesDiv.appendChild(categoryDiv);
+settings.categories.forEach((category, index) => {
+  const button = document.createElement("button");
+  button.textContent = category.name;
+  button.onclick = () => renderCategory(index);
+  buttonsContainer.appendChild(button);
 });
+
+function renderCategory(index) {
+  const category = settings.categories[index];
+  contentContainer.innerHTML = "";
+  category.items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "api-item";
+    div.innerHTML = \`
+      <h3>\${item.name}</h3>
+      <p>\${item.desc}</p>
+      <p><strong>Path:</strong> <code>\${item.path}</code></p>
+      \${item.innerDesc ? `<p><em>${item.innerDesc}</em></p>` : ""}
+    \`;
+    contentContainer.appendChild(div);
+  });
+}
