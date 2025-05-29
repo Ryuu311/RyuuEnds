@@ -1,38 +1,22 @@
-
-const axios = require('axios');
-
-module.exports = function(app) {
-    async function fetchChatGPTContent(prompt) {
-        try {
-            const response = await axios.post('https://chatgpt.com/api/generate', {
-                prompt: prompt
-            });
-            return response.data;
-        } catch (error) {
-            console.error("Error fetching from ChatGPT API:", error);
-            throw error;
+app.get('/ai/ryzumi-filter', async (req, res) => {
+    try {
+        const { url, filter } = req.query;
+        if (!url || !filter) {
+            return res.status(400).json({ status: false, error: 'Parameter url dan filter wajib diisi' });
         }
-    }
 
-    app.get('/ai/chatgpt', async (req, res) => {
-        try {
-            const { prompt } = req.query;
-
-            if (!prompt) {
-                return res.status(400).json({
-                    status: false,
-                    error: 'Prompt is required'
-                });
+        const response = await axios.get('https://api.ryzumi.vip/api/ai/negro', {
+            params: { url, filter },
+            responseType: 'arraybuffer', // karena hasilnya berupa gambar
+            headers: {
+                'accept': 'image/png'
             }
+        });
 
-            const result = await fetchChatGPTContent(prompt);
-
-            res.status(200).json({
-                status: true,
-                result
-            });
-        } catch (error) {
-            res.status(500).json({ status: false, error: error.message });
-        }
-    });
-};
+        res.set('Content-Type', 'image/png');
+        res.send(response.data);
+    } catch (error) {
+        console.error("Error dari ryzumi:", error.message);
+        res.status(500).json({ status: false, error: 'Gagal memproses gambar dari API ryzumi' });
+    }
+});
