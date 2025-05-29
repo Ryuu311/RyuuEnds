@@ -45,12 +45,6 @@
           "desc": "Talk with hydromind",
           "path": "/ai/hydromind?text=&model=",
           "innerDesc": "See the list of supported AI models here: https://mind.hydrooo.web.id"
-        },
-        {
-          "name": "Ryzumi Image Filter",
-          "desc": "Edit gambar pakai filter AI dari Ryzumi",
-          "path": "/ai/ryzumi-filter?url=&filter=",
-          "innerDesc": "Gunakan filter seperti: coklat, anime, kartun, dll"
         }
       ]
     },
