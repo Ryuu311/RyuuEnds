@@ -60,23 +60,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         settings.categories.forEach((category) => {
             const sortedItems = category.items.sort((a, b) => a.name.localeCompare(b.name));
             const categoryContent = sortedItems.map((item, index, array) => {
-                const isLastItem = index === array.length - 1;
-                const itemClass = `col-md-6 col-lg-4 api-item ${isLastItem ? 'mb-4' : 'mb-2'}`;
-                return `
-                    <div class="${itemClass}" data-name="${item.name}" data-desc="${item.desc}">
-                        <div class="hero-section d-flex align-items-center justify-content-between" style="height: 70px;">
-                            <div>
-                                <h5 class="mb-0" style="font-size: 18px;">${item.name}</h5>
-                                <p class="text-muted mb-0" style="font-size: 0.8rem;">${item.desc}</p>
-                            </div>
-                            <button class="btn btn-dark btn-sm get-api-btn" data-api-path="${item.path}" data-api-name="${item.name}" data-api-desc="${item.desc}">
-                                GET
-                            </button>
+            const itemClass = `col-md-6 col-lg-4 api-item ${isLastItem ? 'mb-4' : 'mb-2'}`;
+            return `
+                <div class="${itemClass}" data-name="${item.name}" data-desc="${item.desc}">
+                    <div class="hero-section d-flex align-items-center justify-content-between" style="height: 70px;">
+                        <div>
+                            <span class="category-badge">${category.name}</span>
+                            <h5 class="mb-0" style="font-size: 18px;">${item.name}</h5>
+                            <p class="text-muted mb-0" style="font-size: 0.8rem;">${item.desc}</p>
                         </div>
+                        <button class="btn btn-dark btn-sm get-api-btn" data-api-path="${item.path}" data-api-name="${item.name}" data-api-desc="${item.desc}">
+                            GET
+                        </button>
                     </div>
-                `;
-            }).join('');
-            apiContent.insertAdjacentHTML('beforeend', `<h3 class="mb-3 category-header" style="font-size: 22px;">${category.name}</h3><div class="row">${categoryContent}</div>`);
+                </div>
+            `;
+
+            apiContent.insertAdjacentHTML('beforeend', `<h3 class="category-header">${category.name}</h3><div class="row">${categoryContent}</div>`);
         });
 
         const searchInput = document.getElementById('searchInput');
