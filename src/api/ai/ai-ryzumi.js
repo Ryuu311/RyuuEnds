@@ -1,11 +1,10 @@
-
 const axios = require('axios');
 
 module.exports = function(app) {
-    async function fetchRyzumiChat(text, prompt) {
+    async function fetchRyzumiChat(text) {
         try {
             const response = await axios.get('https://api.ryzumi.vip/api/ai/chatgpt', {
-                params: { text, prompt }
+                params: { text }
             });
             return response.data;
         } catch (error) {
@@ -16,17 +15,15 @@ module.exports = function(app) {
 
     app.get('/ai/ryzumi', async (req, res) => {
         try {
-            const { text, prompt } = req.query;
-
-            if (!text || !prompt) {
+            const { text } = req.query;
+            if (!text) {
                 return res.status(400).json({
                     success: false,
-                    error: 'Both text and prompt are required'
+                    error: 'Parameter text is required'
                 });
             }
 
-            const data = await fetchRyzumiChat(text, prompt);
-
+            const data = await fetchRyzumiChat(text);
             if (!data.success || !data.result) {
                 return res.status(404).json({
                     success: false,
