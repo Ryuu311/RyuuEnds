@@ -49,7 +49,7 @@
         {
           "name": "Ryzumi Image Filter",
           "desc": "Edit gambar pakai filter AI dari Ryzumi",
-          "path": "/ai/ryzumi-filter?url=&filter=",
+          "path": "/ai/ryzumi?url=&filter=",
           "innerDesc": "Gunakan filter seperti: coklat, anime, kartun, dll"
         }
       ]
