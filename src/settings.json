@@ -31,11 +31,6 @@
       "name": "AI (Artificial Intelligence)",
       "items": [
         {
-          "name": "LuminAI",
-          "desc": "Talk with luminai",
-          "path": "/ai/luminai?text="
-        },
-        {
           "name": "Chatgpt",
           "desc": "Talk Chatgpt",
           "path": "/ai/gptturbo?text="
@@ -45,12 +40,6 @@
           "desc": "Talk with hydromind",
           "path": "/ai/hydromind?text=&model=",
           "innerDesc": "See the list of supported AI models here: https://mind.hydrooo.web.id"
-        },
-        {
-          "name": "Ryzumi Image Filter",
-          "desc": "Edit gambar pakai filter AI dari Ryzumi",
-          "path": "/ai/ryzumi?url=&filter=",
-          "innerDesc": "Gunakan filter seperti: coklat, anime, kartun, dll"
         }
       ]
     },
@@ -86,6 +75,16 @@
           "name": "Free Fire",
           "desc": "Stalk akun Free Fire",
           "path": "/stalk/ff?id="
+        }
+      ]
+    },
+    {
+      "name": "Tools",
+      "items": [
+        {
+          "name": "Fake NGL Generator",
+          "desc": "Generate pertanyaan dan jawaban gaya NGL",
+          "path": "/ai/ngl?title=&text="
         }
       ]
     }
