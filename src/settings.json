@@ -84,7 +84,7 @@
         {
           "name": "Fake NGL Generator",
           "desc": "Generate pertanyaan dan jawaban gaya NGL",
-          "path": "/tools/ngl?judulNgl=&text="
+          "path": "/tools/ngl?title=&text="
         }
       ]
     }
