@@ -14,16 +14,16 @@
     }
   },
   "apiSettings": {
-    "creator": "Rynn"
+    "creator": "Ryuu"
   },
   "links": [
     {
       "name": "Source Code",
-      "url": "https://github.com/rynxzyy/Rynn-UI"
+      "url": "https:www.ryuupremium.my.id"
     },
     {
       "name": "Contact Me",
-      "url": "https://wa.me/6285173370004"
+      "url": "https://wa.me/6285143569870"
     }
   ],
   "categories": [
@@ -34,6 +34,11 @@
           "name": "LuminAI",
           "desc": "Talk with luminai",
           "path": "/ai/luminai?text="
+        },
+        {
+          "name": "Chatgpt",
+          "desc": "Talk Chatgpt",
+          "path": "/ai/chatgpt?text="
         },
         {
           "name": "HydroMind",
