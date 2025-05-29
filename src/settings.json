@@ -38,7 +38,7 @@
         {
           "name": "Chatgpt",
           "desc": "Talk Chatgpt",
-          "path": "/ai/ryzumi?text="
+          "path": "/ai/gptturbo?text="
         },
         {
           "name": "HydroMind",
