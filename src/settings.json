@@ -15,23 +15,15 @@
       "name": "AI (Artificial Intelligence)",
       "items": [
         {
-          "name": "LuminAI",
-          "desc": "Talk with luminai",
-          "path": "/ai/luminai?text=",
-          "status": "ready",
-          "params": {
-            "text": "Text for luminai to respond to"
-          }
+          "name": "Chatgpt",
+          "desc": "Talk Chatgpt",
+          "path": "/ai/gptturbo?text="
         },
-       {
+        {
           "name": "HydroMind",
-          "desc": "See the list of supported AI models here: https://mind.hydrooo.web.id",
+          "desc": "Talk with hydromind",
           "path": "/ai/hydromind?text=&model=",
-          "status": "ready",
-          "params": {
-            "text": "Teks atau perintah untuk chat AI",
-            "model":"1See the list of supported AI models here: https://mind.hydrooo.web.id"
-          }
+          "innerDesc": "See the list of supported AI models here: https://mind.hydrooo.web.id"
         }
       ]
     },
@@ -41,8 +33,7 @@
         {
           "name": "Blue Archive",
           "desc": "Blue Archive Random Images",
-          "path": "/random/ba",
-          "status": "ready"
+          "path": "/random/ba"
         }
       ]
     },
@@ -52,13 +43,39 @@
         {
           "name": "YouTube",
           "desc": "Video search",
-          "path": "/search/youtube?q=",
-          "status": "ready",
-          "params": {
-            "q": "Search query"
-          }
+          "path": "/search/youtube?q="
         }
       ]
-    }               
+    },
+    {
+      "name": "Stalk",
+      "items": [
+        {
+          "name": "Mobile Legends",
+          "desc": "Stalk akun Mobile Legends",
+          "path": "/stalk/mlbb?userId=&zoneId="
+        },
+        {
+          "name": "Free Fire",
+          "desc": "Stalk akun Free Fire",
+          "path": "/stalk/ff?id="
+        }
+      ]
+    },
+    {
+  "name": "Tools",
+  "items": [
+    {
+      "name": "Fake NGL Generator",
+      "desc": "Generate pertanyaan dan jawaban gaya NGL",
+      "path": "/tools/ngl?title=&text="
+    },
+    {
+      "name": "Fake TikTok Generator",
+      "desc": "Buat profil TikTok palsu dengan nama dan foto",
+      "path": "/tools/faketiktok?name=&username=&pp="
+        }
+      ]
+    }
   ]
 }
