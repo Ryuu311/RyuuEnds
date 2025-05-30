@@ -22,10 +22,11 @@
         {
           "name": "Dopple AI",
           "desc": "Talk with Dopple AI",
-          "path": "/ai/dopple?text=",
+          "path": "/ai/dopple?text=&apikey=",
           "status": "ACTIVE",
           "params": {
-            "text": "Text for Dopple AI to respond to"
+         "text": "Text for Dopple AI to respond to",
+         "apikey": "Your API key"
           }
         },
         {
