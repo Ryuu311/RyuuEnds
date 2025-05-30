@@ -48,6 +48,38 @@
       ]
     },
     {
+      "name": "Download Tools",
+      "items": [
+        {
+          "name": "Facebook",
+          "desc": "Download Reel/Video FB",
+          "path": "/download/facebook?url=",
+          "status": "ready",
+          "params": {
+            "url": "Masukan URL nya"
+          }
+        },
+        {
+          "name": "Instagram",
+          "desc": "Download Reel/Video IG",
+          "path": "/download/instagram?url=",
+          "status": "ready",
+          "params": {
+            "url": "Masukan URL nya"
+          }
+        },
+        {
+          "name": "YouTube",
+          "desc": "Download Video/Musik Dari YouTube",
+          "path": "/download/youtube?url=",
+          "status": "ready",
+          "params": {
+            "url": "Masukan URL nya"
+          }
+        }
+        ]
+    },
+    {
       "name": "Stalk",
       "items": [
         {
