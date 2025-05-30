@@ -7,7 +7,7 @@
     "status": "Online!"
   },
   "apiSettings": {
-    "creator": "RyuuXiao", 
+    "creator": "RyuuXiao",
     "apikey": ["RyuuXiao-api"]
   },
   "categories": [
@@ -19,62 +19,61 @@
           "desc": "Talk Chatgpt",
           "path": "/ai/gptturbo?text="
         },
-        {       
-        "name": "AI (Artificial Intelligence)",
-        "items": [{
-            "name": "Dopple AI",
-            "desc": "Talk with Dopple AI",
-            "path": "/ai/dopple?text=",
-            "status": "ACTIVE",
-            "params": {
-                "text": "Text for Dopple AI to respond to"
-            }
+        {
+          "name": "Dopple AI",
+          "desc": "Talk with Dopple AI",
+          "path": "/ai/dopple?text=",
+          "status": "ACTIVE",
+          "params": {
+            "text": "Text for Dopple AI to respond to"
+          }
         },
         {
-            "name": "Felo AI",
-            "desc": "Talk with Felo AI",
-            "path": "/ai/felo?text=",
-            "status": "ACTIVE",
-            "params": {
-                "text": "Text for Felo AI to respond to"
-            }
+          "name": "Felo AI",
+          "desc": "Talk with Felo AI",
+          "path": "/ai/felo?text=",
+          "status": "ACTIVE",
+          "params": {
+            "text": "Text for Felo AI to respond to"
+          }
         },
         {
-            "name": "Koyuki AI",
-            "desc": "Talk with Koyuki AI",
-            "path": "/ai/koyuki?text=",
-            "status": "ACTIVE",
-            "params": {
-                "text": "Text for Koyuki Iceflow to respond to"
-            }
+          "name": "Koyuki AI",
+          "desc": "Talk with Koyuki AI",
+          "path": "/ai/koyuki?text=",
+          "status": "ACTIVE",
+          "params": {
+            "text": "Text for Koyuki Iceflow to respond to"
+          }
         },
         {
-            "name": "Lumin AI",
-            "desc": "Talk with Lumin AI",
-            "path": "/ai/lumin?text=",
-            "status": "ACTIVE",
-            "params": {
-                "text": "Text for Lumin AI to respond to"
-            }
+          "name": "Lumin AI",
+          "desc": "Talk with Lumin AI",
+          "path": "/ai/lumin?text=",
+          "status": "ACTIVE",
+          "params": {
+            "text": "Text for Lumin AI to respond to"
+          }
         },
         {
-            "name": "Venice AI",
-            "desc": "Talk with Felo AI",
-            "path": "/ai/venice?text=",
-            "status": "ACTIVE",
-            "params": {
-                "text": "Text for Venice AI to respond to"
-            }
+          "name": "Venice AI",
+          "desc": "Talk with Venice AI",
+          "path": "/ai/venice?text=",
+          "status": "ACTIVE",
+          "params": {
+            "text": "Text for Venice AI to respond to"
+          }
         },
         {
-            "name": "HydroMind",
-            "desc": "See the list of supported AI models here: https://mind.hydrooo.web.id",
-            "path": "/ai/hydromind?text=&model=",
-            "status": "ERROR",
-            "params": {
-                "text": "Teks atau perintah untuk chat AI",
-                "model":"1See the list of supported AI models here: https://mind.hydrooo.web.id"
-            }
+          "name": "HydroMind",
+          "desc": "See the list of supported AI models here: https://mind.hydrooo.web.id",
+          "path": "/ai/hydromind?text=&model=",
+          "status": "ERROR",
+          "params": {
+            "text": "Teks atau perintah untuk chat AI",
+            "model": "Lihat model di https://mind.hydrooo.web.id"
+          }
+        }
       ]
     },
     {
@@ -127,7 +126,7 @@
             "url": "Masukan URL nya"
           }
         }
-        ]
+      ]
     },
     {
       "name": "Stalk",
@@ -145,17 +144,17 @@
       ]
     },
     {
-  "name": "Tools",
-  "items": [
-    {
-      "name": "Fake NGL Generator",
-      "desc": "Generate pertanyaan dan jawaban gaya NGL",
-      "path": "/tools/ngl?title=&text="
-    },
-    {
-      "name": "Fake TikTok Generator",
-      "desc": "Buat profil TikTok palsu dengan nama dan foto",
-      "path": "/tools/faketiktok?name=&username=&pp="
+      "name": "Tools",
+      "items": [
+        {
+          "name": "Fake NGL Generator",
+          "desc": "Generate pertanyaan dan jawaban gaya NGL",
+          "path": "/tools/ngl?title=&text="
+        },
+        {
+          "name": "Fake TikTok Generator",
+          "desc": "Buat profil TikTok palsu dengan nama dan foto",
+          "path": "/tools/faketiktok?name=&username=&pp="
         }
       ]
     }
