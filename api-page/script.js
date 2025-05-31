@@ -315,9 +315,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 sortedItems.forEach((item, index) => {
                     const itemCol = document.createElement('div');
                     itemCol.className = 'col-md-6 col-lg-4 api-item';
-                    itemCol.dataset.name = (item.name || '').toLowerCase();
-                    itemCol.dataset.desc = (item.desc || '').toLowerCase();
-                    itemCol.dataset.category = (category.name || '').toLowerCase();
+                    itemCol.dataset.name = item.name;
+                    itemCol.dataset.desc = item.desc;
+                    itemCol.dataset.category = category.name;
                     itemCol.style.animationDelay = `${index * 0.05 + 0.3}s`;
                     
                     const heroSection = document.createElement('div');
@@ -352,29 +352,24 @@ document.addEventListener('DOMContentLoaded', async () => {
                     statusIndicator.className = 'api-status';
                     
                     // Set status based on item.status (or default to "ready")
-                    const status = item.status || "ACTIVE";
+                    const status = item.status || "ready";
                     let statusClass, statusIcon, statusTooltip;
                     
                     switch(status) {
-                        case "ERROR":
+                        case "error":
                             statusClass = "status-error";
-                            statusIcon = "fa-circle-xmarx";
-                            statusTooltip = "This Feature has Errors";
+                            statusIcon = "fa-exclamation-triangle";
+                            statusTooltip = "API has errors";
                             break;
-                        case "MAINTENANCE":
-                            statusClass = "status-maintenance";
-                            statusIcon = "fa-circle-exclamation";
-                            statusTooltip = "This Feature has Maintenance";
-                            break;
-                        case "UPDATE":
+                        case "update":
                             statusClass = "status-update";
-                            statusIcon = "fa-circle-plus";
-                            statusTooltip = "New Update Available";
+                            statusIcon = "fa-arrow-up";
+                            statusTooltip = "Updates available";
                             break;
-                        default: // "ACTIVE"
-                            statusClass = "status-active";
-                            statusIcon = "fa-circle-check";
-                            statusTooltip = "This Feature is Active";
+                        default: // "ready"
+                            statusClass = "status-ready";
+                            statusIcon = "fa-circle";
+                            statusTooltip = "API is ready";
                     }
                     
                     statusIndicator.classList.add(statusClass);
