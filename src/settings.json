@@ -135,7 +135,8 @@
         {
           "name": "Mobile Legends",
           "desc": "Stalk akun Mobile Legends",
-          "path": "/stalk/mlbb?userId=&zoneId="
+          "path": "/stalk/mlbb?userId=&zoneId=&apikey=",
+           "apikey": "Your API key"
         },
         {
           "name": "Free Fire",
