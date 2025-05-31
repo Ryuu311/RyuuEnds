@@ -101,9 +101,9 @@
       "name": "Download Tools",
       "items": [
         {
-          "name": "Facebook",
-          "desc": "Download Reel/Video FB",
-          "path": "/download/facebook?url=",
+          "name": "Tiktok",
+          "desc": "Download Video Tiktok",
+          "path": "/download/tiktok?url=",
           "status": "ready",
           "params": {
             "url": "Masukan URL nya"
