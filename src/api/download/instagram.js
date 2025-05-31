@@ -1,69 +1,105 @@
-const express = require("express");
-const axios = require("axios");
-const cheerio = require("cheerio");
-const cors = require("cors");
+const axios = require('axios');
+const { URLSearchParams } = require('url'); // URLSearchParams sudah built-in, tapi bisa diimpor untuk kejelasan
 
-module.exports = function(app) {
+/**
+ * Mengambil data post Instagram menggunakan Snapins.ai.
+ * @param {string} urlIgPost - URL postingan Instagram.
+ * @returns {Promise<object>} Objek berisi informasi postingan.
+ */
+async function fetchInstagramDataFromSnapins(urlIgPost) {
+    const apiUrl = "https://snapins.ai/action.php";
+    const headers = {
+        "content-type": "application/x-www-form-urlencoded",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.0.0 Safari/537.36", // User agent umum
+        "Origin": "https://snapins.ai",
+        "Referer": "https://snapins.ai/"
+    };
 
-async function yt5sIo(url) {
+    // Membuat body dengan format x-www-form-urlencoded
+    const bodyParams = new URLSearchParams();
+    bodyParams.append('url', urlIgPost);
+
     try {
-        const form = new URLSearchParams();
-        form.append("q", url);
-        form.append("vt", "home");
+        const response = await axios.post(apiUrl, bodyParams.toString(), { headers, timeout: 20000 });
+        
+        // axios akan error untuk status non-2xx, jadi tidak perlu cek response.ok
+        const json = response.data; // axios otomatis parse JSON
 
-        const response = await axios.post("https://yt5s.io/api/ajaxSearch", form, {
-            headers: {
-                "Accept": "application/json",
-                "X-Requested-With": "XMLHttpRequest",
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
+        // Validasi respons dari Snapins.ai
+        if (!json || json.status === 'error' || !json.data || !Array.isArray(json.data) || json.data.length === 0) {
+            throw new Error(json.message || 'Respons dari Snapins.ai tidak valid atau tidak ada data.');
+        }
+        
+        // Informasi author biasanya ada di item pertama jika postingan adalah carousel
+        const firstItem = json.data[0];
+        const name = firstItem.author?.name || "(no name)";
+        const username = firstItem.author?.username || "(no username)";
+        
+        let images = [];
+        let videos = [];
+
+        json.data.forEach(item => {
+            if (item.type === "image" && item.imageUrl) {
+                images.push(item.imageUrl);
+            } else if (item.type === "video" && item.videoUrl) {
+                videos.push(item.videoUrl);
+            }
         });
 
-        if (response.data.status === "ok") {
-            const $ = cheerio.load(response.data.data);
+        return { name, username, images, videos };
 
-            if (/^(https?:\/\/)?(www\.)?(facebook\.com|fb\.watch)\/.+/i.test(url)) {
-                const videoQualities = [];
-                $("table tbody tr").each((index, element) => {
-                    const quality = $(element).find(".video-quality").text().trim();
-                    const downloadLink = $(element).find("a.download-link-fb").attr("href");
-                    if (quality && downloadLink) {
-                        videoQualities.push({ quality, downloadLink });
-                    }
-                });
-
-                // Prioritize HD quality, fallback to SD
-                const hdVideo = videoQualities.find((v) => v.quality.toLowerCase().includes("hd"));
-                const sdVideo = videoQualities.find((v) => v.quality.toLowerCase().includes("sd"));
-                const videoUrl = hdVideo ? hdVideo.downloadLink : sdVideo ? sdVideo.downloadLink : null;
-
-                if (!videoUrl) throw new Error("Tidak ada link download yang tersedia.");
-                return { source: "Facebook", videoUrl };
-            } 
-            else if (/^(https?:\/\/)?(www\.)?instagram\.com\/(p|reel)\/.+/i.test(url)) {
-                const videoUrl = $('a[title="Download Video"]').attr("href");
-                if (!videoUrl) throw new Error("Tidak ada link download yang tersedia.");
-                return { source: "Instagram", videoUrl };
-            } 
-            else {
-                throw new Error("URL tidak valid. Harap masukkan URL Facebook atau Instagram.");
-            }
-        } else {
-            throw new Error("Gagal mengambil video: " + response.data.message);
-        }
     } catch (error) {
-        return { error: error.message || "Terjadi kesalahan saat mengambil video." };
+        console.error("Snapins API Error:", error.response?.data || error.message);
+        // Jika error sudah memiliki pesan dari Snapins, gunakan itu
+        if (error.response?.data?.message) {
+            throw new Error(`Snapins.ai: ${error.response.data.message}`);
+        }
+        throw new Error(`Gagal mengambil data Instagram via Snapins: ${error.message}`);
     }
 }
 
-// Endpoint API untuk mengambil video
-app.get("/download/instagram", async (req, res) => {
+// --- Rute Express ---
+module.exports = function (app) {
+  const creatorName = "RyuuXiao";
+
+  app.get('/download/instagram', async (req, res) => {
     const { url } = req.query;
+
     if (!url) {
-        return res.status(400).json({ error: "Parameter 'url' diperlukan." });
+      return res.status(400).json({
+        status: false,
+        creator: creatorName,
+        message: 'Parameter url (link Instagram post) wajib diisi.'
+      });
     }
 
-    const data = await yt5sIo(url);
-    res.json(data);
-});
-}
+    // Validasi sederhana untuk URL Instagram
+    if (!url.includes("instagram.com/p/") && !url.includes("instagram.com/reel/") && !url.includes("instagram.com/tv/")) {
+        return res.status(400).json({
+            status: false,
+            creator: creatorName,
+            message: 'Harap masukkan URL postingan Instagram yang valid.'
+        });
+    }
+
+    try {
+      const result = await fetchInstagramDataFromSnapins(url);
+      res.json({
+        status: true,
+        creator: creatorName,
+        result: result
+      });
+    } catch (error) {
+      console.error("Instagram Downloader Endpoint Error:", error.message, error.stack);
+      // Jika error spesifik dari Snapins, mungkin status 422 atau 400 lebih cocok
+      const statusCode = error.message.startsWith("Snapins.ai:") ? 422 : 500;
+      res.status(statusCode).json({
+        status: false,
+        creator: creatorName,
+        message: error.message || 'Gagal memproses permintaan download Instagram.'
+      });
+    }
+  });
+
+  // Tambahkan rute lain di sini...
+};
