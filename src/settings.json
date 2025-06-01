@@ -8,7 +8,7 @@
   },
   "apiSettings": {
     "creator": "RyuuXiao",
-    "apikey": ["RyuuXiao-api"]
+    "apikey": ["RyuuXiao"]
   },
   "categories": [
     {
@@ -77,6 +77,23 @@
         }
       ]
     },
+    {
+      "name": "Orderkuota Gateway",
+      "items": [
+        {
+          "name": "Create Payment",
+          "desc": "Create qris payment", 
+          "path": "/orderkuota/createpayment?apikey=&amount=&codeqr=", 
+          "innerDesc": "Buy apikey >> wa.me/6285143569870"
+        },
+        {
+          "name": "Cek Status",
+          "desc": "Cek status payment", 
+          "path": "/orderkuota/cekstatus?apikey=&merchant=&keyorkut=", 
+          "innerDesc": "Buy apikey >> wa.me/6285143569870"          
+        }
+      ]
+    },    
     {
       "name": "Random",
       "items": [
