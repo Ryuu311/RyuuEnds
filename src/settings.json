@@ -8,7 +8,7 @@
   },
   "apiSettings": {
     "creator": "RyuuXiao",
-    "apikey": ["RyuuXiao"]
+    "apikey": ["RyuuXiao-api"]
   },
   "categories": [
     {
@@ -25,8 +25,8 @@
           "path": "/ai/dopple?text=&apikey=",
           "status": "ACTIVE",
           "params": {
-         "text": "Text for Dopple AI to respond to",
-         "apikey": "Your API key"
+            "text": "Text for Dopple AI to respond to",
+            "apikey": "Your API key"
           }
         },
         {
@@ -77,24 +77,6 @@
         }
       ]
     },
-    {
-      "name": "Orderkuota Gateway",
-      "items": [
-        {
-          "name": "Create Payment",
-          "desc": "Create qris payment", 
-          "path": "/orderkuota/createpayment?apikey=&amount=&codeqr=", 
-          "innerDesc": "Buy apikey >> wa.me/6285143569870"
-        }
-        },
-        {
-          "name": "Cek Status",
-          "desc": "Cek status payment", 
-          "path": "/orderkuota/cekstatus?apikey=&merchant=&keyorkut=", 
-          "innerDesc": "Buy apikey >> wa.me/6285143569870"          
-        }
-      ]
-    },    
     {
       "name": "Random",
       "items": [
@@ -154,7 +136,7 @@
           "name": "Mobile Legends",
           "desc": "Stalk akun Mobile Legends",
           "path": "/stalk/mlbb?userId=&zoneId=&apikey=",
-           "apikey": "Your API key"
+          "apikey": "Your API key"
         },
         {
           "name": "Free Fire",
@@ -175,6 +157,23 @@
           "name": "Fake TikTok Generator",
           "desc": "Buat profil TikTok palsu dengan nama dan foto",
           "path": "/tools/faketiktok?name=&username=&pp="
+        }
+      ]
+    },
+    {
+      "name": "Orderkuota Gateway",
+      "items": [
+        {
+          "name": "Create Payment",
+          "desc": "Create qris payment",
+          "path": "/orderkuota/createpayment?apikey=&amount=&codeqr=",
+          "innerDesc": "Buy apikey >> wa.me/6285143569870"
+        },
+        {
+          "name": "Cek Status",
+          "desc": "Cek status payment",
+          "path": "/orderkuota/cekstatus?apikey=&merchant=&keyorkut=",
+          "innerDesc": "Buy apikey >> wa.me/6285143569870"
         }
       ]
     }
