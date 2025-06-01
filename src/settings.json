@@ -85,6 +85,7 @@
           "desc": "Create qris payment", 
           "path": "/orderkuota/createpayment?apikey=&amount=&codeqr=", 
           "innerDesc": "Buy apikey >> wa.me/6285143569870"
+        }
         },
         {
           "name": "Cek Status",
