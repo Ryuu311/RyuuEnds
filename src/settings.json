@@ -169,13 +169,13 @@
         {
           "name": "Create Payment",
           "desc": "Create qris payment",
-          "path": "/api/orderkuota/createpayment?&amount=&codeqr=",
+          "path": "/orderkuota/createpayment?&amount=&codeqr=",
           "innerDesc": "Buy apikey >> wa.me/6285143569870"
         },
         {
           "name": "Cek Status",
           "desc": "Cek status payment",
-          "path": "/api/orderkuota/cekstatus?&merchant=&keyorkut=",
+          "path": "/orderkuota/cekstatus?&merchant=&keyorkut=",
           "innerDesc": "Buy apikey >> wa.me/6285143569870"
         }
       ]
