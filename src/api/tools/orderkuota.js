@@ -29,7 +29,7 @@ function convertCRC16(str) {
 }
 
 function generateTransactionId() {
-    return `LUXZ-OFFC-${crypto.randomBytes(2).toString('hex').toUpperCase()}`
+    return crypto.randomBytes(5).toString('hex').toUpperCase()
 }
 
 function generateExpirationTime() {
@@ -42,7 +42,7 @@ async function elxyzFile(buffer) {
     return new Promise(async (resolve, reject) => {
         try {
 const service = new ImageUploadService('pixhost.to');
-let { directLink } = await service.uploadFromBinary(buffer, 'luxz.png');
+let { directLink } = await service.uploadFromBinary(buffer, 'hiyoshop.png');
             resolve(directLink);
         } catch (error) {
             console.error('🚫 Upload Failed:', error);
@@ -140,9 +140,7 @@ module.exports = function(app) {
 app.get('/orderkuota/createpayment', async (req, res) => {
     const { apikey, amount, codeqr} = req.query;
     const check = global.apikey
-    if (!global.apikey.includes(apikey)) return res.status(400).json({ status: false, error: 'Apikey invalid' })
-    if (!amount) return res.status(400).json({ status: false, error: 'Amount is required' });
-    if (!codeqr) return res.status(400).json({ status: false, error: 'QrCode is required' });
+    if (!global.apikey.includes(apikey)) return res.json("Apikey tidak valid.")
     try {
         const qrData = await createQRIS(amount, codeqr);
         res.status(200).json({
@@ -157,9 +155,7 @@ app.get('/orderkuota/createpayment', async (req, res) => {
 app.get('/orderkuota/cekstatus', async (req, res) => {
     const { merchant, keyorkut, apikey } = req.query;
     const check = global.apikey
-    if (!global.apikey.includes(apikey)) return res.status(400).json({ status: false, error: 'Apikey invalid' })
-    if (!merchant) return res.status(400).json({ status: false, error: 'Merchant ID is required' });
-    if (!keyorkut) return res.status(400).json({ status: false, error: 'Apikey Orderkuota is required' });
+    if (!global.apikey.includes(apikey)) return res.json("Apikey tidak valid.")
         try {
         const apiUrl = `https://gateway.okeconnect.com/api/mutasi/qris/${merchant}/${keyorkut}`;
         const response = await axios.get(apiUrl);
@@ -178,4 +174,30 @@ app.get('/orderkuota/cekstatus', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 })
+
+app.get('/orderkuota/ceksaldo', async (req, res) => {
+    const { merchant, keyorkut, apikey } = req.query;
+    const check = global.apikey
+    if (!global.apikey.includes(apikey)) return res.json("Apikey tidak valid.")
+        try {
+        const apiUrl = `https://gateway.okeconnect.com/api/mutasi/qris/${merchant}/${keyorkut}`;
+        const response = await axios.get(apiUrl);
+        const result = await response.data;
+                // Check if data exists and get the latest transaction
+        const latestTransaction = result.data && result.data.length > 0 ? result.data[0] : null;
+                if (latestTransaction) {
+         res.status(200).json({
+            status: true, 
+            result: {
+            saldo_qris: latestTransaction.balance
+            }
+        })
+        } else {
+            res.json({ message: "No transactions found." });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+})
+
 }
