@@ -1,0 +1,374 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>API Explorer - Ryuuganteng</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8f9fc;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      position: relative;
+      text-align: center;
+      color: white;
+    }
+    header img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    header .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+    }
+    header .top-bar {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+    header .top-bar .hamburger {
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    header .top-bar .social-links a {
+      color: white;
+      margin-left: 1rem;
+      font-size: 1.25rem;
+    }
+    header h1 {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 0;
+      font-size: 2rem;
+      z-index: 1;
+    }
+    .container {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .search-filter {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .search-filter input {
+      padding: 0.75rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .categories button {
+      padding: 0.5rem 1rem;
+      background: #e0e7ff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .categories button.active {
+      background: #4f46e5;
+      color: white;
+    }
+    .api-list {
+      display: grid;
+      gap: 1rem;
+    }
+    .api-card {
+      background: white;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    .api-card + .api-card {
+      border-top: 1px solid #e5e7eb;
+    }
+    .api-card h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+    .api-card p {
+      margin: 0.25rem 0;
+      color: #555;
+    }
+    .api-card code {
+      background: #f3f4f6;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .api-card button {
+      padding: 0.5rem 1rem;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 0.5rem;
+    }
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width:100%;
+      height:100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .modal {
+      background: white;
+      border-radius: 8px;
+      max-width: 500px;
+      width: 90%;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      max-height: 80%;
+      overflow-y: auto;
+      position: relative;
+    }
+    .modal h3 {
+      margin-top: 0;
+    }
+    .modal .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+    }
+    .modal .param-group {
+      margin-bottom: 1rem;
+    }
+    .modal label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+    }
+    .modal input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    .modal .submit-btn {
+      padding: 0.5rem 1rem;
+      background: #4f46e5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 1rem;
+    }
+    .modal .response {
+      background: #f3f4f6;
+      padding: 0.75rem;
+      border-radius: 5px;
+      margin-top: 1rem;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="src/banner.jpg" alt="Banner Image">
+    <div class="overlay"></div>
+    <div class="top-bar">
+      <div class="hamburger"><i class="fas fa-bars"></i></div>
+      <div class="social-links">
+        <a href="https://wa.me/yourNumber" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://instagram.com/yourUsername" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://github.com/yourRepo" target="_blank"><i class="fab fa-github"></i></a>
+      </div>
+    </div>
+    <h1>Ryuuganteng API Explorer</h1>
+  </header>
+
+  <div class="container">
+    <div class="search-filter" id="searchFilter">
+      <input type="text" id="searchInput" placeholder="Search API...">
+      <div class="categories" id="categoryButtons">
+        <button class="active" data-cat="all">All</button>
+        <button data-cat="ai">AI</button>
+        <button data-cat="orderkuota">Orderkuota</button>
+        <button data-cat="downloader">Downloader</button>
+        <button data-cat="tools">Tools</button>
+      </div>
+    </div>
+    <div class="api-list" id="apiList"></div>
+  </div>
+
+  <!-- Modal for Try It -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="apiModal">
+      <button class="close-btn" id="closeModal"><i class="fas fa-times"></i></button>
+      <h3 id="modalApiName"></h3>
+      <p id="modalApiDesc"></p>
+      <div id="paramContainer"></div>
+      <button class="submit-btn" id="submitBtn">Submit</button>
+      <div class="response" id="responseContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    const apis = [
+      { name: "Chatgpt", desc: "Talk Chatgpt", path: "/ai/openai?text=", category: "ai" },
+      { name: "Deepseek", desc: "Talk Deepseek AI", path: "/ai/deepseek?text=", category: "ai" },
+      { name: "Create Payment", desc: "Create qris payment", path: "/orderkuota/createpayment?amount=&codeqr=", category: "orderkuota" },
+      { name: "Cek Status", desc: "Check payment status", path: "/orderkuota/cekstatus?merchant=&keyorkut=", category: "orderkuota" },
+      { name: "Tiktok Downloader", desc: "Download TikTok video", path: "/download/tiktok?url=", category: "downloader" },
+      { name: "Screenshot Web", desc: "Take website screenshot", path: "/tools/ssweb?url=", category: "tools" }
+    ];
+
+    const apiList = document.getElementById("apiList");
+    const searchInput = document.getElementById("searchInput");
+    const categoryButtons = document.querySelectorAll("#categoryButtons button");
+    const hamburger = document.querySelector(".hamburger");
+    const searchFilter = document.getElementById("searchFilter");
+
+    function renderApis(filter = "all", keyword = "") {
+      apiList.innerHTML = "";
+      apis.filter(api => {
+        return (filter === "all" || api.category === filter) &&
+               (api.name.toLowerCase().includes(keyword.toLowerCase()) || api.desc.toLowerCase().includes(keyword.toLowerCase()));
+      }).forEach(api => {
+        const card = document.createElement("div");
+        card.className = "api-card";
+        card.innerHTML = `
+          <h3>${api.name}</h3>
+          <p>${api.desc}</p>
+          <code>${api.path.split('?')[0]}?<span class="param-placeholder">${api.path.split('?')[1]}</span></code>
+          <button onclick="openModal('${api.name}', '${api.desc}', '${api.path}')">Try It</button>
+        `;
+        apiList.appendChild(card);
+      });
+    }
+
+    function filterCategory(category) {
+      categoryButtons.forEach(btn => btn.classList.remove("active"));
+      document.querySelector(`#categoryButtons button[data-cat="${category}"]`).classList.add("active");
+      renderApis(category, searchInput.value);
+    }
+
+    categoryButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterCategory(btn.getAttribute("data-cat"));
+      });
+    });
+
+    searchInput.addEventListener("input", () => {
+      const activeBtn = document.querySelector("#categoryButtons button.active");
+      const cat = activeBtn ? activeBtn.getAttribute("data-cat") : "all";
+      renderApis(cat, searchInput.value);
+    });
+
+    hamburger.addEventListener("click", () => {
+      if (searchFilter.style.display === "none" || !searchFilter.style.display) {
+        searchFilter.style.display = "flex";
+      } else {
+        searchFilter.style.display = "none";
+      }
+    });
+
+    // Modal Logic
+    const modalOverlay = document.getElementById("modalOverlay");
+    const closeModal = document.getElementById("closeModal");
+    const modalApiName = document.getElementById("modalApiName");
+    const modalApiDesc = document.getElementById("modalApiDesc");
+    const paramContainer = document.getElementById("paramContainer");
+    const submitBtn = document.getElementById("submitBtn");
+    const responseContainer = document.getElementById("responseContainer");
+
+    function openModal(name, desc, path) {
+      modalApiName.textContent = name;
+      modalApiDesc.textContent = desc;
+      responseContainer.innerHTML = "";
+      paramContainer.innerHTML = "";
+
+      // Parse params from path
+      const [base, query] = path.split("?");
+      const params = query ? query.split("&").map(p => p.split("=")[0]) : [];
+      params.forEach(param => {
+        const group = document.createElement("div");
+        group.className = "param-group";
+        group.innerHTML = `
+          <label for="param-${param}">${param}</label>
+          <input type="text" id="param-${param}" name="${param}" placeholder="${param}...">
+        `;
+        paramContainer.appendChild(group);
+      });
+
+      // Store base in submitBtn dataset
+      submitBtn.dataset.base = path.split("?")[0];
+      submitBtn.dataset.params = JSON.stringify(params);
+      modalOverlay.style.display = "flex";
+    }
+
+    closeModal.addEventListener("click", () => {
+      modalOverlay.style.display = "none";
+    });
+
+    submitBtn.addEventListener("click", () => {
+      const base = submitBtn.dataset.base;
+      const params = JSON.parse(submitBtn.dataset.params);
+      const urlParams = new URLSearchParams();
+      params.forEach(p => {
+        const val = document.getElementById(`param-${p}`).value.trim();
+        urlParams.append(p, val);
+      });
+      const url = `${location.origin}${base}?${urlParams.toString()}`;
+      responseContainer.innerHTML = "Loading...";
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          responseContainer.textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(err => {
+          responseContainer.textContent = "Error: " + err;
+        });
+    });
+
+    // Initial render
+    renderApis();
+
+  </script>
+</body>
+</html>
