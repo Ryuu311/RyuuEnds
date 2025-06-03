@@ -169,7 +169,7 @@
         {
           "name": "Create Payment",
           "desc": "Create qris payment",
-          "path": "/orderkuota/createpayment?&amount=&codeqr=",
+          "path": "/orderkuota/createpayment?&apikey=&amount=&codeqr=",
           "innerDesc": "Buy apikey >> wa.me/6285143569870"
         },
         {
