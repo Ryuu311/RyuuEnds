@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RyuuXiao Api</title>
+  <style>
+    :root {
+      --bg-light: #f9f9fb;
+      --bg-dark: #121212;
+      --text-light: #333;
+      --text-dark: #f1f1f1;
+      --card-light: #ffffff;
+      --card-dark: #1e1e1e;
+      --primary: #7f56d9;
+      --primary-dark: #9f7aea;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    #loader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: var(--bg-light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    body.dark #loader {
+      background: var(--bg-dark);
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid var(--primary-dark);
+      border-top: 5px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    #content {
+      display: none;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background-color: var(--card-light);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    body.dark header {
+      background-color: var(--card-dark);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .brand img {
+      width: 28px;
+      margin-right: 0.5rem;
+    }
+
+    .version {
+      background-color: var(--primary);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 16px;
+      font-size: 0.8rem;
+    }
+
+    main {
+      padding: 2rem 1rem;
+      max-width: 600px;
+      margin: auto;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .buttons {
+      margin: 2rem 0;
+    }
+
+    .buttons a {
+      display: block;
+      margin: 0.5rem auto;
+      padding: 0.75rem 1rem;
+      max-width: 200px;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: transform 0.2s;
+    }
+
+    .buttons a:hover {
+      transform: scale(1.05);
+    }
+
+    .illustration img {
+      width: 100%;
+      max-width: 350px;
+      margin: 1rem auto;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 1rem;
+      background-color: transparent;
+    }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .theme-toggle input {
+      transform: scale(1.2);
+    }
+
+    .links {
+      margin-top: 0.5rem;
+    }
+
+    .links a {
+      color: inherit;
+      margin: 0 0.5rem;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Konten utama -->
+  <div id="content">
+    <header>
+      <div class="brand">
+        <img src="https://files.catbox.moe/uyqvbu.png" alt="logo" />
+        RyuuXiao
+      </div>
+      <div class="version">V 4.0.4</div>
+    </header>
+
+    <main>
+      <h1>RyuuXiao API</h1>
+      <p>Menyediakan Layanan Api Dari Yang Gratis🔥🔥 Hingga Yang Berbayar ( Murah ) 🤩</p>
+
+      <div class="illustration">
+        <img src="https://files.catbox.moe/75c2tn.jpg" alt="girl and cat" />
+      </div>
+
+      <div class="buttons">
+        <a href="/api">🚀  Dapatkan Layanan Api Free Sekarang</a>
+      </div>
+    </main>
+
+    <footer>
+      <div>© 2020 RyuuXiao API. All rights reserved.</div>
+
+      <div class="theme-toggle">
+        <span>🌞 Light</span>
+        <label>
+          <input type="checkbox" id="toggleTheme" />
+        </label>
+        <span>🌙 Dark</span>
+      </div>
+
+      <div class="links">
+        <a href="https://wa.me/6285143569870">ℹ️ Information</a>
+        <a href="https://wa.me/6285143569870">✉️ Contact</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const toggle = document.getElementById("toggleTheme");
+    toggle.addEventListener("change", () => {
+      document.body.classList.toggle("dark", toggle.checked);
+    });
+
+    // Tampilkan konten setelah loading
+    window.addEventListener("load", () => {
+      document.getElementById("loader").style.display = "none";
+      document.getElementById("content").style.display = "block";
+    });
+  </script>
+</body>
+</html>
