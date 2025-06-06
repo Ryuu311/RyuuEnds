@@ -71,7 +71,7 @@
           "name": "Gpt 4",
           "desc": "Api Gpt 4",
           "path": "/ai/gpt4?&text=",
-          "status": "ready",
+          "status": "error",
           "params": {
             "text": "Text for Gpt4 AI to respond to"
                       }
@@ -80,7 +80,7 @@
           "name": "Stabielif AI",
           "desc": "Talk with Stabil AI",
           "path": "/ai/stabil?&text=",
-          "status": "ready",
+          "status": "error",
           "params": {
             "text": "Text for Venice AI to respond to"
           }
@@ -89,10 +89,39 @@
           "name": "Open AI",
           "desc": "Talk with Open AI",
           "path": "/ai/openai?text=",
-          "status": "ready",
+          "status": "error",
           "params": {
             "text": "Text for Venice AI to respond to"
-            
+          }
+        },
+        {
+          
+          "name": "Claude AI",
+          "desc": "Talk with claude AI",
+          "path": "/ai/claude?text=",
+          "status": "ready",
+          "params": {
+            "text": "Text for claude AI to respond to"
+
+          }
+        },
+        {
+          "name": "Ryzumi AI",
+          "desc": "Talk with Ryzumi AI",
+          "path": "/ai/ryzumi?text=",
+          "status": "ready",
+          "params": {
+            "text": "Text for Ryzumi AI to respond to"
+          }
+        },
+        {
+          "name": "Blackbox AI",
+          "desc": "Talk with blackbox AI",
+          "path": "/ai/blackbox?text=",
+          "status": "ready",
+          "params": {
+            "text": "Text for blackbox AI to respond to"
+
           }
         }
       ]
