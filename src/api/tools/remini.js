@@ -1,101 +1,162 @@
-const axios = require("axios");
+const axios = require('axios');
+const FormData = require('form-data');
+const { fromBuffer } = require('file-type');
+const qs = require('qs');
 
-const CREATOR_NAME = "ZenzzXD";
+const getBuffer = async (url, options) => {
+	try {
+		options ? options : {}
+		const res = await axios({
+			method: "get",
+			url,
+			headers: {
+				'DNT': 1,
+				'Upgrade-Insecure-Request': 1
+			},
+			...options,
+			responseType: 'arraybuffer'
+		})
+		return res.data
+	} catch (err) {
+		return err
+	}
+}
 
-async function forwardRemini(imageUrl) { // Mengganti nama parameter agar lebih jelas
-  try {
-    // Target API upstream (tanpa query parameter di sini)
-    const targetBaseUrl = `https://zenzzx-api.vercel.app/tools/remini`;
-    // Tambahkan imageUrl sebagai query parameter ke URL target
-    const targetUrlWithQuery = `${targetBaseUrl}?url=${encodeURIComponent(imageUrl)}`;
+const tool = [ 'removebg', 'enhance', 'upscale', 'restore', 'colorize' ];
 
-    console.log(`[Remini Forwarder] Calling upstream: ${targetUrlWithQuery}`); // Logging
+const pxpic = {
+ upload: async (filePath) => {
+  const buffer = filePath
+  const { ext, mime } = (await fromBuffer(buffer)) || {};
+  const fileName = Date.now() + "." + ext;
 
-    // Gunakan axios.get dan URL yang sudah memiliki query parameter
-    const response = await axios.get(targetUrlWithQuery, { timeout: 60000 });
+  const folder = "uploads";
+  const responsej = await axios.post("https://pxpic.com/getSignedUrl", { folder, fileName }, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-    if (response.status !== 200 || !response.data || response.data.status !== true) {
-      console.warn("[Remini Forwarder] Invalid response from upstream:", response.data);
-      return {
-        status: false,
-        creator: CREATOR_NAME,
-        message: "Gagal mendapatkan respons yang valid dari zenzzx-api.",
-        upstream_response: response.data,
-        code: response.status || 502 // Gunakan status dari upstream atau 502
-      };
+  const { presignedUrl } = responsej.data;
+
+  await axios.put(presignedUrl, buffer, {
+    headers: {
+      "Content-Type": mime,
+    },
+  });
+
+  const cdnDomain = "https://files.fotoenhancer.com/uploads/";
+  const sourceFileUrl = cdnDomain + fileName;
+
+  return sourceFileUrl;
+  },
+  create: async (filePath, tools) => {
+    if (!tool.includes(tools)) { 
+        return `Pilih salah satu dari tools ini: ${tool.join(', ')}`; 
     }
+    const url = await pxpic.upload(filePath);
+    let data = qs.stringify({
+      'imageUrl': url,
+      'targetFormat': 'png',
+      'needCompress': 'no',
+      'imageQuality': '100',
+      'compressLevel': '6',
+      'fileOriginalExtension': 'png',
+      'aiFunction': tools,
+      'upscalingLevel': ''
+    });
 
-    const upscaledImageUrl = response.data.result;
-
-    if (!upscaledImageUrl || typeof upscaledImageUrl !== "string") {
-      console.warn("[Remini Forwarder] URL hasil tidak ditemukan atau tidak valid dalam respons upstream:", response.data);
-      return {
-        status: false,
-        creator: CREATOR_NAME,
-        message: "URL hasil tidak ditemukan atau tidak valid dalam respons zenzzx-api.",
-        upstream_response: response.data,
-        code: 502 // Anggap sebagai Bad Gateway jika format data tidak sesuai
-      };
-    }
-
-    return {
-      status: true,
-      creator: CREATOR_NAME,
-      result: upscaledImageUrl
-      // Tidak perlu 'code: 200' di sini karena akan di-handle oleh route handler
+    let config = {
+      method: 'POST',
+      url: 'https://pxpic.com/callAiFunction',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Android 10; Mobile; rv:131.0) Gecko/131.0 Firefox/131.0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/png,image/svg+xml,*/*;q=0.8',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'accept-language': 'id-ID'
+      },
+      data: data
     };
-  } catch (e) {
-    let statusCode = 500;
-    let errorMessage = "Terjadi kesalahan internal pada server.";
 
-    if (e.response) { // Error dari respons HTTP upstream
-      console.error("[Remini Forwarder] Upstream API error:", e.response.status, e.response.data);
-      statusCode = e.response.status; // Gunakan status code asli dari upstream jika < 500
-      if (e.response.status >= 500) {
-        statusCode = 502; // Bad Gateway jika upstream error 5xx
-      }
-      errorMessage = e.response.data?.message || `Gagal menghubungi layanan upstream (status: ${e.response.status})`;
-    } else if (e.request) { // Request dibuat tapi tidak ada respons (misal, timeout, network error)
-      console.error("[Remini Forwarder] No response from upstream or timeout:", e.code, e.message);
-      statusCode = 504; // Gateway Timeout
-      errorMessage = "Timeout atau tidak ada respons dari layanan upstream.";
-    } else { // Error lain saat setup request atau error tak terduga
-      console.error("[Remini Forwarder] Generic error:", e.message);
-      errorMessage = e.message;
-    }
-
-    return {
-      status: false,
-      creator: CREATOR_NAME,
-      message: errorMessage,
-      code: statusCode // 'code' ini akan digunakan oleh route handler untuk status HTTP
-    };
+    const api = await axios.request(config);
+    return api.data;
   }
 }
 
-module.exports = function (app) {
-  app.get("/tools/remini", async (req, res) => {
-    const { url } = req.query;
+module.exports = function(app) {
+app.get('/imagecreator/removebg', async (req, res) => {
+       const { url } = req.query;
+           const { apikey } = req.query;
+           if (!global.apikey.includes(apikey)) return res.status(400).json({ status: false, error: 'Apikey invalid' })
+            if (!url) {
+                return res.status(400).json({ status: false, error: 'Url is required' });
+            }
+        try {
+            let image = await getBuffer(url)
+            const result = await pxpic.create(image, "removebg")
+            res.status(200).json({
+                status: true,
+                result: result.resultImageUrl
+            });
+        } catch (error) {
+            res.status(500).send(`Error: ${error.message}`);
+        }
+});
 
-    if (!url) {
-      return res.status(400).json({
-        status: false,
-        creator: CREATOR_NAME,
-        message: "Parameter 'url' wajib diisi"
-      });
-    }
+app.get('/imagecreator/remini', async (req, res) => {
+       const { url } = req.query;
+           const { apikey } = req.query;
+           if (!global.apikey.includes(apikey)) return res.status(400).json({ status: false, error: 'Apikey invalid' })
+            if (!url) {
+                return res.status(400).json({ status: false, error: 'Url is required' });
+            }
+        try {
+            let image = await getBuffer(url)
+            const result = await pxpic.create(image, "enhance")
+            res.status(200).json({
+                status: true,
+                result: result.resultImageUrl
+            });
+        } catch (error) {
+            res.status(500).send(`Error: ${error.message}`);
+        }
+});
 
-    const result = await forwardRemini(url);
-    
-    // Tentukan status code HTTP berdasarkan field 'code' dari hasil forwardRemini,
-    // atau default ke 200 jika sukses dan tidak ada 'code' (untuk jalur sukses).
-    const httpStatusCode = result.code || (result.status === true ? 200 : 500);
-    
-    // Hapus field 'code' dari objek hasil agar tidak dikirim ke klien jika tidak perlu
-    if (result.hasOwnProperty('code')) {
-      delete result.code;
-    }
-    
-    res.status(httpStatusCode).json(result);
-  });
-};
+app.get('/imagecreator/upscale', async (req, res) => {
+       const { url } = req.query;
+           const { apikey } = req.query;
+           if (!global.apikey.includes(apikey)) return res.status(400).json({ status: false, error: 'Apikey invalid' })
+            if (!url) {
+                return res.status(400).json({ status: false, error: 'Url is required' });
+            }
+        try {
+            let image = await getBuffer(url)
+            const result = await pxpic.create(image, "upscale")
+            res.status(200).json({
+                status: true,
+                result: result.resultImageUrl
+            });
+        } catch (error) {
+            res.status(500).send(`Error: ${error.message}`);
+        }
+});
+
+app.get('/imagecreator/colorize', async (req, res) => {
+       const { url } = req.query;
+           const { apikey } = req.query;
+           if (!global.apikey.includes(apikey)) return res.status(400).json({ status: false, error: 'Apikey invalid' })
+            if (!url) {
+                return res.status(400).json({ status: false, error: 'Url is required' });
+            }
+        try {
+            let image = await getBuffer(url)
+            const result = await pxpic.create(image, "colorize")
+            res.status(200).json({
+                status: true,
+                result: result.resultImageUrl
+            });
+        } catch (error) {
+            res.status(500).send(`Error: ${error.message}`);
+        }
+});
+}

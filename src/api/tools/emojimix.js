@@ -1,51 +1,42 @@
-const axios = require('axios');
+const fetch = require("node-fetch")
+const axios = require("axios")
 
-module.exports = (app) => {
-    const creatorName = "ZenzXD"; // Nama creator Anda
+const getBuffer = async (url, options) => {
+	try {
+		options ? options : {}
+		const res = await axios({
+			method: "get",
+			url,
+			headers: {
+				'DNT': 1,
+				'Upgrade-Insecure-Request': 1
+			},
+			...options,
+			responseType: 'arraybuffer'
+		})
+		return res.data
+	} catch (err) {
+		return err
+	}
+}
 
-    app.get('/maker/emojimix', async (req, res) => {
-        const { emoji1, emoji2 } = req.query; // Mengambil parameter
 
-        // Validasi input
-        if (!emoji1 || !emoji2) {
-            return res.status(400).json({
-                status: false,
-                creator: creatorName, // Ditambahkan
-                message: 'Parameter emoji1 dan emoji2 wajib diisi'
-            });
-        }
-
+module.exports = function(app) {
+app.get('/tools/emojimix', async (req, res) => {
+const { emoji1, emoji2 } = req.query
+const { apikey } = req.query;
+if (!global.apikey.includes(apikey)) return res.status(400).json({ status: false, error: 'Apikey invalid' })
+if (!emoji1 || !emoji2) return res.status(400).json({ status: false, error: 'Emoji is required' });
+let img = await fetch(`https://tenor.googleapis.com/v2/featured?key=AIzaSyAyimkuYQYF_FXVALexPuGQctUWRURdCYQ&contentfilter=high&media_filter=png_transparent&component=proactive&collection=emoji_kitchen_v5&q=${encodeURIComponent(emoji1)}_${encodeURIComponent(emoji2)}`).then(resd => resd.json()).then(resu => resu.results[0].url)
+const image = await getBuffer(img)
         try {
-            const apiUrl = `https://api.yogik.id/maker/emojimix?emoji1=${encodeURIComponent(emoji1)}&emoji2=${encodeURIComponent(emoji2)}`;
-            console.log(`Requesting Emojimix from: ${apiUrl}`); // Logging
-
-            // Panggil API eksternal, minta respons sebagai stream
-            const response = await axios.get(apiUrl, {
-                responseType: 'stream'
+            res.writeHead(200, {
+                'Content-Type': 'image/png',
+                'Content-Length': image.length,
             });
-
-            // Set header 'Content-Type' sesuai dengan respons API eksternal
-            res.setHeader('Content-Type', response.headers['content-type']);
-
-            // Alirkan (pipe) data gambar langsung ke respons klien
-            response.data.pipe(res);
-
-        } catch (err) {
-            console.error("Emojimix Maker Error:", err.response?.data || err.message); // Logging
-
-            // Coba dapatkan status code dan pesan dari error axios
-            const statusCode = err.response?.status || 500;
-            const message = err.response?.data?.message || err.message || 'Gagal mengambil gambar emojimix';
-
-            // Kirim respons error sebagai JSON
-            res.status(statusCode).json({
-                status: false,
-                creator: creatorName, // Ditambahkan
-                message: message
-            });
+            res.end(image);
+        } catch (error) {
+            res.status(500).send(`Error: ${error.message}`);
         }
-    });
-
-    // Tambahkan rute lain di sini...
-
-};
+});
+}

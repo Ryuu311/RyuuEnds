@@ -1,81 +1,23 @@
 const fetch = require("node-fetch");
-const AbortController = require("abort-controller");
 
-const CREATOR_NAME = "ZenzXD";
-const FETCH_TIMEOUT = 15000;
+module.exports = function(app) {
+  app.get('/sticker/brat', async (req, res) => {
+    try {
+      const { apikey, text } = req.query;
+      if (!global.apikey.includes(apikey)) return res.status(403).send('Invalid API key');
+      if (!text) return res.status(400).send('Text is required');
 
-async function fetchBratImage(text) {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+      const url = `https://vapis.my.id/api/bratv1?q=${encodeURIComponent(text)}`;
+      const response = await fetch(url);
 
-  try {
-    const url = `https://api.yogik.id/maker/brat?text=${encodeURIComponent(text)}`;
-    const response = await fetch(url, { signal: controller.signal });
-    clearTimeout(timeout);
+      if (!response.ok) return res.status(502).send('Failed to fetch image from API');
 
-    if (!response.ok) {
-      let errMsg = `Status ${response.status}`;
-      try {
-        if (response.headers.get("content-type")?.includes("application/json")) {
-          const json = await response.json();
-          errMsg += ` - ${json.message || "Unknown error"}`;
-        }
-      } catch {}
+      const buffer = await response.buffer();
 
-      return {
-        status: false,
-        message: `Gagal mengambil gambar dari API eksternal. ${errMsg}`
-      };
+      res.set('Content-Type', 'image/png');  // Pastikan respons dalam bentuk PNG
+      res.send(buffer);
+    } catch (err) {
+      res.status(500).send(`Error: ${err.message}`);
     }
-
-    const contentType = response.headers.get("content-type");
-    if (!contentType.startsWith("image/")) {
-      return {
-        status: false,
-        message: "Respons dari API eksternal bukan gambar."
-      };
-    }
-
-    const buffer = await response.buffer();
-    return {
-      status: true,
-      buffer,
-      contentType
-    };
-
-  } catch (err) {
-    const isTimeout = err.name === "AbortError";
-    return {
-      status: false,
-      message: isTimeout ? "Timeout ke API eksternal." : err.message
-    };
-  }
-}
-
-module.exports = function (app) {
-  app.get("/maker/brat", async (req, res) => {
-    const { text } = req.query;
-
-    if (!text) {
-      return res.status(400).json({
-        status: false,
-        creator: CREATOR_NAME,
-        message: "Parameter 'text' wajib diisi."
-      });
-    }
-
-    const result = await fetchBratImage(text);
-
-    if (!result.status) {
-      return res.status(500).json({
-        status: false,
-        creator: CREATOR_NAME,
-        message: result.message
-      });
-    }
-
-    res.setHeader("Content-Type", result.contentType);
-    res.setHeader("Cache-Control", "public, max-age=86400");
-    res.send(result.buffer);
   });
 };
