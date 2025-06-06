@@ -315,9 +315,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 sortedItems.forEach((item, index) => {
                     const itemCol = document.createElement('div');
                     itemCol.className = 'col-md-6 col-lg-4 api-item';
-                    itemCol.dataset.name = item.name;
-                    itemCol.dataset.desc = item.desc;
-                    itemCol.dataset.category = category.name;
+                    itemCol.dataset.name = (item.name || "").toLowerCase();
+                    itemCol.dataset.desc = (item.desc || "").toLowerCase();
+                    itemCol.dataset.category = (category.name || "").toLowerCase();
                     itemCol.style.animationDelay = `${index * 0.05 + 0.3}s`;
                     
                     const heroSection = document.createElement('div');
