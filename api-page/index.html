@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Koyuki Iceflow</title>
+  <title>RyuuXiao Api</title>
   <style>
     :root {
       --bg-light: #f9f9fb;
@@ -27,6 +27,38 @@
     body.dark {
       background-color: var(--bg-dark);
       color: var(--text-dark);
+    }
+
+    #loader {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: var(--bg-light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    body.dark #loader {
+      background: var(--bg-dark);
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid var(--primary-dark);
+      border-top: 5px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    #content {
+      display: none;
     }
 
     header {
@@ -137,56 +169,62 @@
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <img src="https://cdn-icons-png.flaticon.com/512/7477/7477689.png" alt="logo" />
-      Koyuki Iceflow
-    </div>
-    <div class="version">v1.1.7</div>
-  </header>
+  <!-- Loader -->
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
 
-  <main>
-    <h1>Iceflow API</h1>
-    <p>
-      Unlock the power of seamless integration with our comprehensive Koyuki Iceflow API suite. Designed for developers, by developers.
-      Our API provides robust, scalable solutions with 99.9% uptime and comprehensive documentation.
-    </p>
-    <p>
-      From user authentication to data analytics, our API suite is built with modern web standards and security best practices.
-      Whether you're building a small project or enterprise application, Iceflow API has you covered.
-    </p>
+  <!-- Konten utama -->
+  <div id="content">
+    <header>
+      <div class="brand">
+        <img src="https://files.catbox.moe/uyqvbu.png" alt="logo" />
+        RyuuXiao
+      </div>
+      <div class="version">V 4.0.4</div>
+    </header>
 
-    <div class="illustration">
-      <img src="https://i.pinimg.com/originals/15/62/3c/15623c8fd3e2a97d9fef588b4c647048.png" alt="girl and cat" />
-    </div>
+    <main>
+      <h1>RyuuXiao API</h1>
+      <p>Menyediakan Layanan Api Dari Yang Gratis🔥🔥 Hingga Yang Berbayar ( Murah ) 🤩</p>
 
-    <div class="buttons">
-      <a href="#">🚀 Get Started</a>
-      <a href="/docs">📘 Documentation</a>
-    </div>
-  </main>
+      <div class="illustration">
+        <img src="https://files.catbox.moe/75c2tn.jpg" alt="girl and cat" />
+      </div>
 
-  <footer>
-    <div>© 2023 Iceflow API. All rights reserved.</div>
+      <div class="buttons">
+        <a href="/api">🚀  Dapatkan Layanan Api Free Sekarang</a>
+      </div>
+    </main>
 
-    <div class="theme-toggle">
-      <span>🌞 Light</span>
-      <label>
-        <input type="checkbox" id="toggleTheme" />
-      </label>
-      <span>🌙 Dark</span>
-    </div>
+    <footer>
+      <div>© 2020 RyuuXiao API. All rights reserved.</div>
 
-    <div class="links">
-      <a href="#">ℹ️ Information</a>
-      <a href="#">✉️ Contact</a>
-    </div>
-  </footer>
+      <div class="theme-toggle">
+        <span>🌞 Light</span>
+        <label>
+          <input type="checkbox" id="toggleTheme" />
+        </label>
+        <span>🌙 Dark</span>
+      </div>
+
+      <div class="links">
+        <a href="https://wa.me/6285143569870">ℹ️ Information</a>
+        <a href="https://wa.me/6285143569870">✉️ Contact</a>
+      </div>
+    </footer>
+  </div>
 
   <script>
     const toggle = document.getElementById("toggleTheme");
     toggle.addEventListener("change", () => {
       document.body.classList.toggle("dark", toggle.checked);
+    });
+
+    // Tampilkan konten setelah loading
+    window.addEventListener("load", () => {
+      document.getElementById("loader").style.display = "none";
+      document.getElementById("content").style.display = "block";
     });
   </script>
 </body>
