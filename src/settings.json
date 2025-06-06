@@ -16,7 +16,7 @@
       "icon": "fas fa-robot",
       "items": [
         {
-          "name": "Chatgpt",
+          "name": "chatgpt",
           "desc": "Talk Chatgpt",
           "path": "/ai/gptturbo?text=",
           "status": "ready"
