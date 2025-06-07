@@ -272,7 +272,7 @@
             display: flex;
             flex-direction: column;
             padding: 24px 0;
-            overflow-x: hidden;
+            overflow-x: auto;
             overflow-y: auto;
         }
 
@@ -1660,23 +1660,7 @@
             <i class="fas fa-home"></i>
             <span>Home</span>
         </a>
-        <li class="sidebar-menu-item">
-            <a href="javascript:void(0)" class="side-nav-link category-toggle" data-submenu="apis-submenu">
-                <i class="fas fa-plug"></i>
-                <span>APIs</span>
-                <i class="fas fa-chevron-right ms-auto toggle-icon"></i>
-            </a>
-            <ul class="sidebar-submenu" id="apis-submenu">
-            </ul>
-        </li>
-        <a href="#docs" class="side-nav-link">
-            <i class="fas fa-book"></i>
-            <span>Documentation</span>
-        </a>
-        <a href="https://github.com/FlowFalcon" target="_blank" class="side-nav-link">
-            <i class="fab fa-github"></i>
-            <span>GitHub</span>
-        </a>
+        <!-- Sub menu untuk API categories akan di-generate di sini oleh JavaScript -->
     </nav>
     
     <div class="nav-collapse-btn" aria-label="Toggle navigation">
@@ -1853,6 +1837,7 @@
     const mainWrapper = document.querySelector('.main-wrapper');
     const navCollapseBtn = document.querySelector('.nav-collapse-btn');
     const menuToggle = document.querySelector('.menu-toggle');
+    const sideNavLinks = document.querySelector('.side-nav-links'); // Get this element
 
     navCollapseBtn.addEventListener('click', () => {
         sideNav.classList.toggle('collapsed');
@@ -1883,51 +1868,13 @@
         }
     });
 
-    document.querySelectorAll('.side-nav-link').forEach(link => {
-        if (link.getAttribute('href') && link.getAttribute('href').startsWith('#')) {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    targetElement.scrollIntoView({ 
-                        behavior: 'smooth' 
-                    });
-                    
-                    document.querySelectorAll('.side-nav-link').forEach(l => {
-                        l.classList.remove('active');
-                    });
-                    if (!this.classList.contains('category-toggle') && !this.classList.contains('sub-category-toggle') && !this.classList.contains('api-link')) {
-                        this.classList.add('active');
-                    }
-                    
-                    if (window.innerWidth < 992) {
-                        sideNav.classList.remove('active');
-                    }
-                }
-            });
-        }
-    });
-
-    window.addEventListener('scroll', () => {
-        const scrollPosition = window.scrollY;
-        
-        document.querySelectorAll('section[id]').forEach(section => {
-            const sectionTop = section.offsetTop - 100;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-            
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                document.querySelectorAll('.side-nav-link').forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${sectionId}`) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-        });
-    });
+    // Remove the previous general side-nav-link listener to redefine behavior
+    // document.querySelectorAll('.side-nav-link').forEach(link => {
+    //     if (link.getAttribute('href') && link.getAttribute('href').startsWith('#')) {
+    //         link.addEventListener('click', function(e) { /* ... */ });
+    //     }
+    // });
+    // We will handle this more dynamically after categories are loaded.
 
     const showToast = (message, type = 'info') => {
         const toast = document.getElementById('notificationToast');
@@ -2087,7 +2034,7 @@
         }
 
         const apiContent = document.getElementById('apiContent');
-        const apisSubmenu = document.getElementById('apis-submenu');
+        // const apisSubmenu = document.getElementById('apis-submenu'); // Removed as per request
 
         if (!settings.categories || !settings.categories.length) {
             apiContent.innerHTML = `
@@ -2102,11 +2049,12 @@
         } else {
             settings.categories.forEach((category, categoryIndex) => {
                 const sortedItems = category.items.sort((a, b) => a.name.localeCompare(b.name));
+                const categorySectionId = `category-${category.name.toLowerCase().replace(/\s+/g, '-')}`;
                 
                 const categoryElement = document.createElement('div');
                 categoryElement.className = 'category-section';
                 categoryElement.style.animationDelay = `${categoryIndex * 0.2}s`;
-                categoryElement.id = `category-${category.name.toLowerCase().replace(/\s+/g, '-')}`;
+                categoryElement.id = categorySectionId; // Set ID for scrolling
 
                 const categoryHeader = document.createElement('h3');
                 categoryHeader.className = 'category-header';
@@ -2216,13 +2164,14 @@
                 categoryElement.appendChild(itemsRow);
                 apiContent.appendChild(categoryElement);
 
+                // Start: Perubahan untuk sidebar
                 const categorySidebarLi = document.createElement('li');
                 categorySidebarLi.className = 'sidebar-menu-item';
 
                 const categorySidebarLink = document.createElement('a');
-                categorySidebarLink.href = "javascript:void(0)";
-                categorySidebarLink.className = 'side-nav-link sub-category-toggle';
-                categorySidebarLink.dataset.submenu = `category-submenu-${categoryIndex}`;
+                categorySidebarLink.href = `#${categorySectionId}`; // Link to section ID
+                categorySidebarLink.className = 'side-nav-link sub-category-toggle'; // Still use this class for toggle logic
+                categorySidebarLink.dataset.submenu = `category-submenu-${categoryIndex}`; // Data attribute for submenu
                 categorySidebarLink.innerHTML = `<i class="${category.icon || 'fas fa-cube'}"></i> <span>${category.name}</span><i class="fas fa-chevron-right ms-auto toggle-icon"></i>`;
                 
                 const categorySubmenuUl = document.createElement('ul');
@@ -2232,7 +2181,7 @@
                 sortedItems.forEach(item => {
                     const apiLi = document.createElement('li');
                     const apiSidebarLink = document.createElement('a');
-                    apiSidebarLink.href = "javascript:void(0)";
+                    apiSidebarLink.href = "javascript:void(0)"; // These links open modal, not navigate
                     apiSidebarLink.className = 'side-nav-link api-link';
                     apiSidebarLink.innerHTML = `<i class="${item.icon || 'fas fa-bolt'}"></i> <span>${item.name}</span>`;
                     apiSidebarLink.dataset.apiPath = item.path;
@@ -2246,47 +2195,41 @@
                 
                 categorySidebarLi.appendChild(categorySidebarLink);
                 categorySidebarLi.appendChild(categorySubmenuUl);
-                apisSubmenu.appendChild(categorySidebarLi);
+                sideNavLinks.appendChild(categorySidebarLi); // Append directly to sideNavLinks
+                // End: Perubahan untuk sidebar
             });
         }
 
-        document.querySelectorAll('.category-toggle, .sub-category-toggle').forEach(toggle => {
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                
-                const targetId = this.dataset.submenu;
-                const targetSubmenu = document.getElementById(targetId);
-                const arrow = this.querySelector('.toggle-icon');
+        // Ini adalah event listener baru/yang dimodifikasi untuk semua link sidebar
+        document.querySelectorAll('.side-nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                const targetElement = targetId ? document.querySelector(targetId) : null;
+                const isHomeLink = targetId === '#home';
 
-                if (targetSubmenu) {
-                    const isOpen = targetSubmenu.classList.contains('open');
-                    
-                    if (this.classList.contains('category-toggle')) {
-                        document.querySelectorAll('.sidebar-submenu').forEach(otherSubmenu => {
-                            if (otherSubmenu !== targetSubmenu) {
-                                otherSubmenu.classList.remove('open');
-                                otherSubmenu.style.maxHeight = '0';
-                                const otherToggle = otherSubmenu.previousElementSibling;
-                                if (otherToggle && otherToggle.classList.contains('category-toggle')) {
-                                    otherToggle.classList.remove('active');
-                                    const otherArrow = otherToggle.querySelector('.toggle-icon');
-                                    if (otherArrow) {
-                                        otherArrow.classList.remove('fa-chevron-down');
-                                        otherArrow.classList.add('fa-chevron-right');
-                                    }
-                                }
-                            }
-                        });
-                    } else if (this.classList.contains('sub-category-toggle')) {
-                        const parentUl = this.closest('.sidebar-submenu');
-                        if (parentUl) {
-                            parentUl.querySelectorAll('.sidebar-submenu').forEach(otherSubSubmenu => {
-                                if (otherSubSubmenu !== targetSubmenu) {
-                                    otherSubSubmenu.classList.remove('open');
-                                    otherSubSubmenu.style.maxHeight = '0';
-                                    const otherToggle = otherSubSubmenu.previousElementSibling;
-                                    if (otherToggle && otherToggle.classList.contains('sub-category-toggle')) {
+                // Handle scrolling for Home and Category links
+                if (targetId && targetId.startsWith('#')) {
+                    e.preventDefault(); // Prevent default browser navigation
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Set active state immediately for direct navigation links
+                        document.querySelectorAll('.side-nav-link').forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+
+                        // If it's a category link (sub-category-toggle), also handle its submenu
+                        if (this.classList.contains('sub-category-toggle')) {
+                            const targetSubmenuId = this.dataset.submenu;
+                            const targetSubmenu = document.getElementById(targetSubmenuId);
+                            const arrow = this.querySelector('.toggle-icon');
+
+                            // Close other category submenus at the same level
+                            document.querySelectorAll('.sidebar-menu-item > .sidebar-submenu').forEach(otherSubmenu => {
+                                if (otherSubmenu !== targetSubmenu && otherSubmenu.classList.contains('open')) {
+                                    otherSubmenu.classList.remove('open');
+                                    otherSubmenu.style.maxHeight = '0';
+                                    const otherToggle = otherSubmenu.previousElementSibling;
+                                    if (otherToggle) {
                                         otherToggle.classList.remove('active');
                                         const otherArrow = otherToggle.querySelector('.toggle-icon');
                                         if (otherArrow) {
@@ -2296,27 +2239,76 @@
                                     }
                                 }
                             });
+
+                            // Toggle the clicked category's submenu
+                            if (targetSubmenu) {
+                                const isOpen = targetSubmenu.classList.contains('open');
+                                if (isOpen) {
+                                    targetSubmenu.classList.remove('open');
+                                    targetSubmenu.style.maxHeight = '0';
+                                    arrow.classList.remove('fa-chevron-down');
+                                    arrow.classList.add('fa-chevron-right');
+                                } else {
+                                    targetSubmenu.classList.add('open');
+                                    targetSubmenu.style.maxHeight = targetSubmenu.scrollHeight + 'px';
+                                    arrow.classList.remove('fa-chevron-right');
+                                    arrow.classList.add('fa-chevron-down');
+                                }
+                            }
                         }
                     }
+                } else if (this.classList.contains('api-link')) {
+                    // For individual API links that open the modal
+                    e.preventDefault();
+                    // Original modal opening logic will be triggered below
+                }
 
-                    if (isOpen) {
-                        targetSubmenu.classList.remove('open');
-                        targetSubmenu.style.maxHeight = '0';
-                        arrow.classList.remove('fa-chevron-down');
-                        arrow.classList.add('fa-chevron-right');
-                        this.classList.remove('active');
-                    } else {
-                        targetSubmenu.classList.add('open');
-                        targetSubmenu.style.maxHeight = targetSubmenu.scrollHeight + 'px';
-                        arrow.classList.remove('fa-chevron-right');
-                        arrow.classList.add('fa-chevron-down');
-                        this.classList.add('active');
-                        
-                        this.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                if (window.innerWidth < 992) {
+                    // Close sidebar on mobile after clicking any link
+                    sideNav.classList.remove('active');
+                }
+            });
+        });
+
+
+        // Perbarui listener scroll untuk menangani active state pada sidebar
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            
+            document.querySelectorAll('section[id]').forEach(section => {
+                const sectionTop = section.offsetTop - 100; // Offset for header
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    // Remove active from all links first
+                    document.querySelectorAll('.side-nav-link').forEach(link => {
+                        link.classList.remove('active');
+                    });
+
+                    // Find the main link for the current section
+                    const activeNavLink = document.querySelector(`.side-nav-link[href="#${sectionId}"]`);
+                    if (activeNavLink) {
+                        activeNavLink.classList.add('active');
+
+                        // If it's a category link, ensure its submenu is open
+                        if (activeNavLink.classList.contains('sub-category-toggle')) {
+                            const targetSubmenu = document.getElementById(activeNavLink.dataset.submenu);
+                            if (targetSubmenu && !targetSubmenu.classList.contains('open') && !sideNav.classList.contains('collapsed')) {
+                                targetSubmenu.classList.add('open');
+                                targetSubmenu.style.maxHeight = targetSubmenu.scrollHeight + 'px';
+                                const arrow = activeNavLink.querySelector('.toggle-icon');
+                                if (arrow) {
+                                    arrow.classList.remove('fa-chevron-right');
+                                    arrow.classList.add('fa-chevron-down');
+                                }
+                            }
+                        }
                     }
                 }
             });
         });
+
 
         const searchInput = document.getElementById('searchInput');
         const clearSearchBtn = document.getElementById('clearSearch');
