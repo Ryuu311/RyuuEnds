@@ -68,9 +68,9 @@
           }
         },
         {
-          "name": "Gpt 4",
+          "name": "ChatGpt 4",
           "desc": "Talk with GPT-4. Bisa memahami gambar dan lanjutkan percakapan.",
-          "path": "/ai/gpt4?text=&imageUrl=&sessionid=",
+          "path": "/ai/gpt4?text=&imageUrl=",
           "method": "GET",
           "status": "ready",
           "params": {
