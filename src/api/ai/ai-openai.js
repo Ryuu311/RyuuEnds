@@ -1,35 +1,37 @@
 const axios = require('axios');
 
 module.exports = function(app) {
-    async function fetchOpenAi(text) {
+    async function openAI({ text }) {
         try {
-            const payload = { text: text };
-            const response = await axios.post('https://api.nekorinn.my.id/ai/openai', payload);
+            const url = `https://api.nekorinn.my.id/ai/openai?text=${encodeURIComponent(text)}`;
+            const response = await axios.get(url);
             return response.data;
         } catch (error) {
-            console.error("Error fetching from OpenAi:", error.response?.data || error.message);
-            throw new Error("Gagal terhubung ke OpenAi.");
+            console.error('OpenAI API Error:', error.message);
+            throw new Error('Failed to connect to OpenAI API');
         }
     }
 
     app.get('/ai/openai', async (req, res) => {
-        try {
-            const { text } = req.query;
-            if (!text) {
-                return res.status(400).json({ status: false, error: 'Text is required' });
-            }
-            const result = await fetchOpenAi(text);
+        const { text } = req.query;
 
+        if (!text) {
+            return res.status(400).json({
+                status: false,
+                message: 'Parameter "text" is required'
+            });
+        }
+
+        try {
+            const result = await openAI({ text });
             res.status(200).json({
-                status: true,
-                creator: "Hazel",
-                result: result.result || result.message || "Tidak ada respons dari OpenAi 🥺"
+                ...result,
+                creator: "RyuuXiao"
             });
         } catch (error) {
             res.status(500).json({
                 status: false,
-                creator: "Hazel",
-                result: "Maaf, terjadi kesalahan saat memproses permintaan Anda."
+                message: error.message
             });
         }
     });
