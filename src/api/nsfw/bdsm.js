@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 module.exports = function(app) {
-  app.get('/api/bdsm', async (req, res) => {
+  app.get('/nsfw/bdsm', async (req, res) => {
     try {
       const response = await axios.get('https://api.nekorinn.my.id/nsfwhub/bdsm');
       res.json({

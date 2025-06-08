@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 module.exports = function(app) {
-  app.get('/api/bottomless', async (req, res) => {
+  app.get('/nsfw/bottomless', async (req, res) => {
     try {
       const response = await axios.get('https://api.nekorinn.my.id/nsfwhub/bottomless');
       res.json({
