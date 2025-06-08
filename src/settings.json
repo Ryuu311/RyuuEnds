@@ -67,28 +67,42 @@
             "text": "Text for Venice AI to respond to"
           }
         },
+{
+  "name": "Gpt 4.1",
+  "desc": "Talk with GPT-4.1. Bisa memahami gambar dan lanjutkan percakapan.",
+  "path": "/ai/gpt-4.1?text=&imageUrl=",
+  "method": "GET",
+  "status": "ready",
+  "params": {
+    "text": {
+      "required": true,
+      "type": "string",
+      "desc": "Teks yang ingin dikirim ke GPT-4.1"
+    },
+    "imageUrl": {
+      "required": false,
+      "type": "string",
+      "desc": "URL gambar opsional untuk dianalisis oleh GPT-4.1"
+    }
+  }
+}
         {
-          "name": "ChatGpt 4",
-          "desc": "Talk with GPT-4. Bisa memahami gambar dan lanjutkan percakapan.",
-          "path": "/ai/gpt4?text=&imageUrl=",
-          "method": "GET",
-          "status": "ready",
-          "params": {
-            "text": {
-              "required": true,
-              "type": "string",
-              "desc": "Teks untuk dikirim ke GPT-4"
-            },
-            "imageUrl": {
-              "required": false,
-              "type": "string",
-              "desc": "URL gambar opsional yang bisa dianalisis oleh GPT-4"
-            },
-            "sessionid": {
-              "required": false,
-              "type": "string",
-              "desc": "Session ID opsional untuk mempertahankan konteks percakapan"
-            }
+  "name": "Gpt 4.1",
+  "desc": "Talk with GPT-4.1. Bisa memahami gambar dan lanjutkan percakapan.",
+  "path": "/ai/gpt-4.1?text=&imageUrl=",
+  "method": "GET",
+  "status": "ready",
+  "params": {
+    "text": {
+      "required": true,
+      "type": "string",
+      "desc": "Teks yang ingin dikirim ke GPT-4.1"
+    },
+    "imageUrl": {
+      "required": false,
+      "type": "string",
+      "desc": "URL gambar opsional untuk dianalisis oleh GPT-4.1"
+        }
           }
         },
         {
