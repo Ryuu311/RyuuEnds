@@ -104,6 +104,7 @@
       "desc": "URL gambar opsional untuk dianalisis oleh GPT-4.1"
         }
           }
+        }
         },
         {
           "name": "Open AI",
