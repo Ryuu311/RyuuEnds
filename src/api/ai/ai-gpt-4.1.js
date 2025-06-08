@@ -18,13 +18,16 @@ module.exports = function(app) {
         if (!text) {
             return res.status(400).json({
                 status: false,
-                message: 'Parameter \"text\" is required'
+                message: 'Parameter "text" is required'
             });
         }
 
         try {
             const result = await gpt41AI({ text, imageUrl, sessionid });
-            res.status(200).json(result);
+            res.status(200).json({
+                ...result,
+                creator: "RyuuXiao"
+            });
         } catch (error) {
             res.status(500).json({
                 status: false,
