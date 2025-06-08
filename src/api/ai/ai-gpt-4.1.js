@@ -12,7 +12,7 @@ module.exports = function(app) {
         }
     }
 
-    app.get('/ai/gpt4', async (req, res) => {
+    app.get('/ai/gpt-4.1', async (req, res) => {
         const { text, imageUrl, sessionid } = req.query;
 
         if (!text) {
