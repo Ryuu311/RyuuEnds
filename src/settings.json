@@ -61,7 +61,7 @@
         {
           "name": "Venice AI",
           "desc": "Talk with Venice AI",
-          "path": "/ai/venice?text=",
+          "path": "/ai/veniceai?text=",
           "status": "ready",
           "params": {
             "text": "Text for Venice AI to respond to"
@@ -90,7 +90,7 @@
           "name": "Open AI",
           "desc": "Talk with Open AI",
           "path": "/ai/openai?text=",
-          "status": "error",
+          "status": "ready",
           "params": {
             "text": "Text for Venice AI to respond to"
           }
