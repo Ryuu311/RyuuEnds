@@ -15,7 +15,7 @@ module.exports = function(app) {
         try {
             const buffer = await fetchImage();
             res.writeHead(200, {
-                'Content-Type': 'image/jpeg',
+                'Content-Type': 'image/png',
                 'Content-Length': buffer.length
             });
             res.end(buffer);
