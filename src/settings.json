@@ -114,17 +114,29 @@
             "text": "Text for Ryzumi AI to respond to"
           }
         },
-        {
+{
   "name": "Blackbox AI",
   "desc": "Talk with Blackbox AI. Bisa deteksi gambar & balas chat.",
-  "path": "/ai/blackbox?text=",
+  "path": "/ai/blackbox?text=&imageUrl=&sessionid=",
+  "method": "GET",
   "status": "ready",
   "params": {
-    "text": "Text untuk dikirim ke Blackbox AI",
-    "imageUrl": "URL gambar opsional untuk dianalisis",
-    "sessionid": "Session ID opsional (untuk menyambung percakapan)"
-          }
-        }
+    "text": {
+      "required": true,
+      "type": "string",
+      "desc": "Teks yang ingin dikirim ke Blackbox AI"
+    },
+    "imageUrl": {
+      "required": false,
+      "type": "string",
+      "desc": "URL gambar (opsional) untuk dianalisis oleh AI"
+    },
+    "sessionid": {
+      "required": false,
+      "type": "string",
+      "desc": "Session ID opsional untuk menyambung konteks"
+    }
+  }
       ]
     },
     {
