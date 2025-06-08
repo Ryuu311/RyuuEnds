@@ -1,31 +1,35 @@
 const axios = require('axios');
 
 module.exports = function(app) {
-    app.get('/ai/gpt4', async (req, res) => {
+    async function gpt4AI({ text, imageUrl = '', sessionid = '' }) {
         try {
-            const { apikey, ask } = req.query;
-            if (!global.apikey.includes(apikey)) {
-                return res.status(400).json({ status: false, error: 'Apikey invalid' });
-            }
-            if (!ask) {
-                return res.status(400).json({ status: false, error: 'Parameter "ask" wajib diisi' });
-            }
-
-            const response = await axios.get(`https://fastrestapis.fasturl.cloud/aillm/gpt-4?ask=${encodeURIComponent(ask)}`);
-            const data = response.data;
-
-            if (data.status !== 200) {
-                return res.status(500).json({ status: false, error: 'Gagal mengambil data dari GPT-4 API' });
-            }
-
-            res.status(200).json({
-                status: true,
-                result: data.result,
-                message: '/ai/gpt4?apikey=your_apikey&ask=Hai aku ubed'
-            });
+            const url = `https://api.nekorinn.my.id/ai/gpt4?text=${encodeURIComponent(text)}&imageUrl=${encodeURIComponent(imageUrl)}&sessionid=${encodeURIComponent(sessionid)}`;
+            const response = await axios.get(url);
+            return response.data;
         } catch (error) {
-            console.error(error);
-            res.status(500).json({ status: false, error: error.message });
+            console.error('GPT-4 API Error:', error.message);
+            throw new Error('Failed to connect to GPT-4 API');
+        }
+    }
+
+    app.get('/ai/gpt4', async (req, res) => {
+        const { text, imageUrl, sessionid } = req.query;
+
+        if (!text) {
+            return res.status(400).json({
+                status: false,
+                message: 'Parameter "text" is required'
+            });
+        }
+
+        try {
+            const result = await gpt4AI({ text, imageUrl, sessionid });
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                message: error.message
+            });
         }
     });
-}
+};
