@@ -272,7 +272,7 @@
           "name": "Remini",
           "desc": "Tingkatkan kualitas foto buram",
           "path": "/tools/remini?image=",
-          "status": "ready",
+          "status": "error",
           "params": {
             "image": "URL gambar yang ingin ditingkatkan"
           }
@@ -281,7 +281,7 @@
           "name": "Emojimix",
           "desc": "Gabungkan dua emoji jadi satu",
           "path": "/tools/emojimix?emoji1=&emoji2=",
-          "status": "ready",
+          "status": "error",
           "params": {
             "emoji1": "Emoji pertama (misal: 😀)",
             "emoji2": "Emoji kedua (misal: 💀)"
@@ -300,7 +300,7 @@
           "name": "Jarak",
           "desc": "Hitung jarak antar dua lokasi",
           "path": "/tools/jarak?lokasi1=&lokasi2=",
-          "status": "ready",
+          "status": "error",
           "params": {
             "lokasi1": "Lokasi pertama (contoh: Jakarta)",
             "lokasi2": "Lokasi kedua (contoh: Bandung)"
@@ -308,27 +308,11 @@
         },
         {
           "name": "Brat",
-          "desc": "Ubah foto jadi gaya kartun Bratz",
-          "path": "/tools/brat?image=",
-          "status": "ready",
+          "desc": "Ubah Teks Menjadi Stoker",
+          "path": "/tools/brat?text=",
+          "status": "error",
           "params": {
             "image": "URL foto yang ingin diubah ke gaya Bratz"
-             }
-        }
-      ]
-    },
-    {
-      "name": "Tools",
-      "icon": "fas fa-games",
-      "items": [
-        {
-          "name": "Fake NGL Generator",
-          "desc": "Generate pertanyaan dan jawaban gaya NGL",
-          "path": "/tools/ngl?title=&text=",
-          "status": "ready",
-          "params": {
-            "title": "Judul pertanyaan",
-            "text": "Isi pertanyaan atau jawaban"
           }
         }
       ]
