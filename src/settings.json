@@ -117,7 +117,7 @@
 {
   "name": "Blackbox AI",
   "desc": "Talk with Blackbox AI. Bisa deteksi gambar & balas chat.",
-  "path": "/ai/blackbox?text=&imageUrl=&sessionid=",
+  "path": "/ai/blackbox?text=&imageUrl=",
   "method": "GET",
   "status": "ready",
   "params": {
@@ -129,12 +129,7 @@
     "imageUrl": {
       "required": false,
       "type": "string",
-      "desc": "URL gambar (opsional) untuk dianalisis oleh AI"
-    },
-    "sessionid": {
-      "required": false,
-      "type": "string",
-      "desc": "Session ID opsional untuk menyambung konteks"
+      "desc": "URL Opsional (opsional) untuk dianalisis oleh AI"
     }
   }
 }
