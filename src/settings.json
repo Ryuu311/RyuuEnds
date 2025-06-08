@@ -290,7 +290,7 @@
         {
           "name": "Removebg",
           "desc": "Hapus background gambar",
-          "path": "/tools/removebg?image=",
+          "path": "/tools/removebg?imageUrl=",
           "status": "ready",
           "params": {
             "image": "URL gambar yang ingin dihapus background-nya"
