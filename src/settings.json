@@ -67,30 +67,31 @@
             "text": "Text for Venice AI to respond to"
           }
         },
-{
-  "name": "Gpt 4",
-  "desc": "Talk with GPT-4. Bisa memahami gambar dan lanjutkan percakapan.",
-  "path": "/ai/gpt4?text=&imageUrl=",
-  "method": "GET",
-  "status": "ready",
-  "params": {
-    "text": {
-      "required": true,
-      "type": "string",
-      "desc": "Teks untuk dikirim ke GPT-4"
-    },
-    "imageUrl": {
-      "required": false,
-      "type": "string",
-      "desc": "URL gambar opsional yang bisa dianalisis oleh GPT-4"
-    },
-    "sessionid": {
-      "required": false,
-      "type": "string",
-      "desc": "Session ID opsional untuk mempertahankan konteks percakapan"
-    }
-  } 
-}
+        {
+          "name": "Gpt 4",
+          "desc": "Talk with GPT-4. Bisa memahami gambar dan lanjutkan percakapan.",
+          "path": "/ai/gpt4?text=&imageUrl=&sessionid=",
+          "method": "GET",
+          "status": "ready",
+          "params": {
+            "text": {
+              "required": true,
+              "type": "string",
+              "desc": "Teks untuk dikirim ke GPT-4"
+            },
+            "imageUrl": {
+              "required": false,
+              "type": "string",
+              "desc": "URL gambar opsional yang bisa dianalisis oleh GPT-4"
+            },
+            "sessionid": {
+              "required": false,
+              "type": "string",
+              "desc": "Session ID opsional untuk mempertahankan konteks percakapan"
+            }
+          }
+        },
+        {
           "name": "Open AI",
           "desc": "Talk with Open AI",
           "path": "/ai/openai?text=",
@@ -100,34 +101,38 @@
           }
         },
         {
-          
           "name": "Claude AI",
-          "desc": "Talk with claude AI",
+          "desc": "Talk with Claude AI",
           "path": "/ai/claude?text=",
           "status": "ready",
           "params": {
-            "text": "Text for claude AI to respond to"
+            "text": "Text for Claude AI to respond to"
           }
         },
-{
-  "name": "Blackbox AI",
-  "desc": "Talk with Blackbox AI. Bisa deteksi gambar & balas chat.",
-  "path": "/ai/blackbox?text=&imageUrl=",
-  "method": "GET",
-  "status": "ready",
-  "params": {
-    "text": {
-      "required": true,
-      "type": "string",
-      "desc": "Teks yang ingin dikirim ke Blackbox AI"
-    },
-    "imageUrl": {
-      "required": false,
-      "type": "string",
-      "desc": "URL Opsional (opsional) untuk dianalisis oleh AI"
-    }
-  }
-}
+        {
+          "name": "Blackbox AI",
+          "desc": "Talk with Blackbox AI. Bisa deteksi gambar & balas chat.",
+          "path": "/ai/blackbox?text=&imageUrl=&sessionid=",
+          "method": "GET",
+          "status": "ready",
+          "params": {
+            "text": {
+              "required": true,
+              "type": "string",
+              "desc": "Teks yang ingin dikirim ke Blackbox AI"
+            },
+            "imageUrl": {
+              "required": false,
+              "type": "string",
+              "desc": "URL gambar opsional untuk dianalisis oleh AI"
+            },
+            "sessionid": {
+              "required": false,
+              "type": "string",
+              "desc": "Session ID opsional untuk mempertahankan konteks"
+            }
+          }
+        }
       ]
     },
     {
