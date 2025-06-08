@@ -1,9 +1,9 @@
 const axios = require('axios');
 
 module.exports = function(app) {
-  app.get('/api/ass', async (req, res) => {
+  app.get('/api/bottomless', async (req, res) => {
     try {
-      const response = await axios.get('https://api.nekorinn.my.id/nsfwhub/ass');
+      const response = await axios.get('https://api.nekorinn.my.id/nsfwhub/bottomless');
       res.json({
         status: true,
         creator: "RyuuXiao",
