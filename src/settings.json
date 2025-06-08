@@ -102,11 +102,10 @@
       "required": false,
       "type": "string",
       "desc": "URL gambar opsional untuk dianalisis oleh GPT-4.1"
+    }
+  },
         }
-          }
-        }
-        },
-        {
+          {
           "name": "Open AI",
           "desc": "Talk with Open AI",
           "path": "/ai/openai?text=",
