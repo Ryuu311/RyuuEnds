@@ -16,7 +16,7 @@
       "icon": "fas fa-robot",
       "items": [
         {
-          "name": "chatgpt",
+          "name": "Chatgpt Turbo 3.0",
           "desc": "Talk Chatgpt",
           "path": "/ai/gptturbo?text=",
           "status": "ready"
@@ -67,25 +67,30 @@
             "text": "Text for Venice AI to respond to"
           }
         },
-        {
-          "name": "Gpt 4",
-          "desc": "Api Gpt 4",
-          "path": "/ai/gpt4?&text=",
-          "status": "error",
-          "params": {
-            "text": "Text for Gpt4 AI to respond to"
-                      }
-        },
-        {
-          "name": "Stabielif AI",
-          "desc": "Talk with Stabil AI",
-          "path": "/ai/stabil?&text=",
-          "status": "error",
-          "params": {
-            "text": "Text for Venice AI to respond to"
-          }
-        },
-        {
+{
+  "name": "Gpt 4",
+  "desc": "Talk with GPT-4. Bisa memahami gambar dan lanjutkan percakapan.",
+  "path": "/ai/gpt4?text=&imageUrl=",
+  "method": "GET",
+  "status": "ready",
+  "params": {
+    "text": {
+      "required": true,
+      "type": "string",
+      "desc": "Teks untuk dikirim ke GPT-4"
+    },
+    "imageUrl": {
+      "required": false,
+      "type": "string",
+      "desc": "URL gambar opsional yang bisa dianalisis oleh GPT-4"
+    },
+    "sessionid": {
+      "required": false,
+      "type": "string",
+      "desc": "Session ID opsional untuk mempertahankan konteks percakapan"
+    }
+  } 
+}
           "name": "Open AI",
           "desc": "Talk with Open AI",
           "path": "/ai/openai?text=",
@@ -102,16 +107,6 @@
           "status": "ready",
           "params": {
             "text": "Text for claude AI to respond to"
-
-          }
-        },
-        {
-          "name": "Ryzumi AI",
-          "desc": "Talk with Ryzumi AI",
-          "path": "/ai/ryzumi?text=",
-          "status": "ready",
-          "params": {
-            "text": "Text for Ryzumi AI to respond to"
           }
         },
 {
