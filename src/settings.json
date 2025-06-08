@@ -115,13 +115,14 @@
           }
         },
         {
-          "name": "Blackbox AI",
-          "desc": "Talk with blackbox AI",
-          "path": "/ai/blackbox?text=",
-          "status": "ready",
-          "params": {
-            "text": "Text for blackbox AI to respond to"
-
+  "name": "Blackbox AI",
+  "desc": "Talk with Blackbox AI. Bisa deteksi gambar & balas chat.",
+  "path": "/ai/blackbox?text=",
+  "status": "ready",
+  "params": {
+    "text": "Text untuk dikirim ke Blackbox AI",
+    "imageUrl": "URL gambar opsional untuk dianalisis",
+    "sessionid": "Session ID opsional (untuk menyambung percakapan)"
           }
         }
       ]
