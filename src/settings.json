@@ -8,7 +8,7 @@
   },
   "apiSettings": {
     "creator": "RyuuXiao",
-    "apikey": ["RyuuXiao", "Xiao", "Ryuu"]
+    "apikey": ["RyuuXiao", "Xiao", "RyuuGanteng"]
   },
   "categories": [
     {
@@ -290,7 +290,7 @@
         {
           "name": "Removebg",
           "desc": "Hapus background gambar",
-          "path": "/tools/removebg?imageUrl=",
+          "path": "/tools/removebg?apikey=&imageUrl=",
           "status": "ready",
           "params": {
             "image": "URL gambar yang ingin dihapus background-nya"
