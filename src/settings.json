@@ -107,7 +107,7 @@
         {
           "name": "Blackbox AI",
           "desc": "Talk with Blackbox AI. Bisa deteksi gambar & balas chat.",
-          "path": "/ai/blackbox?text=&imageUrl=",
+          "path": "/ai/blackbox?text=&imageUrl=&sessionid=",
           "method": "GET",
           "status": "ready",
           "params": {
