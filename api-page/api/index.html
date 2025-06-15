@@ -12,12 +12,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link rel="stylesheet" href="/styles.css">
   <style>
-    .hero-section { padding-top: 40px !important; padding-bottom: 20px !important; min-height: auto !important; }
-    .hero-visual { margin-bottom: -40px !important; }
-    .api-section { padding-top: 10px !important; }
-    .side-nav-links a.child-link {
-      font-size: 0.9rem;
+    .side-nav-link.child-link {
+      font-size: 0.92rem;
       padding-left: 2rem;
+      color: #888;
+    }
+    .side-nav-link.child-link:hover {
+      color: #000;
     }
   </style>
 </head>
@@ -115,60 +116,5 @@
   </div>
 </footer>
 
-  </div>  <script src="/script.js"></script>  <script>
-    (function() {
-      const nav = document.getElementById('sideNavLinks');
-      const content = document.getElementById('apiContent');
-      if (!nav || !content) return;
-
-      fetch('/src/settings.json').then(res => res.json()).then(settings => {
-        nav.innerHTML = '';
-
-        const home = document.createElement('a');
-        home.href = '#home';
-        home.className = 'side-nav-link active';
-        home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
-        nav.appendChild(home);
-
-        settings.categories.forEach(cat => {
-          const catId = cat.name.toLowerCase().replace(/\s+/g, '-');
-          const a = document.createElement('a');
-          a.href = `#${catId}`;
-          a.className = 'side-nav-link';
-          a.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span>`;
-          nav.appendChild(a);
-
-          (cat.items || []).forEach((item, i) => {
-            const child = document.createElement('a');
-            child.href = `#${catId}-item-${i}`;
-            child.className = 'side-nav-link child-link';
-            child.textContent = item.name;
-            nav.appendChild(child);
-          });
-
-          const section = document.createElement('div');
-          section.className = 'card my-3';
-          section.id = catId;
-          section.innerHTML = `<div class="card-header"><h5><i class="${cat.icon}"></i> ${cat.name}</h5></div><div class="card-body"></div>`;
-
-          (cat.items || []).forEach((item, i) => {
-            const itemDiv = document.createElement('div');
-            itemDiv.id = `${catId}-item-${i}`;
-            itemDiv.className = 'mb-3';
-            itemDiv.innerHTML = `<strong>${item.name}</strong><span class="badge bg-${item.status === 'ready' ? 'success' : 'danger'} ms-2">${item.status}</span><br/><small>${item.desc || ''}</small><br/><code>${item.path}</code>`;
-            section.querySelector('.card-body').appendChild(itemDiv);
-          });
-
-          content.appendChild(section);
-        });
-
-        document.getElementById('sideNavName').textContent = settings.name;
-        document.getElementById('page').textContent = settings.name;
-        document.getElementById('name').textContent = settings.name;
-        document.getElementById('version').textContent = settings.version;
-        document.getElementById('versionHeader').textContent = settings.header?.status || '';
-        document.getElementById('dynamicImage').src = settings.bannerImage || '/src/banner.jpg';
-      }).catch(() => {});
-    })();
-  </script></body>
+  </div>  <script src="/script.js"></script></body>
 </html>
