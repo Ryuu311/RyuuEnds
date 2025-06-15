@@ -58,67 +58,80 @@
       fetch('/src/settings.json')
         .then(r=>r.ok?r.json():Promise.reject())
         .then(s=>{
-          const home = document.createElement('a'); home.href='#home'; home.className='side-nav-link active';
-          home.innerHTML='<i class="fas fa-home"></i><span>Beranda</span>'; nav.appendChild(home);
+          const home = document.createElement('a');
+          home.href='#home';
+          home.className='side-nav-link active';
+          home.innerHTML='<i class="fas fa-home"></i><span>Beranda</span>';
+          nav.appendChild(home);s.categories.forEach(cat=>{
+        const group=document.createElement('div');
+        group.className='side-nav-group';
+        const parent=document.createElement('a');
+        parent.href=`#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
+        parent.className='side-nav-link';
+        parent.innerHTML=`<i class="${cat.icon}"></i><span>${cat.name}</span><i class="fas fa-chevron-right side-arrow"></i>`;
+        group.appendChild(parent);
 
-          s.categories.forEach(cat=>{
-            const group=document.createElement('div'); group.className='side-nav-group';
-            const parent=document.createElement('a'); parent.href=`#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
-            parent.className='side-nav-link';
-            parent.innerHTML=`<i class="${cat.icon}"></i><span>${cat.name}</span><i class="fas fa-chevron-right side-arrow"></i>`;
-            group.appendChild(parent);
-
-            if(Array.isArray(cat.items)){
-              const submenu=document.createElement('div'); submenu.className='side-submenu';
-              cat.items.forEach(item=>{
-                const slug=item.name.toLowerCase().replace(/\s+/g,'-');
-                const a=document.createElement('a'); a.href=`#${slug}`; a.className='side-sub-link';
-                a.innerHTML=`<i class="fas fa-chevron-right"></i><span>${item.name}</span>`;
-                a.onclick=e=>{ e.preventDefault(); document.querySelector(`[data-id="${slug}"]`)?.scrollIntoView({behavior:'smooth'}); };
-                submenu.appendChild(a);
-              });
-              group.appendChild(submenu);
-              parent.addEventListener('click', e => {
-                e.preventDefault();
-                const was = group.classList.contains('active');
-                document.querySelectorAll('.side-nav-group').forEach(g => g.classList.remove('active'));
-                if (!was) {
-                  group.classList.add('active');
-                  document.getElementById('apis')?.scrollIntoView({ behavior: 'smooth' });
-                }
-              });
+        if(Array.isArray(cat.items)){
+          const submenu=document.createElement('div');
+          submenu.className='side-submenu';
+          cat.items.forEach(item=>{
+            const slug=item.name.toLowerCase().replace(/\s+/g,'-');
+            const a=document.createElement('a');
+            a.href=`#${slug}`;
+            a.className='side-sub-link';
+            a.innerHTML=`<i class="fas fa-chevron-right"></i><span>${item.name}</span>`;
+            a.onclick=e=>{
+              e.preventDefault();
+              document.querySelector(`[data-id="${slug}"]`)?.scrollIntoView({behavior:'smooth'});
+            };
+            submenu.appendChild(a);
+          });
+          group.appendChild(submenu);
+          parent.onclick=e=>{
+            e.preventDefault();
+            const was=group.classList.contains('active');
+            document.querySelectorAll('.side-nav-group').forEach(g=>g.classList.remove('active'));
+            if(!was){
+              group.classList.add('active');
+              document.getElementById('apis')?.scrollIntoView({behavior:'smooth'});
             }
-            nav.appendChild(group);
-          });
-        }).catch(console.error);
-
-      const bell = document.getElementById('notificationBell');
-      const badge = document.getElementById('notificationBadge');
-      const panel = document.createElement('div'); panel.className='custom-notif-panel';
-      panel.innerHTML='<h4>Notifikasi</h4><div id="notifItems">Memuat...</div>';
-      bell.after(panel);
-      let loaded = false;
-      bell.onclick = () => {
-        panel.classList.toggle('active');
-        if (!loaded) {
-          fetch('/src/notifications.json').then(r => r.ok ? r.json() : Promise.reject()).then(data => {
-            badge.textContent = data.length;
-            const list = document.getElementById('notifItems'); list.innerHTML = '';
-            data.forEach(n => {
-              const d = document.createElement('div'); d.className = 'notif-item';
-              d.innerHTML = `<strong>${n.title}</strong><p>${n.message}</p>`;
-              list.appendChild(d);
-            });
-          }).catch(e => {
-            document.getElementById('notifItems').textContent = 'Gagal memuat';
-          });
-          loaded = true;
+          };
         }
-      };
-      document.addEventListener('click', e => {
-        if (!bell.contains(e.target) && !panel.contains(e.target)) panel.classList.remove('active');
+        nav.appendChild(group);
       });
-    })();
+    }).catch(console.error);
+
+  const bell=document.getElementById('notificationBell');
+  const badge=document.getElementById('notificationBadge');
+  const panel=document.createElement('div');
+  panel.className='custom-notif-panel';
+  panel.innerHTML='<h4>Notifikasi</h4><div id="notifItems">Memuat...</div>';
+  bell.after(panel);
+  let loaded=false;
+  bell.onclick=()=>{
+    panel.classList.toggle('active');
+    if(!loaded){
+      fetch('/src/notifications.json').then(r=>r.ok?r.json():Promise.reject()).then(data=>{
+        badge.textContent=data.length;
+        const list=document.getElementById('notifItems');
+        list.innerHTML='';
+        data.forEach(n=>{
+          const d=document.createElement('div');
+          d.className='notif-item';
+          d.innerHTML=`<strong>${n.title}</strong><p>${n.message}</p>`;
+          list.appendChild(d);
+        });
+      }).catch(e=>{
+        document.getElementById('notifItems').textContent='Gagal memuat';
+      });
+      loaded=true;
+    }
+  };
+  document.addEventListener('click',e=>{
+    if(!bell.contains(e.target)&&!panel.contains(e.target)) panel.classList.remove('active');
+  });
+})();
+
   </script>
 </body>
 </html>
