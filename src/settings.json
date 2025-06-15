@@ -304,7 +304,7 @@
           "path": "/tools/removebg?apikey=&imageUrl=",
           "status": "ready",
           "params": {
-            "image": "URL gambar yang ingin dihapus background-nya"
+            "imageUrl": "URL gambar yang ingin dihapus background-nya"
           }
         },
         {
@@ -323,9 +323,10 @@
           "path": "/tools/brat?text=",
           "status": "error",
           "params": {
-            "image": "URL foto yang ingin diubah ke gaya Bratz"
+            "text": "Teks yang ingin diubah ke gaya Bratz"
+          }
         }
       ]
     }
   ]
-    }
+}
