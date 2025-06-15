@@ -1,5 +1,4 @@
-<!DOCTYPE html><html lang="id">
-<head>
+<!DOCTYPE html><html lang="id"><head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title id="page">RyuuXiao-Api UI</title>
@@ -8,105 +7,34 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <link rel="stylesheet" href="/styles.css">
   <style>
-    /* Existing styles */
     .hero-section { padding-top: 40px !important; padding-bottom: 20px !important; min-height: auto !important; }
     .hero-visual { margin-bottom: -40px !important; }
-    .api-section { padding-top: 10px !important; }/* Submenu & Arrow */
-.side-nav-group { display: flex; flex-direction: column; }
-.side-submenu { margin-left: 1.4rem; display: none; flex-direction: column; gap: 4px; margin-top: 4px; }
-.side-nav-group.active .side-submenu { display: flex; }
-.side-sub-link { font-size: 0.9rem; padding-left: 0.5rem; color: #888; display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
-.side-sub-link:hover { color: var(--primary); }
-.side-arrow { margin-left: auto; transition: transform 0.2s ease-in-out; }
-.side-nav-group.active .side-arrow { transform: rotate(90deg); }
-
-/* Notification panel override if needed */
-.custom-notif-panel { position: absolute; top: 60px; right: 2rem; width: 280px; background: #fff; color: #333; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); padding: 1rem; display: none; z-index: 200; }
-.custom-notif-panel.active { display: block; }
-.custom-notif-panel h4 { margin: 0 0 0.5rem 0; }
-.custom-notif-panel .notif-item { padding: 0.5rem 0; border-bottom: 1px solid #ddd; }
-.custom-notif-panel .notif-item:last-child { border-bottom: none; }
-.custom-notif-panel .notif-item p { margin: 4px 0 0; font-size: 0.85rem; }
+    .api-section { padding-top: 10px !important; }
+    .side-nav-group { display: flex; flex-direction: column; }
+    .side-submenu { margin-left: 1.4rem; display: none; flex-direction: column; gap: 4px; margin-top: 4px; }
+    .side-nav-group.active .side-submenu { display: flex; }
+    .side-sub-link { font-size: 0.9rem; padding-left: 0.5rem; color: #888; display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
+    .side-sub-link:hover { color: var(--primary); }
+    .side-arrow { margin-left: auto; transition: transform 0.2s ease-in-out; }
+    .side-nav-group.active .side-arrow { transform: rotate(90deg); }
+    .custom-notif-panel { position: absolute; top: 60px; right: 2rem; width: 280px; background: #fff; color: #333; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); padding: 1rem; display: none; z-index: 200; }
+    .custom-notif-panel.active { display: block; }
+    .custom-notif-panel h4 { margin: 0 0 0.5rem 0; }
+    .custom-notif-panel .notif-item { padding: 0.5rem 0; border-bottom: 1px solid #ddd; }
+    .custom-notif-panel .notif-item:last-child { border-bottom: none; }
+    .custom-notif-panel .notif-item p { margin: 4px 0 0; font-size: 0.85rem; }/* Tambahan fix ukuran logo */
+.side-nav-logo img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+.brand img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  margin-right: 8px;
+}
 
   </style>
 </head>
 <body>
-  <div id="loader"><div class="spinner"></div></div>
-  <aside class="side-nav" id="sideNavigation">
-    <div class="side-nav-logo">
-      <img src="https://files.catbox.moe/uyqvbu.png" alt="logo" style="width:32px; margin-right:8px;">
-      <span id="sideNavName">RyuuXiao-Api UI</span>
-      <div id="versionHeader" class="badge-pill">Online!</div>
-    </div>
-    <nav class="side-nav-links" id="sideNavLinks"></nav>
-    <button class="nav-collapse-btn" id="collapseBtn"><i class="fas fa-angle-left"></i></button>
-  </aside>  <div id="content">
-    <header>
-      <div class="brand"><img src="https://files.catbox.moe/uyqvbu.png" alt="logo">RyuuXiao-Api UI</div>
-      <div style="display:flex; align-items:center; gap:16px; position:relative;">
-        <div class="version">v1.0.0</div>
-        <button id="notificationBell" class="notif-bell"><i class="far fa-bell"></i><span id="notificationBadge" class="notification-badge"></span></button>
-      </div>
-    </header>
-    <main>
-      <section id="apis">
-        <!-- API cards rendered here with attribute data-id matching slug -->
-      </section>
-    </main>
-  </div>  <script src="/script.js"></script>  <script>
-    (function(){
-      // Sidebar dynamic
-      const nav = document.getElementById('sideNavLinks');
-      fetch('/src/settings.json')
-        .then(r=>r.ok?r.json():Promise.reject())
-        .then(s=>{
-          // Home
-          const home = document.createElement('a'); home.href='#home'; home.className='side-nav-link active';
-          home.innerHTML='<i class="fas fa-home"></i><span>Beranda</span>'; nav.appendChild(home);
-          // Categories
-          s.categories.forEach(cat=>{
-            const group=document.createElement('div'); group.className='side-nav-group';
-            const parent=document.createElement('a'); parent.href=`#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
-            parent.className='side-nav-link';
-            parent.innerHTML=`<i class="${cat.icon}"></i><span>${cat.name}</span><i class="fas fa-chevron-right side-arrow"></i>`;
-            group.appendChild(parent);
-            // Submenu
-            if(Array.isArray(cat.items)){
-              const submenu=document.createElement('div'); submenu.className='side-submenu';
-              cat.items.forEach(item=>{
-                const slug=item.name.toLowerCase().replace(/\s+/g,'-');
-                const a=document.createElement('a'); a.href=`#${slug}`; a.className='side-sub-link';
-                a.innerHTML=`<i class="fas fa-chevron-right"></i><span>${item.name}</span>`;
-                a.onclick=e=>{ e.preventDefault(); document.querySelector(`[data-id="${slug}"]`)?.scrollIntoView({behavior:'smooth'}); };
-                submenu.appendChild(a);
-              });
-              group.appendChild(submenu);
-              parent.onclick=e=>{
-                e.preventDefault();
-                const was=group.classList.contains('active');
-                document.querySelectorAll('.side-nav-group').forEach(g=>g.classList.remove('active'));
-                if(!was){ group.classList.add('active'); document.getElementById('apis').scrollIntoView({behavior:'smooth'}); }
-              };
-            }
-            nav.appendChild(group);
-          });
-        }).catch(console.error);
-
-      // Notifications
-      const bell=document.getElementById('notificationBell');
-      const badge=document.getElementById('notificationBadge');
-      const panel=document.createElement('div'); panel.className='custom-notif-panel';
-      panel.innerHTML='<h4>Notifikasi</h4><div id="notifItems">Memuat...</div>';
-      bell.after(panel);
-      let loaded=false;
-      bell.onclick=()=>{
-        panel.classList.toggle('active');
-        if(!loaded){ fetch('/src/notifications.json').then(r=>r.ok?r.json():Promise.reject()).then(data=>{
-          badge.textContent=data.length; const list=document.getElementById('notifItems'); list.innerHTML='';
-          data.forEach(n=>{ const d=document.createElement('div'); d.className='notif-item'; d.innerHTML=`<strong>${n.title}</strong><p>${n.message}</p>`; list.appendChild(d); });
-        }).catch(e=>{ document.getElementById('notifItems').textContent='Gagal memuat'; }); loaded=true; }
-      };
-      document.addEventListener('click',e=>{ if(!bell.contains(e.target)&&!panel.contains(e.target)) panel.classList.remove('active'); });
-    })();
-  </script></body>
-</html>
