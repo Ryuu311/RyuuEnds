@@ -203,6 +203,17 @@
           }
         },
         {
+          "name": "Mobile Legends",
+          "desc": "Stalk akun Mobile Legends",
+          "path": "/stalk/mlbb2?userId=&zoneId=&apikey=",
+          "status": "ready",
+          "params": {
+            "userId": "User ID Mobile Legends",
+            "zoneId": "Zone ID Mobile Legends",
+            "apikey": "Your API key"
+          }
+        },
+        {
           "name": "Free Fire",
           "desc": "Stalk akun Free Fire",
           "path": "/stalk/ff?id=",
