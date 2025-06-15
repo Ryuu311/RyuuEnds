@@ -1,5 +1,4 @@
-<!DOCTYPE html><html lang="id">
-<head>
+<!DOCTYPE html><html lang="id"><head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Dokumentasi API modern dan antarmuka pengujian yang interaktif.">
@@ -26,97 +25,7 @@
             </svg>
             <p>Memuat<span class="loading-dots">...</span></p>
         </div>
-    </div><aside class="side-nav" id="sideNavigation" aria-label="Navigasi Utama">
-    <div class="side-nav-logo">
-        <img src="/src/icon.png" alt="Logo API" style="width: 40px; height: 40px; border-radius: 8px;">
-        <span id="sideNavName">API</span>
-        <div id="versionHeader" class="badge-pill"></div>
-    </div>
-    <nav class="side-nav-links" id="sideNavLinks" aria-label="Tautan navigasi">
-        <!-- Default static minimal links if JS fails -->
-        <a href="#home" class="side-nav-link active" aria-current="page">
-            <i class="fas fa-home" aria-hidden="true"></i>
-            <span>Beranda</span>
-        </a>
-        <a href="#apis" class="side-nav-link">
-            <i class="fas fa-plug" aria-hidden="true"></i>
-            <span>API</span>
-        </a>
-    </nav>
-    <button class="nav-collapse-btn" aria-label="Alihkan navigasi" aria-controls="sideNavigation">
-        <i class="fas fa-angle-left"></i>
-    </button>
-</aside>
-
-<div class="main-wrapper">
-    <header class="main-header" role="banner">
-        <button class="menu-toggle" aria-label="Alihkan menu navigasi" aria-controls="sideNavigation">
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="search-container" role="search">
-            <div class="input-group">
-                <span class="input-group-text" aria-hidden="true"><i class="fas fa-search"></i></span>
-                <input type="text" id="searchInput" class="form-control" placeholder="Cari API..." aria-label="Cari API">
-                <button class="clear-search" id="clearSearch" aria-label="Hapus pencarian"><i class="fas fa-times"></i></button>
-            </div>
-        </div>
-        <div class="header-actions">
-            <button class="notification-bell" id="notificationBell" aria-label="Notifikasi">
-                <i class="far fa-bell"></i>
-                <span class="notification-badge" id="notificationBadge"></span>
-            </button>
-        </div>
-    </header>
-    <main id="mainContent">
-        <section id="home" class="hero-section" aria-labelledby="heroHeading">
-            <div class="hero-content">
-                <div class="hero-heading">
-                    <h1 id="name" class="gradient-text">Falcon API</h1>
-                    <div id="version" class="badge-pill">v1.0</div>
-                </div>
-            </div>
-            <div class="hero-visual" aria-hidden="true">
-                <div class="banner-container">
-                    <img id="dynamicImage" class="banner" src="/src/banner.jpg" alt="Banner API">
-                </div>
-                <div class="shape shape-1"></div>
-                <div class="shape shape-2"></div>
-                <div class="shape shape-3"></div>
-            </div>
-        </section>
-        <section id="apis" class="api-section" aria-labelledby="apiSectionTitle">
-            <h2 id="apiSectionTitle" class="section-title">API yang Tersedia</h2>
-            <p class="section-description">Jelajahi koleksi API kami yang powerful dan mudah digunakan.</p>
-            <div class="tab-content" id="apiContent"></div>
-        </section>
-    </main>
-    <footer class="main-footer" role="contentinfo">
-        <div class="footer-content">
-            <div id="wm" class="copyright">&copy; 2024 FlowFalcon. Semua hak dilindungi.</div>
-            <div class="footer-middle">
-                <div class="theme-switcher">
-                    <span>Terang</span>
-                    <label class="switch" aria-label="Alihkan tema gelap/terang">
-                        <input type="checkbox" id="themeToggle"><span class="slider round" aria-hidden="true"></span>
-                    </label>
-                    <span>Gelap</span>
-                </div>
-            </div>
-            <nav class="footer-links" aria-label="Tautan tambahan">
-                <a href="https://whatsapp.com/channel/0029VasjrIh3gvWXKzWncf2P" class="footer-link" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-whatsapp"></i> Info
-                </a>
-                <a href="https://wa.me/message/UB3MPOSN5S7AG1" class="footer-link" target="_blank" rel="noopener noreferrer">
-                    <i class="fas fa-envelope"></i> Kontak
-                </a>
-            </nav>
-        </div>
-    </footer>
-</div>
-
-<script src="/script.js"></script>
-<!-- Inject only sidebar population script, does not override existing DOMContentLoaded -->
-<script>
+    </div><!-- SIDEBAR DAN NAV AKAN DIPERBAIKI --><!-- SCRIPT INI AKAN DIGANTI DENGAN VERSI YANG SUPPORT SUBMENU DAN NOTIFIKASI --><script src="/script.js"></script><script>
 (function() {
     const nav = document.getElementById('sideNavLinks');
     if (!nav) return;
@@ -125,31 +34,76 @@
         return res.json();
     }).then(settings => {
         nav.innerHTML = '';
-        // Home link
         const home = document.createElement('a');
         home.href = '#home';
         home.className = 'side-nav-link active';
         home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
         nav.appendChild(home);
-        // Categories
         settings.categories.forEach(cat => {
-            const a = document.createElement('a');
-            a.href = `#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
-            a.className = 'side-nav-link';
-            a.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span>`;
-            nav.appendChild(a);
+            const group = document.createElement('div');
+            group.className = 'side-nav-group';
+            const parent = document.createElement('a');
+            parent.href = `#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
+            parent.className = 'side-nav-link';
+            parent.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span>`;
+            group.appendChild(parent);
+            if (Array.isArray(cat.children)) {
+                const submenu = document.createElement('div');
+                submenu.className = 'side-submenu';
+                cat.children.forEach(child => {
+                    const childLink = document.createElement('a');
+                    childLink.href = `#${child.toLowerCase().replace(/\s+/g,'-')}`;
+                    childLink.className = 'side-sub-link';
+                    childLink.innerHTML = `<i class="fas fa-chevron-right"></i><span>${child}</span>`;
+                    submenu.appendChild(childLink);
+                });
+                group.appendChild(submenu);
+                parent.addEventListener('click', e => {
+                    e.preventDefault();
+                    group.classList.toggle('active');
+                });
+            }
+            nav.appendChild(group);
         });
-        // Update names
         document.getElementById('sideNavName').textContent = settings.name;
         document.getElementById('page').textContent = settings.name;
         document.getElementById('name').textContent = settings.name;
         document.getElementById('version').textContent = settings.version;
         document.getElementById('versionHeader').textContent = settings.header?.status || '';
-    }).catch(() => {
-        // do nothing, keep default
+    }).catch(() => {});
+
+    const bell = document.getElementById('notificationBell');
+    const badge = document.getElementById('notificationBadge');
+    const panel = document.createElement('div');
+    panel.className = 'custom-notif-panel';
+    panel.innerHTML = '<h4>Notifikasi</h4><div id="notifItems">Memuat...</div>';
+    bell.insertAdjacentElement('afterend', panel);
+    let loaded = false;
+    bell.addEventListener('click', () => {
+        panel.classList.toggle('active');
+        if (!loaded) {
+            fetch('/src/notifications.json')
+                .then(r => r.ok ? r.json() : Promise.reject())
+                .then(data => {
+                    loaded = true;
+                    badge.textContent = data.length;
+                    const c = document.getElementById('notifItems');
+                    c.innerHTML = '';
+                    data.forEach(n => {
+                        const item = document.createElement('div');
+                        item.className = 'notif-item';
+                        item.innerHTML = `<strong>${n.title}</strong><p>${n.message}</p>`;
+                        c.appendChild(item);
+                    });
+                })
+                .catch(() => {
+                    document.getElementById('notifItems').textContent = 'Gagal memuat notifikasi';
+                });
+        }
+    });
+    document.addEventListener('click', e => {
+        if (!bell.contains(e.target) && !panel.contains(e.target)) panel.classList.remove('active');
     });
 })();
-</script>
-
-</body>
+</script></body>
 </html>
