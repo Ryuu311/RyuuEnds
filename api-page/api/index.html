@@ -1,5 +1,4 @@
-<!DOCTYPE html><html lang="id">
-<head>
+<!DOCTYPE html><html lang="id"><head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Dokumentasi API modern dan antarmuka pengujian yang interaktif.">
@@ -15,6 +14,12 @@
         .hero-section { padding-top: 40px !important; padding-bottom: 20px !important; min-height: auto !important; }
         .hero-visual { margin-bottom: -40px !important; }
         .api-section { padding-top: 10px !important; }
+        .side-submenu { margin-left: 1.5rem; display: none; flex-direction: column; gap: 4px; margin-top: 4px; }
+        .side-nav-group.active .side-submenu { display: flex; }
+        .side-sub-link { font-size: 0.9rem; padding-left: 1rem; color: #888; text-decoration: none; }
+        .side-sub-link:hover { color: var(--primary); }
+        .side-arrow { margin-left: auto; transition: transform 0.2s ease-in-out; }
+        .side-nav-group.active .side-arrow { transform: rotate(90deg); }
     </style>
 </head>
 <body>
@@ -26,29 +31,18 @@
             </svg>
             <p>Memuat<span class="loading-dots">...</span></p>
         </div>
-    </div><aside class="side-nav" id="sideNavigation" aria-label="Navigasi Utama">
-    <div class="side-nav-logo">
-        <img src="/src/icon.png" alt="Logo API" style="width: 40px; height: 40px; border-radius: 8px;">
-        <span id="sideNavName">API</span>
-        <div id="versionHeader" class="badge-pill"></div>
     </div>
-    <nav class="side-nav-links" id="sideNavLinks" aria-label="Tautan navigasi">
-        <!-- Default static minimal links if JS fails -->
-        <a href="#home" class="side-nav-link active" aria-current="page">
-            <i class="fas fa-home" aria-hidden="true"></i>
-            <span>Beranda</span>
-        </a>
-        <a href="#apis" class="side-nav-link">
-            <i class="fas fa-plug" aria-hidden="true"></i>
-            <span>API</span>
-        </a>
-    </nav>
-    <button class="nav-collapse-btn" aria-label="Alihkan navigasi" aria-controls="sideNavigation">
-        <i class="fas fa-angle-left"></i>
-    </button>
-</aside>
-
-<div class="main-wrapper">
+    <aside class="side-nav" id="sideNavigation" aria-label="Navigasi Utama">
+        <div class="side-nav-logo">
+            <img src="/src/icon.png" alt="Logo API" style="width: 40px; height: 40px; border-radius: 8px;">
+            <span id="sideNavName">API</span>
+            <div id="versionHeader" class="badge-pill"></div>
+        </div>
+        <nav class="side-nav-links" id="sideNavLinks" aria-label="Tautan navigasi"></nav>
+        <button class="nav-collapse-btn" aria-label="Alihkan navigasi" aria-controls="sideNavigation">
+            <i class="fas fa-angle-left"></i>
+        </button>
+    </aside><div class="main-wrapper">
     <header class="main-header" role="banner">
         <button class="menu-toggle" aria-label="Alihkan menu navigasi" aria-controls="sideNavigation">
             <i class="fas fa-bars"></i>
@@ -114,39 +108,57 @@
     </footer>
 </div>
 
-<script src="/script.js"></script>
-<!-- Inject only sidebar population script, does not override existing DOMContentLoaded -->
 <script>
 (function() {
     const nav = document.getElementById('sideNavLinks');
-    if (!nav) return;
-    fetch('/src/settings.json').then(res => {
-        if (!res.ok) throw new Error();
-        return res.json();
-    }).then(settings => {
+    fetch('/src/settings.json').then(res => res.json()).then(settings => {
         nav.innerHTML = '';
-        // Home link
         const home = document.createElement('a');
         home.href = '#home';
         home.className = 'side-nav-link active';
         home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
         nav.appendChild(home);
-        // Categories
         settings.categories.forEach(cat => {
-            const a = document.createElement('a');
-            a.href = `#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
-            a.className = 'side-nav-link';
-            a.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span>`;
-            nav.appendChild(a);
+            const group = document.createElement('div');
+            group.className = 'side-nav-group';
+            const parent = document.createElement('a');
+            parent.href = `#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
+            parent.className = 'side-nav-link';
+            parent.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span><i class="fas fa-chevron-right side-arrow"></i>`;
+            group.appendChild(parent);
+            if (Array.isArray(cat.items)) {
+                const submenu = document.createElement('div');
+                submenu.className = 'side-submenu';
+                cat.items.forEach(item => {
+                    const slug = item.name.toLowerCase().replace(/\s+/g, '-');
+                    const child = document.createElement('a');
+                    child.href = `#${slug}`;
+                    child.className = 'side-sub-link';
+                    child.innerHTML = `<span>${item.name}</span>`;
+                    child.onclick = e => {
+                        e.preventDefault();
+                        document.querySelector(`[data-id="${slug}"]`)?.scrollIntoView({ behavior: 'smooth' });
+                    };
+                    submenu.appendChild(child);
+                });
+                group.appendChild(submenu);
+                parent.onclick = e => {
+                    e.preventDefault();
+                    const wasActive = group.classList.contains('active');
+                    document.querySelectorAll('.side-nav-group').forEach(g => g.classList.remove('active'));
+                    if (!wasActive) {
+                        group.classList.add('active');
+                        document.getElementById('apis').scrollIntoView({ behavior: 'smooth' });
+                    }
+                };
+            }
+            nav.appendChild(group);
         });
-        // Update names
         document.getElementById('sideNavName').textContent = settings.name;
         document.getElementById('page').textContent = settings.name;
         document.getElementById('name').textContent = settings.name;
         document.getElementById('version').textContent = settings.version;
         document.getElementById('versionHeader').textContent = settings.header?.status || '';
-    }).catch(() => {
-        // do nothing, keep default
     });
 })();
 </script>
