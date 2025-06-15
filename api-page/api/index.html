@@ -18,13 +18,19 @@
         /* Gaya untuk submenu */
         .side-nav-link.has-submenu {
             cursor: pointer;
+            position: relative; /* Penting untuk positioning anak panah jika ingin ditambah */
         }
         .submenu {
             list-style: none;
             padding-left: 20px; /* Indentasi submenu */
+            margin: 0;
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out; /* Transisi untuk efek buka/tutup */
+            background-color: rgba(0, 0, 0, 0.2); /* Sedikit background agar terlihat */
+            border-radius: 5px;
+            margin-top: 5px;
+            margin-bottom: 5px;
         }
         .submenu.open {
             max-height: 500px; /* Tinggi maksimum saat terbuka, sesuaikan jika perlu */
@@ -34,7 +40,12 @@
             padding: 8px 0;
             color: #ccc; /* Warna teks submenu */
         }
-        .submenu-item:hover {
+        .submenu-item a {
+            color: inherit; /* Warisi warna dari parent */
+            text-decoration: none; /* Hilangkan garis bawah */
+            display: block; /* Agar seluruh area item bisa diklik */
+        }
+        .submenu-item a:hover {
             color: #fff; /* Warna teks submenu saat hover */
         }
     </style>
@@ -137,109 +148,160 @@
     const content = document.getElementById('apiContent');
     let openSubmenu = null; // Variabel untuk melacak submenu yang sedang terbuka
 
-    if (!nav || !content) return;
+    if (!nav || !content) {
+        console.error('Navigasi atau Konten API tidak ditemukan.');
+        return;
+    }
 
-    fetch('/src/settings.json').then(res => res.json()).then(settings => {
-        nav.innerHTML = ''; // Bersihkan navigasi awal
-        
-        // Tambahkan link Beranda
-        const home = document.createElement('a');
-        home.href = '#home';
-        home.className = 'side-nav-link active';
-        home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
-        nav.appendChild(home);
-
-        // Tambahkan event listener untuk scroll ke bagian saat link navigasi diklik
-        home.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.querySelector(e.currentTarget.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-            // Tutup semua submenu saat mengklik Beranda
-            if (openSubmenu) {
-                openSubmenu.classList.remove('open');
-                openSubmenu = null;
+    fetch('/src/settings.json')
+        .then(res => {
+            if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
             }
-            // Hapus kelas 'active' dari semua link dan tambahkan ke Beranda
-            document.querySelectorAll('.side-nav-link').forEach(link => link.classList.remove('active'));
-            home.classList.add('active');
-        });
+            return res.json();
+        })
+        .then(settings => {
+            console.log('Settings loaded:', settings); // Debugging: Periksa apakah settings.json dimuat
+            nav.innerHTML = ''; // Bersihkan navigasi awal
 
-        settings.categories.forEach(cat => {
-            const categoryId = cat.name.toLowerCase().replace(/\s+/g,'-');
-            
-            const categoryLink = document.createElement('a');
-            categoryLink.href = `javascript:void(0)`; // Ubah href agar tidak langsung scroll
-            categoryLink.className = 'side-nav-link has-submenu'; // Tambahkan kelas has-submenu
-            categoryLink.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span>`;
-            nav.appendChild(categoryLink);
+            // Tambahkan link Beranda
+            const home = document.createElement('a');
+            home.href = '#home';
+            home.className = 'side-nav-link active';
+            home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
+            nav.appendChild(home);
 
-            const submenu = document.createElement('ul');
-            submenu.className = 'submenu';
-            submenu.id = `submenu-${categoryId}`;
-            nav.appendChild(submenu);
-
-            // Event listener untuk kategori (menggulir dan membuka/menutup submenu)
-            categoryLink.addEventListener('click', (e) => {
+            // Tambahkan event listener untuk scroll ke bagian saat link navigasi diklik
+            home.addEventListener('click', (e) => {
                 e.preventDefault();
-                // Scroll ke kategori yang sesuai
-                document.getElementById(categoryId).scrollIntoView({ behavior: 'smooth' });
+                console.log('Clicked Home, scrolling to #home'); // Debugging
+                document.querySelector(e.currentTarget.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
 
-                // Tutup submenu yang sedang terbuka jika ada, kecuali submenu yang baru saja diklik
-                if (openSubmenu && openSubmenu !== submenu) {
+                // Tutup semua submenu saat mengklik Beranda
+                if (openSubmenu) {
                     openSubmenu.classList.remove('open');
+                    openSubmenu = null;
+                    console.log('Closed previously open submenu.'); // Debugging
                 }
-                
-                // Toggle submenu
-                submenu.classList.toggle('open');
-                openSubmenu = submenu.classList.contains('open') ? submenu : null;
-
-                // Atur kelas 'active' untuk link kategori yang diklik
+                // Hapus kelas 'active' dari semua link dan tambahkan ke Beranda
                 document.querySelectorAll('.side-nav-link').forEach(link => link.classList.remove('active'));
-                categoryLink.classList.add('active');
+                home.classList.add('active');
             });
 
-            const section = document.createElement('div');
-            section.className = 'card my-3';
-            section.id = categoryId; // ID untuk section kategori
-            section.innerHTML = `<div class="card-header"><h5><i class="${cat.icon}"></i> ${cat.name}</h5></div><div class="card-body"></div>`;
+            // Proses kategori dari settings.json
+            if (!settings.categories || !Array.isArray(settings.categories)) {
+                console.warn('Settings.json does not contain a valid "categories" array.');
+                return;
+            }
 
-            (cat.items || []).forEach(item => {
-                const itemId = `${categoryId}-${item.name.toLowerCase().replace(/\s+/g,'-')}`; // ID unik untuk setiap item API
-                
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'mb-3';
-                itemDiv.id = itemId; // Tambahkan ID ke itemDiv
-                itemDiv.innerHTML = `<strong>${item.name}</strong><span class="badge bg-${item.status === 'ready' ? 'success' : 'danger'} ms-2">${item.status}</span><br/><small>${item.desc || ''}</small><br/><code>${item.path}</code>`;
-                section.querySelector('.card-body').appendChild(itemDiv);
+            settings.categories.forEach(cat => {
+                const categoryId = cat.name.toLowerCase().replace(/\s+/g,'-');
+                console.log(`Processing category: ${cat.name}, ID: ${categoryId}`); // Debugging
 
-                // Buat item submenu
-                const submenuItem = document.createElement('li');
-                submenuItem.className = 'submenu-item';
-                submenuItem.innerHTML = `<a href="#${itemId}">${item.name}</a>`; // Link ke item API
-                submenu.appendChild(submenuItem);
+                const categoryLink = document.createElement('a');
+                categoryLink.href = `javascript:void(0)`; // Ubah href agar tidak langsung scroll
+                categoryLink.className = 'side-nav-link has-submenu'; // Tambahkan kelas has-submenu
+                categoryLink.innerHTML = `<i class="<span class="math-inline">\{cat\.icon\}"\></i\><span\></span>{cat.name}</span>`;
+                nav.appendChild(categoryLink);
 
-                // Event listener untuk scroll ke item saat submenu item diklik
-                submenuItem.querySelector('a').addEventListener('click', (e) => {
+                const submenu = document.createElement('ul');
+                submenu.className = 'submenu';
+                submenu.id = `submenu-${categoryId}`;
+                nav.appendChild(submenu);
+
+                // Event listener untuk kategori (menggulir dan membuka/menutup submenu)
+                categoryLink.addEventListener('click', (e) => {
                     e.preventDefault();
-                    document.querySelector(e.currentTarget.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-                    // Hapus kelas 'active' dari semua link dan tambahkan ke kategori induk
+                    console.log(`Clicked category link: <span class="math-inline">\{cat\.name\}, scrolling to \#</span>{categoryId}`); // Debugging
+
+                    // Scroll ke kategori yang sesuai
+                    const targetSection = document.getElementById(categoryId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        console.warn(`Target section #${categoryId} not found for scrolling.`); // Debugging
+                    }
+
+                    // Tutup submenu yang sedang terbuka jika ada, kecuali submenu yang baru saja diklik
+                    if (openSubmenu && openSubmenu !== submenu) {
+                        openSubmenu.classList.remove('open');
+                        console.log('Closed old submenu.'); // Debugging
+                    }
+
+                    // Toggle submenu
+                    submenu.classList.toggle('open');
+                    openSubmenu = submenu.classList.contains('open') ? submenu : null;
+                    console.log(`Submenu for ${cat.name} toggled. Is open: ${submenu.classList.contains('open')}`); // Debugging
+
+                    // Atur kelas 'active' untuk link kategori yang diklik
                     document.querySelectorAll('.side-nav-link').forEach(link => link.classList.remove('active'));
                     categoryLink.classList.add('active');
                 });
+
+                // Buat section untuk kategori di konten utama
+                const section = document.createElement('div');
+                section.className = 'card my-3';
+                section.id = categoryId; // ID untuk section kategori
+                section.innerHTML = `<div class="card-header"><h5><i class="${cat.icon}"></i> ${cat.name}</h5></div><div class="card-body"></div>`;
+
+                // Proses item-item di dalam kategori
+                if (!cat.items || !Array.isArray(cat.items)) {
+                    console.warn(`Category "${cat.name}" does not contain a valid "items" array.`);
+                    return; // Lanjutkan ke kategori berikutnya jika tidak ada item
+                }
+
+                (cat.items || []).forEach(item => {
+                    const itemId = `<span class="math-inline">\{categoryId\}\-</span>{item.name.toLowerCase().replace(/\s+/g,'-')}`; // ID unik untuk setiap item API
+                    console.log(`  Processing item: ${item.name}, ID: ${itemId}`); // Debugging
+
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'mb-3';
+                    itemDiv.id = itemId; // Tambahkan ID ke itemDiv
+                    itemDiv.innerHTML = `<strong><span class="math-inline">\{item\.name\}</strong\><span class\="badge bg\-</span>{item.status === 'ready' ? 'success' : 'danger'} ms-2"><span class="math-inline">\{item\.status\}</span\><br/\><small\></span>{item.desc || ''}</small><br/><code>${item.path}</code>`;
+                    section.querySelector('.card-body').appendChild(itemDiv);
+
+                    // Buat item submenu
+                    const submenuItem = document.createElement('li');
+                    submenuItem.className = 'submenu-item';
+                    submenuItem.innerHTML = `<a href="#<span class="math-inline">\{itemId\}"\></span>{item.name}</a>`; // Link ke item API
+                    submenu.appendChild(submenuItem);
+
+                    // Event listener untuk scroll ke item saat submenu item diklik
+                    submenuItem.querySelector('a').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        console.log(`Clicked submenu item: <span class="math-inline">\{item\.name\}, scrolling to \#</span>{itemId}`); // Debugging
+                        const targetItem = document.querySelector(e.currentTarget.getAttribute('href'));
+                        if (targetItem) {
+                            targetItem.scrollIntoView({ behavior: 'smooth' });
+                        } else {
+                            console.warn(`Target item #${itemId} not found for scrolling.`); // Debugging
+                        }
+
+                        // Hapus kelas 'active' dari semua link dan tambahkan ke kategori induk
+                        document.querySelectorAll('.side-nav-link').forEach(link => link.classList.remove('active'));
+                        categoryLink.classList.add('active'); // Tetap aktifkan kategori induk
+                    });
+                });
+
+                content.appendChild(section);
             });
 
-            content.appendChild(section);
+            // Update teks berdasarkan settings.json
+            document.getElementById('sideNavName').textContent = settings.name || 'API';
+            document.getElementById('page').textContent = settings.name || 'Falcon API';
+            document.getElementById('name').textContent = settings.name || 'Falcon API';
+            document.getElementById('version').textContent = settings.version || 'v1.0';
+            document.getElementById('versionHeader').textContent = settings.header?.status || '';
+            document.getElementById('dynamicImage').src = settings.bannerImage || '/src/banner.jpg';
+        })
+        .catch(error => {
+            console.error('Error loading or parsing settings.json:', error); // Debugging: Tangkap error fetch
+            // Tampilkan pesan error ke pengguna jika perlu
+            const apiContent = document.getElementById('apiContent');
+            if (apiContent) {
+                apiContent.innerHTML = '<p style="color: red;">Failed to load API data. Please check settings.json and console for errors.</p>';
+            }
         });
-
-        // Update teks berdasarkan settings.json
-        document.getElementById('sideNavName').textContent = settings.name;
-        document.getElementById('page').textContent = settings.name;
-        document.getElementById('name').textContent = settings.name;
-        document.getElementById('version').textContent = settings.version;
-        document.getElementById('versionHeader').textContent = settings.header?.status || '';
-        document.getElementById('dynamicImage').src = settings.bannerImage || '/src/banner.jpg';
-    }).catch(() => {
-        console.error('Error fetching settings.json');
-    });
 })();
 </script></body>
 </html>
