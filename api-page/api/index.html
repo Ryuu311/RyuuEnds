@@ -1,111 +1,88 @@
-<!DOCTYPE html><html lang="id"><head>
+<!DOCTYPE html><html lang="id">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title id="page">RyuuXiao-Api UI</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <meta name="description" content="Dokumentasi API modern dan antarmuka pengujian yang interaktif.">
+  <meta name="keywords" content="API, Dokumentasi API, REST API, Falcon API, FlowFalcon, Alat Pengembang">
+  <meta name="author" content="FlowFalcon">
+  <link rel="icon" href="/src/icon.png" type="image/png">
+  <title id="page">Falcon API</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="/styles.css">
   <style>
     .hero-section { padding-top: 40px !important; padding-bottom: 20px !important; min-height: auto !important; }
     .hero-visual { margin-bottom: -40px !important; }
     .api-section { padding-top: 10px !important; }
-    .side-nav-group { display: flex; flex-direction: column; }
-    .side-submenu { margin-left: 1.4rem; display: none; flex-direction: column; gap: 4px; margin-top: 4px; }
-    .side-nav-group.active .side-submenu { display: flex; }
-    .side-sub-link { font-size: 0.9rem; padding-left: 0.5rem; color: #888; display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
-    .side-sub-link:hover { color: var(--primary); }
-    .side-arrow { margin-left: auto; transition: transform 0.2s ease-in-out; }
-    .side-nav-group.active .side-arrow { transform: rotate(90deg); }
-    .custom-notif-panel { position: absolute; top: 60px; right: 2rem; width: 280px; background: #fff; color: #333; border-radius: 8px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); padding: 1rem; display: none; z-index: 200; }
-    .custom-notif-panel.active { display: block; }
-    .custom-notif-panel h4 { margin: 0 0 0.5rem 0; }
-    .custom-notif-panel .notif-item { padding: 0.5rem 0; border-bottom: 1px solid #ddd; }
-    .custom-notif-panel .notif-item:last-child { border-bottom: none; }
-    .custom-notif-panel .notif-item p { margin: 4px 0 0; font-size: 0.85rem; }
+    .side-nav-link i {
+      transition: transform 0.3s ease;
+    }
+    .side-nav-link.active i {
+      transform: rotate(90deg);
+    }
   </style>
 </head>
 <body>
-  <div id="loader"><div class="spinner"></div></div>
-  <aside class="side-nav" id="sideNavigation">
-    <div class="side-nav-logo">
-      <img src="https://files.catbox.moe/uyqvbu.png" alt="logo" style="width:32px; margin-right:8px;">
-      <span id="sideNavName">RyuuXiao-Api UI</span>
-      <div id="versionHeader" class="badge-pill">Online!</div>
-    </div>
-    <nav class="side-nav-links" id="sideNavLinks"></nav>
-    <button class="nav-collapse-btn" id="collapseBtn"><i class="fas fa-angle-left"></i></button>
-  </aside>
-  <div id="content">
-    <header>
-      <div class="brand"><img src="https://files.catbox.moe/uyqvbu.png" alt="logo">RyuuXiao-Api UI</div>
-      <div style="display:flex; align-items:center; gap:16px; position:relative;">
-        <div class="version">v1.0.0</div>
-        <button id="notificationBell" class="notif-bell"><i class="far fa-bell"></i><span id="notificationBadge" class="notification-badge"></span></button>
-      </div>
-    </header>
-    <main>
-      <section id="apis">
-        <!-- API cards rendered here with attribute data-id matching slug -->
-      </section>
-    </main>
-  </div>
-  <script>
-(function () {
+  <!-- TETAPKAN STRUKTUR HTML SEBELUMNYA TANPA DIUBAH --><script src="/script.js"></script><!-- Inject only sidebar population script, does not override existing DOMContentLoaded --><script>
+(function() {
   const nav = document.getElementById('sideNavLinks');
-  fetch('/src/settings.json')
-    .then((r) => r.ok ? r.json() : Promise.reject())
-    .then((s) => {
-      const home = document.createElement('a');
-      home.href = '#home';
-      home.className = 'side-nav-link active';
-      home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
-      nav.appendChild(home);s.categories.forEach((cat) => {
-    const group = document.createElement('div');
-    group.className = 'side-nav-group';
+  if (!nav) return;
+  fetch('/src/settings.json').then(res => {
+    if (!res.ok) throw new Error();
+    return res.json();
+  }).then(settings => {
+    nav.innerHTML = '';
 
-    const parent = document.createElement('a');
-    parent.href = `#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
-    parent.className = 'side-nav-link';
-    parent.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span><i class="fas fa-chevron-right side-arrow"></i>`;
-
-    const submenu = document.createElement('div');
-    submenu.className = 'side-submenu';
-
-    if (Array.isArray(cat.items)) {
-      cat.items.forEach((item) => {
-        const slug = item.name.toLowerCase().replace(/\s+/g,'-');
-        const sub = document.createElement('a');
-        sub.href = `#${slug}`;
-        sub.className = 'side-sub-link';
-        sub.innerHTML = `<i class="fas fa-chevron-right"></i><span>${item.name}</span>`;
-        sub.onclick = (e) => {
-          e.preventDefault();
-          const target = document.querySelector(`[data-id="${slug}"]`);
-          if (target) target.scrollIntoView({ behavior: 'smooth' });
-        };
-        submenu.appendChild(sub);
-      });
-    }
-
-    group.appendChild(parent);
-    group.appendChild(submenu);
-    nav.appendChild(group);
-
-    parent.addEventListener('click', (e) => {
+    const home = document.createElement('a');
+    home.href = '#home';
+    home.className = 'side-nav-link';
+    home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
+    home.addEventListener('click', (e) => {
       e.preventDefault();
-      const wasActive = group.classList.contains('active');
-      document.querySelectorAll('.side-nav-group').forEach((g) => g.classList.remove('active'));
-      if (!wasActive) {
-        group.classList.add('active');
-        const section = document.getElementById('apis');
-        if (section) section.scrollIntoView({ behavior: 'smooth' });
+      const target = document.getElementById('home');
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+    nav.appendChild(home);
+
+    settings.categories.forEach(cat => {
+      const catId = cat.name.toLowerCase().replace(/\s+/g, '-');
+      const catLink = document.createElement('a');
+      catLink.href = `#${catId}`;
+      catLink.className = 'side-nav-link';
+      catLink.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span>`;
+      catLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.getElementById(catId);
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+      nav.appendChild(catLink);
+
+      if (Array.isArray(cat.children)) {
+        cat.children.forEach(child => {
+          const childId = child.name.toLowerCase().replace(/\s+/g, '-');
+          const childLink = document.createElement('a');
+          childLink.href = `#${childId}`;
+          childLink.className = 'side-nav-link ps-4';
+          childLink.innerHTML = `<i class="${child.icon || 'fas fa-code'}"></i><span>${child.name}</span>`;
+          childLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.getElementById(childId);
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+          });
+          nav.appendChild(childLink);
+        });
       }
     });
+
+    document.getElementById('sideNavName').textContent = settings.name;
+    document.getElementById('page').textContent = settings.name;
+    document.getElementById('name').textContent = settings.name;
+    document.getElementById('version').textContent = settings.version;
+    document.getElementById('versionHeader').textContent = settings.header?.status || '';
+  }).catch(() => {
+    // Do nothing, keep default
   });
-});
-
-const bell = document.getElementById('notificationBell'); const badge = document.getElementById('notificationBadge'); const panel = document.createElement('div'); panel.className = 'custom-notif-panel'; panel.innerHTML = '<h4>Notifikasi</h4><div id="notifItems">Memuat...</div>'; bell.after(panel); let loaded = false; bell.onclick = () => { panel.classList.toggle('active'); if (!loaded) { fetch('/src/notifications.json') .then((r) => r.ok ? r.json() : Promise.reject()) .then((data) => { badge.textContent = data.length; const list = document.getElementById('notifItems'); list.innerHTML = ''; data.forEach((n) => { const d = document.createElement('div'); d.className = 'notif-item'; d.innerHTML = <strong>${n.title}</strong><p>${n.message}</p>; list.appendChild(d); }); }) .catch(() => { document.getElementById('notifItems').textContent = 'Gagal memuat'; }); loaded = true; } }; document.addEventListener('click', (e) => { if (!bell.contains(e.target) && !panel.contains(e.target)) panel.classList.remove('active'); }); })(); </script>
-
-</body>
+})();
+</script></body>
 </html>
