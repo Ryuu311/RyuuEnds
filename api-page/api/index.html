@@ -145,12 +145,22 @@
               childLink.href = `#${child.name.toLowerCase().replace(/\s+/g,'-')}`;
               childLink.className = 'side-sub-link';
               childLink.innerHTML = `<i class="fas fa-chevron-right"></i><span>${child.name}</span>`;
+              childLink.addEventListener('click', e => {
+                e.preventDefault();
+                const apiSection = document.getElementById('apiContent');
+                if (apiSection) {
+                  const card = apiSection.querySelector(`[data-id="${child.name.toLowerCase().replace(/\s+/g,'-')}"]`);
+                  if (card) card.scrollIntoView({ behavior: 'smooth' });
+                }
+              });
               submenu.appendChild(childLink);
             });
             group.appendChild(submenu);
             parent.addEventListener('click', e => {
               e.preventDefault();
+              document.querySelectorAll('.side-nav-group').forEach(g => g !== group && g.classList.remove('active'));
               group.classList.toggle('active');
+              document.getElementById('apis').scrollIntoView({ behavior: 'smooth' });
             });
           }
           nav.appendChild(group);
