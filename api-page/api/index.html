@@ -14,17 +14,10 @@
     .hero-section { padding-top: 40px !important; padding-bottom: 20px !important; min-height: auto !important; }
     .hero-visual { margin-bottom: -40px !important; }
     .api-section { padding-top: 10px !important; }
-    .side-nav-group { display:flex; flex-direction:column; }
-    .side-submenu { margin-left:1.2rem; flex-direction:column; gap:4px; margin-top:4px; display:none; }
-    .side-nav-group.active .side-submenu { display:flex; }
-    .side-sub-link { font-size:0.9rem; padding-left:0.5rem; color:#888; display:flex; align-items:center; gap:0.5rem; text-decoration:none; }
+    .side-submenu { margin-left: 1.4rem; display: none; flex-direction: column; gap: 4px; margin-top: 4px; }
+    .side-nav-group.active .side-submenu { display: flex; }
+    .side-sub-link { font-size: 0.9rem; padding-left: 0.5rem; color: #888; display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
     .side-sub-link:hover { color: var(--primary); }
-    .custom-notif-panel { position:absolute; top:60px; right:2rem; width:280px; background:var(--card-light); color:var(--text-light); border-radius:8px; box-shadow:0 8px 16px rgba(0,0,0,0.15); padding:1rem; display:none; z-index:200; }
-    .custom-notif-panel.active { display:block; }
-    .custom-notif-panel h4 { margin:0 0 .5rem 0; }
-    .custom-notif-panel .notif-item { padding:.5rem 0; border-bottom:1px solid #ddd; }
-    .custom-notif-panel .notif-item:last-child { border-bottom:none; }
-    .custom-notif-panel .notif-item p { margin:4px 0 0; font-size:0.85rem; }
   </style>
 </head>
 <body>
@@ -43,8 +36,14 @@
       <div id="versionHeader" class="badge-pill"></div>
     </div>
     <nav class="side-nav-links" id="sideNavLinks" aria-label="Tautan navigasi">
-      <a href="#home" class="side-nav-link active"><i class="fas fa-home"></i><span>Beranda</span></a>
-      <a href="#apis" class="side-nav-link"><i class="fas fa-plug"></i><span>API</span></a>
+      <a href="#home" class="side-nav-link active" aria-current="page">
+        <i class="fas fa-home" aria-hidden="true"></i>
+        <span>Beranda</span>
+      </a>
+      <a href="#apis" class="side-nav-link">
+        <i class="fas fa-plug" aria-hidden="true"></i>
+        <span>API</span>
+      </a>
     </nav>
     <button class="nav-collapse-btn" aria-label="Alihkan navigasi" aria-controls="sideNavigation">
       <i class="fas fa-angle-left"></i>
@@ -56,142 +55,113 @@
       </button>
       <div class="search-container" role="search">
         <div class="input-group">
-          <span class="input-group-text"><i class="fas fa-search"></i></span>
-          <input type="text" id="searchInput" class="form-control" placeholder="Cari API...">
-          <button class="clear-search" id="clearSearch"><i class="fas fa-times"></i></button>
+          <span class="input-group-text" aria-hidden="true"><i class="fas fa-search"></i></span>
+          <input type="text" id="searchInput" class="form-control" placeholder="Cari API..." aria-label="Cari API">
+          <button class="clear-search" id="clearSearch" aria-label="Hapus pencarian"><i class="fas fa-times"></i></button>
         </div>
       </div>
       <div class="header-actions">
-        <button class="notification-bell" id="notificationBell">
+        <button class="notification-bell" id="notificationBell" aria-label="Notifikasi">
           <i class="far fa-bell"></i>
           <span class="notification-badge" id="notificationBadge"></span>
         </button>
-        <div class="custom-notif-panel" id="customNotifPanel">
-          <h4>Notifikasi</h4>
-          <div id="notifItems">Memuat...</div>
+      </div>
+    </header>
+    <main id="mainContent">
+      <section id="home" class="hero-section" aria-labelledby="heroHeading">
+        <div class="hero-content">
+          <div class="hero-heading">
+            <h1 id="name" class="gradient-text">Falcon API</h1>
+            <div id="version" class="badge-pill">v1.0</div>
+          </div>
         </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="banner-container">
+            <img id="dynamicImage" class="banner" src="/src/banner.jpg" alt="Banner API">
+          </div>
+          <div class="shape shape-1"></div>
+          <div class="shape shape-2"></div>
+          <div class="shape shape-3"></div>
+        </div>
+      </section>
+      <section id="apis" class="api-section" aria-labelledby="apiSectionTitle">
+        <h2 id="apiSectionTitle" class="section-title">API yang Tersedia</h2>
+        <p class="section-description">Jelajahi koleksi API kami yang powerful dan mudah digunakan.</p>
+        <div class="tab-content" id="apiContent"></div>
+      </section>
+    </main>
+    <footer class="main-footer" role="contentinfo">
+      <div class="footer-content">
+        <div id="wm" class="copyright">&copy; 2024 FlowFalcon. Semua hak dilindungi.</div>
+        <div class="footer-middle">
+          <div class="theme-switcher">
+            <span>Terang</span>
+            <label class="switch" aria-label="Alihkan tema gelap/terang">
+              <input type="checkbox" id="themeToggle"><span class="slider round" aria-hidden="true"></span>
+            </label>
+            <span>Gelap</span>
+          </div>
+        </div>
+        <nav class="footer-links" aria-label="Tautan tambahan">
+          <a href="https://whatsapp.com/channel/0029VasjrIh3gvWXKzWncf2P" class="footer-link" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-whatsapp"></i> Info
+          </a>
+          <a href="https://wa.me/message/UB3MPOSN5S7AG1" class="footer-link" target="_blank" rel="noopener noreferrer">
+            <i class="fas fa-envelope"></i> Kontak
+          </a>
+        </nav>
       </div>
-    </header><main id="mainContent">
-  <section id="home" class="hero-section">
-    <div class="hero-content">
-      <div class="hero-heading">
-        <h1 id="name" class="gradient-text">Falcon API</h1>
-        <div id="version" class="badge-pill">v1.0</div>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="banner-container">
-        <img id="dynamicImage" class="banner" src="/src/banner.jpg" alt="Banner API">
-      </div>
-      <div class="shape shape-1"></div>
-      <div class="shape shape-2"></div>
-      <div class="shape shape-3"></div>
-    </div>
-  </section>
-  <section id="apis" class="api-section">
-    <h2 class="section-title">API yang Tersedia</h2>
-    <p class="section-description">Jelajahi koleksi API kami yang powerful dan mudah digunakan.</p>
-    <div class="tab-content" id="apiContent"></div>
-  </section>
-</main>
-
-<footer class="main-footer">
-  <div class="footer-content">
-    <div id="wm" class="copyright">&copy; 2024 FlowFalcon. Semua hak dilindungi.</div>
-    <div class="footer-middle">
-      <div class="theme-switcher">
-        <span>Terang</span>
-        <label class="switch">
-          <input type="checkbox" id="themeToggle">
-          <span class="slider round"></span>
-        </label>
-        <span>Gelap</span>
-      </div>
-    </div>
-    <nav class="footer-links">
-      <a href="https://whatsapp.com/channel/0029VasjrIh3gvWXKzWncf2P" class="footer-link" target="_blank"><i class="fab fa-whatsapp"></i> Info</a>
-      <a href="https://wa.me/message/UB3MPOSN5S7AG1" class="footer-link" target="_blank"><i class="fas fa-envelope"></i> Kontak</a>
-    </nav>
-  </div>
-</footer>
-
+    </footer>
   </div>  <script src="/script.js"></script>  <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    (function() {
       const nav = document.getElementById('sideNavLinks');
-      fetch('/src/settings.json')
-        .then(res => res.json())
-        .then(settings => {
-          nav.innerHTML = '';
-          const home = document.createElement('a');
-          home.href = '#home';
-          home.className = 'side-nav-link active';
-          home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
-          nav.appendChild(home);
+      if (!nav) return;
+      fetch('/src/settings.json').then(res => {
+        if (!res.ok) throw new Error();
+        return res.json();
+      }).then(settings => {
+        nav.innerHTML = '';
+        const home = document.createElement('a');
+        home.href = '#home';
+        home.className = 'side-nav-link active';
+        home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
+        nav.appendChild(home);
 
-          settings.categories.forEach(cat => {
-            const group = document.createElement('div');
-            group.className = 'side-nav-group';
-            const parent = document.createElement('a');
-            parent.href = `#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
-            parent.className = 'side-nav-link';
-            parent.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span>`;
-            group.appendChild(parent);
+        settings.categories.forEach(cat => {
+          const group = document.createElement('div');
+          group.className = 'side-nav-group';
 
-            if (Array.isArray(cat.children)) {
-              const submenu = document.createElement('div');
-              submenu.className = 'side-submenu';
-              cat.children.forEach(child => {
-                const childLink = document.createElement('a');
-                childLink.href = `#${child.toLowerCase().replace(/\s+/g,'-')}`;
-                childLink.className = 'side-sub-link';
-                childLink.innerHTML = `<i class="fas fa-chevron-right"></i><span>${child}</span>`;
-                submenu.appendChild(childLink);
-              });
-              group.appendChild(submenu);
-              parent.addEventListener('click', e => {
-                e.preventDefault();
-                group.classList.toggle('active');
-              });
-            }
-            nav.appendChild(group);
-          });
+          const parent = document.createElement('a');
+          parent.href = `#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
+          parent.className = 'side-nav-link';
+          parent.innerHTML = `<i class="${cat.icon || 'fas fa-folder'}"></i><span>${cat.name}</span>`;
+          group.appendChild(parent);
 
-          document.getElementById('sideNavName').textContent = settings.name;
-          document.getElementById('page').textContent = settings.name;
-          document.getElementById('name').textContent = settings.name;
-          document.getElementById('version').textContent = settings.version;
-          document.getElementById('versionHeader').textContent = settings.header?.status || '';
+          if (Array.isArray(cat.items)) {
+            const submenu = document.createElement('div');
+            submenu.className = 'side-submenu';
+            cat.items.forEach(child => {
+              const childLink = document.createElement('a');
+              childLink.href = `#${child.name.toLowerCase().replace(/\s+/g,'-')}`;
+              childLink.className = 'side-sub-link';
+              childLink.innerHTML = `<i class="fas fa-chevron-right"></i><span>${child.name}</span>`;
+              submenu.appendChild(childLink);
+            });
+            group.appendChild(submenu);
+            parent.addEventListener('click', e => {
+              e.preventDefault();
+              group.classList.toggle('active');
+            });
+          }
+          nav.appendChild(group);
         });
 
-      const bell = document.getElementById('notificationBell');
-      const badge = document.getElementById('notificationBadge');
-      const panel = document.getElementById('customNotifPanel');
-      let loaded = false;
-      bell.addEventListener('click', () => {
-        panel.classList.toggle('active');
-        if (!loaded) {
-          fetch('/api-page/notifications.json')
-            .then(res => res.json())
-            .then(data => {
-              loaded = true;
-              badge.textContent = data.length;
-              const container = document.getElementById('notifItems');
-              container.innerHTML = '';
-              data.forEach(item => {
-                const el = document.createElement('div');
-                el.className = 'notif-item';
-                el.innerHTML = `<strong>${item.title}</strong><p>${item.message}</p>`;
-                container.appendChild(el);
-              });
-            });
-        }
-      });
-
-      document.addEventListener('click', e => {
-        if (!bell.contains(e.target) && !panel.contains(e.target)) {
-          panel.classList.remove('active');
-        }
-      });
-    });
+        document.getElementById('sideNavName').textContent = settings.name;
+        document.getElementById('page').textContent = settings.name;
+        document.getElementById('name').textContent = settings.name;
+        document.getElementById('version').textContent = settings.version;
+        document.getElementById('versionHeader').textContent = settings.header?.status || '';
+      }).catch(() => {});
+    })();
   </script></body>
 </html>
