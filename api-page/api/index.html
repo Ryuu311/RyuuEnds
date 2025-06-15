@@ -22,19 +22,101 @@
     .custom-notif-panel h4 { margin: 0 0 0.5rem 0; }
     .custom-notif-panel .notif-item { padding: 0.5rem 0; border-bottom: 1px solid #ddd; }
     .custom-notif-panel .notif-item:last-child { border-bottom: none; }
-    .custom-notif-panel .notif-item p { margin: 4px 0 0; font-size: 0.85rem; }/* Tambahan fix ukuran logo */
-.side-nav-logo img {
-  width: 32px;
-  height: 32px;
-  object-fit: contain;
-}
-.brand img {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  margin-right: 8px;
-}
-
+    .custom-notif-panel .notif-item p { margin: 4px 0 0; font-size: 0.85rem; }
   </style>
 </head>
 <body>
+  <div id="loader"><div class="spinner"></div></div>
+  <aside class="side-nav" id="sideNavigation">
+    <div class="side-nav-logo">
+      <img src="https://files.catbox.moe/uyqvbu.png" alt="logo" style="width:32px; margin-right:8px;">
+      <span id="sideNavName">RyuuXiao-Api UI</span>
+      <div id="versionHeader" class="badge-pill">Online!</div>
+    </div>
+    <nav class="side-nav-links" id="sideNavLinks"></nav>
+    <button class="nav-collapse-btn" id="collapseBtn"><i class="fas fa-angle-left"></i></button>
+  </aside>
+  <div id="content">
+    <header>
+      <div class="brand"><img src="https://files.catbox.moe/uyqvbu.png" alt="logo">RyuuXiao-Api UI</div>
+      <div style="display:flex; align-items:center; gap:16px; position:relative;">
+        <div class="version">v1.0.0</div>
+        <button id="notificationBell" class="notif-bell"><i class="far fa-bell"></i><span id="notificationBadge" class="notification-badge"></span></button>
+      </div>
+    </header>
+    <main>
+      <section id="apis">
+        <!-- API cards rendered here with attribute data-id matching slug -->
+      </section>
+    </main>
+  </div>
+  <script src="/script.js"></script>
+  <script>
+    (function(){
+      const nav = document.getElementById('sideNavLinks');
+      fetch('/src/settings.json')
+        .then(r=>r.ok?r.json():Promise.reject())
+        .then(s=>{
+          const home = document.createElement('a'); home.href='#home'; home.className='side-nav-link active';
+          home.innerHTML='<i class="fas fa-home"></i><span>Beranda</span>'; nav.appendChild(home);s.categories.forEach(cat=>{
+        const group=document.createElement('div'); group.className='side-nav-group';
+        const parent=document.createElement('a'); parent.href=`#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
+        parent.className='side-nav-link';
+        parent.innerHTML=`<i class="${cat.icon}"></i><span>${cat.name}</span><i class="fas fa-chevron-right side-arrow"></i>`;
+        group.appendChild(parent);
+
+        if(Array.isArray(cat.items)){
+          const submenu=document.createElement('div'); submenu.className='side-submenu';
+          cat.items.forEach(item=>{
+            const slug=item.name.toLowerCase().replace(/\s+/g,'-');
+            const a=document.createElement('a'); a.href=`#${slug}`; a.className='side-sub-link';
+            a.innerHTML=`<i class="fas fa-chevron-right"></i><span>${item.name}</span>`;
+            a.onclick=e=>{ e.preventDefault(); document.querySelector(`[data-id="${slug}"]`)?.scrollIntoView({behavior:'smooth'}); };
+            submenu.appendChild(a);
+          });
+          group.appendChild(submenu);
+          parent.addEventListener('click', e => {
+            e.preventDefault();
+            const was = group.classList.contains('active');
+            document.querySelectorAll('.side-nav-group').forEach(g => g.classList.remove('active'));
+            if (!was) {
+              group.classList.add('active');
+              document.getElementById('apis')?.scrollIntoView({ behavior: 'smooth' });
+            }
+          });
+        }
+        nav.appendChild(group);
+      });
+    }).catch(console.error);
+
+  const bell = document.getElementById('notificationBell');
+  const badge = document.getElementById('notificationBadge');
+  const panel = document.createElement('div'); panel.className='custom-notif-panel';
+  panel.innerHTML='<h4>Notifikasi</h4><div id="notifItems">Memuat...</div>';
+  bell.after(panel);
+  let loaded = false;
+  bell.onclick = () => {
+    panel.classList.toggle('active');
+    if (!loaded) {
+      fetch('/src/notifications.json').then(r => r.ok ? r.json() : Promise.reject()).then(data => {
+        badge.textContent = data.length;
+        const list = document.getElementById('notifItems'); list.innerHTML = '';
+        data.forEach(n => {
+          const d = document.createElement('div'); d.className = 'notif-item';
+          d.innerHTML = `<strong>${n.title}</strong><p>${n.message}</p>`;
+          list.appendChild(d);
+        });
+      }).catch(e => {
+        document.getElementById('notifItems').textContent = 'Gagal memuat';
+      });
+      loaded = true;
+    }
+  };
+  document.addEventListener('click', e => {
+    if (!bell.contains(e.target) && !panel.contains(e.target)) panel.classList.remove('active');
+  });
+})();
+
+  </script>
+</body>
+</html>
