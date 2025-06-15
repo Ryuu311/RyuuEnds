@@ -1,20 +1,22 @@
-<!DOCTYPE html><html lang="id"><head>  
-    <meta charset="UTF-8" />  
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
-    <meta name="description" content="Dokumentasi API modern dan antarmuka pengujian yang interaktif.">  
-    <meta name="keywords" content="API, Dokumentasi API, REST API, Falcon API, FlowFalcon, Alat Pengembang">  
-    <meta name="author" content="FlowFalcon">  
-    <link rel="icon" href="/src/icon.png" type="image/png">  
-    <title id="page">Falcon API</title>  
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"/>  
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>  
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>  
-    <link rel="stylesheet" href="/styles.css">  
-    <style>  
-        .hero-section { padding-top: 40px !important; padding-bottom: 20px !important; min-height: auto !important; }  
-        .hero-visual { margin-bottom: -40px !important; }  
-        .api-section { padding-top: 10px !important; }  
-    </style>  
+<!DOCTYPE html><html lang="id"><head>  <meta charset="UTF-8" />  
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+<meta name="description" content="Dokumentasi API modern dan antarmuka pengujian yang interaktif.">  
+<meta name="keywords" content="API, Dokumentasi API, REST API, Falcon API, FlowFalcon, Alat Pengembang">  
+<meta name="author" content="FlowFalcon">  
+<link rel="icon" href="/src/icon.png" type="image/png">  
+<title id="page">Falcon API</title>  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"/>  
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>  
+<link rel="stylesheet" href="/styles.css">  
+<style>  
+    .hero-section { padding-top: 40px !important; padding-bottom: 20px !important; min-height: auto !important; }  
+    .hero-visual { margin-bottom: -40px !important; }  
+    .api-section { padding-top: 10px !important; }  
+    .sub-links { padding-left: 20px; display: none; flex-direction: column; }  
+    .sub-links a { font-size: 14px; padding: 2px 0; }  
+</style>
+
 </head>  
 <body>  
     <div id="loadingScreen" role="status" aria-live="polite">  
@@ -32,7 +34,6 @@
         <div id="versionHeader" class="badge-pill"></div>  
     </div>  
     <nav class="side-nav-links" id="sideNavLinks" aria-label="Tautan navigasi">  
-        <!-- Default static minimal links if JS fails -->  
         <a href="#home" class="side-nav-link active" aria-current="page">  
             <i class="fas fa-home" aria-hidden="true"></i>  
             <span>Beranda</span>  
@@ -120,35 +121,62 @@
         home.href = '#home';  
         home.className = 'side-nav-link active';  
         home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';  
-        nav.appendChild(home);  
-        settings.categories.forEach(cat => {  
-            const a = document.createElement('a');  
-            a.href = `#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;  
-            a.className = 'side-nav-link';  
-            a.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span>`;  
-            nav.appendChild(a);  
-  
-            const section = document.createElement('div');  
-            section.className = 'card my-3';  
-            section.id = cat.name.toLowerCase().replace(/\s+/g,'-');  
-            section.innerHTML = `<div class="card-header"><h5><i class="${cat.icon}"></i> ${cat.name}</h5></div><div class="card-body"></div>`;  
-  
-            (cat.items || []).forEach(item => {  
-                const itemDiv = document.createElement('div');  
-                itemDiv.className = 'mb-3';  
-                itemDiv.innerHTML = `<strong>${item.name}</strong><span class="badge bg-${item.status === 'ready' ? 'success' : 'danger'} ms-2">${item.status}</span><br/><small>${item.desc || ''}</small><br/><code>${item.path}</code>`;  
-                section.querySelector('.card-body').appendChild(itemDiv);  
-            });  
-  
-            content.appendChild(section);  
-        });  
-        document.getElementById('sideNavName').textContent = settings.name;  
-        document.getElementById('page').textContent = settings.name;  
-        document.getElementById('name').textContent = settings.name;  
-        document.getElementById('version').textContent = settings.version;  
-        document.getElementById('versionHeader').textContent = settings.header?.status || '';  
-        document.getElementById('dynamicImage').src = settings.bannerImage || '/src/banner.jpg';  
-    }).catch(() => {});  
-})();  
-</script></body>  
-</html>  
+        nav.appendChild(home);  settings.categories.forEach(cat => {  
+        const catId = cat.name.toLowerCase().replace(/\s+/g,'-');
+        const wrapper = document.createElement('div');
+        wrapper.className = 'category-wrapper';
+
+        const link = document.createElement('a');
+        link.href = `#${catId}`;
+        link.className = 'side-nav-link';
+        link.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span>`;
+        link.onclick = () => {
+            document.querySelectorAll('.sub-links').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.category-wrapper .side-nav-link').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+            subLinks.style.display = 'flex';
+        };
+        wrapper.appendChild(link);
+
+        const subLinks = document.createElement('div');
+        subLinks.className = 'sub-links';
+
+        cat.items.forEach(item => {
+            const subLink = document.createElement('a');
+            const itemId = item.name.toLowerCase().replace(/\s+/g,'-');
+            subLink.href = `#${itemId}`;
+            subLink.textContent = item.name;
+            subLinks.appendChild(subLink);
+        });
+        wrapper.appendChild(subLinks);
+        nav.appendChild(wrapper);
+
+        const section = document.createElement('div');
+        section.className = 'card my-3';
+        section.id = catId;
+        section.innerHTML = `<div class="card-header"><h5><i class="${cat.icon}"></i> ${cat.name}</h5></div><div class="card-body"></div>`;
+
+        cat.items.forEach(item => {
+            const itemDiv = document.createElement('div');
+            const itemId = item.name.toLowerCase().replace(/\s+/g,'-');
+            itemDiv.id = itemId;
+            itemDiv.className = 'mb-3';
+            itemDiv.innerHTML = `<strong>${item.name}</strong><span class="badge bg-${item.status === 'ready' ? 'success' : 'danger'} ms-2">${item.status}</span><br/><small>${item.desc || ''}</small><br/><code>${item.path}</code>`;
+            section.querySelector('.card-body').appendChild(itemDiv);
+        });
+
+        content.appendChild(section);
+    });
+
+    document.getElementById('sideNavName').textContent = settings.name;  
+    document.getElementById('page').textContent = settings.name;  
+    document.getElementById('name').textContent = settings.name;  
+    document.getElementById('version').textContent = settings.version;  
+    document.getElementById('versionHeader').textContent = settings.header?.status || '';  
+    document.getElementById('dynamicImage').src = settings.bannerImage || '/src/banner.jpg';  
+}).catch(() => {});
+
+})();
+</script></body>
+
+</html>
