@@ -170,7 +170,7 @@
       bell.addEventListener('click', () => {
         panel.classList.toggle('active');
         if (!loaded) {
-          fetch('/src/notifications.json')
+          fetch('/api-page/notifications.json')
             .then(res => res.json())
             .then(data => {
               loaded = true;
