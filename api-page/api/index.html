@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="id"><head>
+<!DOCTYPE html><html lang="id">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Dokumentasi API modern dan antarmuka pengujian yang interaktif.">
@@ -15,107 +16,155 @@
         .hero-section { padding-top: 40px !important; padding-bottom: 20px !important; min-height: auto !important; }
         .hero-visual { margin-bottom: -40px !important; }
         .api-section { padding-top: 10px !important; }
-        .side-nav-links {
-            max-height: calc(100vh - 140px);
-            overflow-y: auto;
-        }
+        .side-nav-links { max-height: calc(100vh - 140px); overflow-y: auto; }
         .sidebar-submenu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            max-height: 0;
-            overflow: hidden;
+            list-style: none; padding: 0; margin: 0;
+            max-height: 0; overflow: hidden;
             transition: max-height 0.4s ease, opacity 0.3s ease;
-            background-color: rgba(0, 0, 0, 0.03);
-            opacity: 0;
+            background-color: rgba(0, 0, 0, 0.03); opacity: 0;
         }
-        .sidebar-submenu.open {
-            max-height: 1000px;
-            opacity: 1;
-        }
-        .sidebar-submenu .side-nav-link {
-            padding-left: 40px;
-            font-size: 0.95rem;
-        }
-        .toggle-icon {
-            margin-left: auto;
-            transition: transform 0.3s ease;
-        }
-        .side-nav-link.active .toggle-icon {
-            transform: rotate(90deg);
-        }
+        .sidebar-submenu.open { max-height: 800px; opacity: 1; }
+        .sidebar-submenu .side-nav-link { padding-left: 40px; font-size: 0.95rem; }
+        .toggle-icon { margin-left: auto; transition: transform 0.3s ease; }
+        .sub-category-toggle.open > .toggle-icon { transform: rotate(90deg); }
     </style>
 </head>
 <body>
-<!-- Loading screen, sidebar, main layout... tetap -->
-<script src="/script.js"></script>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" role="status" aria-live="polite">
+        <div class="spinner-wrapper">
+            <svg class="spinner-logo" width="80" height="80" viewBox="0 0 100 100" aria-hidden="true">
+                <circle class="spinner-path" cx="50" cy="50" r="40" fill="none" stroke-width="8" />
+                <circle class="spinner-animation" cx="50" cy="50" r="40" fill="none" stroke-width="8" />
+            </svg>
+            <p>Memuat<span class="loading-dots">...</span></p>
+        </div>
+    </div><!-- Sidebar -->
+<aside class="side-nav" id="sideNavigation" aria-label="Navigasi Utama">
+    <div class="side-nav-logo">
+        <img src="/src/icon.png" alt="Logo API" style="width: 40px; height: 40px; border-radius: 8px;">
+        <span id="sideNavName">API</span>
+        <div id="versionHeader" class="badge-pill"></div>
+    </div>
+    <nav class="side-nav-links" id="sideNavLinks" aria-label="Tautan navigasi"></nav>
+    <button class="nav-collapse-btn" aria-label="Alihkan navigasi" aria-controls="sideNavigation">
+        <i class="fas fa-angle-left"></i>
+    </button>
+</aside>
+
+<!-- Main Wrapper -->
+<div class="main-wrapper">
+    <header class="main-header" role="banner">
+        <button class="menu-toggle" aria-label="Alihkan menu navigasi" aria-controls="sideNavigation">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="search-container" role="search">
+            <div class="input-group">
+                <span class="input-group-text" aria-hidden="true"><i class="fas fa-search"></i></span>
+                <input type="text" id="searchInput" class="form-control" placeholder="Cari API..." aria-label="Cari API">
+                <button class="clear-search" id="clearSearch" aria-label="Hapus pencarian"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="notification-bell" id="notificationBell" aria-label="Notifikasi">
+                <i class="far fa-bell"></i>
+                <span class="notification-badge" id="notificationBadge"></span>
+            </button>
+        </div>
+    </header>
+
+    <main id="mainContent">
+        <section id="home" class="hero-section" aria-labelledby="heroHeading">
+            <div class="hero-content">
+                <div class="hero-heading">
+                    <h1 id="name" class="gradient-text">Falcon API</h1>
+                    <div id="version" class="badge-pill">v1.0</div>
+                </div>
+            </div>
+            <div class="hero-visual" aria-hidden="true">
+                <div class="banner-container">
+                    <img id="dynamicImage" class="banner" src="/src/banner.jpg" alt="Banner API">
+                </div>
+            </div>
+        </section>
+
+        <section id="apis" class="api-section" aria-labelledby="apiSectionTitle">
+            <h2 id="apiSectionTitle" class="section-title">API yang Tersedia</h2>
+            <p class="section-description">Jelajahi koleksi API kami yang powerful dan mudah digunakan.</p>
+            <div class="tab-content" id="apiContent"></div>
+        </section>
+    </main>
+
+    <footer class="main-footer" role="contentinfo">
+        <div class="footer-content">
+            <div id="wm" class="copyright">&copy; 2024 FlowFalcon. Semua hak dilindungi.</div>
+        </div>
+    </footer>
+</div>
+
 <script>
 (function() {
     const nav = document.getElementById('sideNavLinks');
     if (!nav) return;
     fetch('/src/settings.json')
-        .then(res => res.json())
-        .then(settings => {
-            nav.innerHTML = '';
-            const home = document.createElement('a');
-            home.href = '#home';
-            home.className = 'side-nav-link active';
-            home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
-            nav.appendChild(home);settings.categories.forEach((cat, index) => {
-            const catId = `cat-${index}`;
-            const categoryLink = document.createElement('a');
-            categoryLink.href = `#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
-            categoryLink.className = 'side-nav-link sub-category-toggle';
-            categoryLink.setAttribute('data-submenu', catId);
-            categoryLink.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span><i class="fas fa-chevron-right toggle-icon"></i>`;
-            nav.appendChild(categoryLink);
-
-            const submenu = document.createElement('ul');
-            submenu.className = 'sidebar-submenu';
-            submenu.id = catId;
-
-            cat.items.forEach(item => {
+    .then(res => res.ok ? res.json() : Promise.reject())
+    .then(settings => {
+        nav.innerHTML = '';
+        // Home
+        const home = document.createElement('a');
+        home.href = '#home'; home.className = 'side-nav-link';
+        home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
+        nav.appendChild(home);
+        
+        // Categories
+        settings.categories.forEach((cat, idx) => {
+            const id = `cat-${idx}`;
+            // Category link
+            const catLink = document.createElement('a');
+            catLink.href = `#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
+            catLink.className = 'side-nav-link sub-category-toggle';
+            catLink.setAttribute('data-submenu', id);
+            catLink.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span><i class="fas fa-chevron-right toggle-icon"></i>`;
+            nav.appendChild(catLink);
+            
+            // Submenu
+            const submenu = document.createElement('div');
+            submenu.className = 'sidebar-submenu'; submenu.id = id;
+            if(Array.isArray(cat.items)) cat.items.forEach(item => {
                 const link = document.createElement('a');
-                const anchorId = item.name.toLowerCase().replace(/\s+/g,'-');
-                link.href = `#${anchorId}`;
-                link.className = 'side-nav-link';
-                link.textContent = item.name;
+                link.href = `#${item.name.toLowerCase().replace(/\s+/g,'-')}`;
+                link.className = 'side-nav-link'; link.textContent = item.name;
                 submenu.appendChild(link);
             });
             nav.appendChild(submenu);
         });
 
-        // Collapse-others and toggle
+        // Toggle logic
         document.querySelectorAll('.sub-category-toggle').forEach(toggle => {
             toggle.addEventListener('click', e => {
                 e.preventDefault();
-                const submenuId = toggle.getAttribute('data-submenu');
-                const submenu = document.getElementById(submenuId);
-
-                document.querySelectorAll('.sidebar-submenu').forEach(sm => {
-                    if (sm !== submenu) sm.classList.remove('open');
-                });
-
-                submenu.classList.toggle('open');
-
-                // Smooth scroll ke kategori
-                const targetSection = document.querySelector(toggle.getAttribute('href'));
-                if (targetSection) {
-                    setTimeout(() => {
-                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 300);
-                }
+                const sub = document.getElementById(toggle.dataset.submenu);
+                // close others
+                document.querySelectorAll('.sidebar-submenu').forEach(s=>{if(s!==sub) s.classList.remove('open');});
+                document.querySelectorAll('.sub-category-toggle').forEach(t=>{if(t!==toggle) t.classList.remove('open');});
+                // toggle
+                sub.classList.toggle('open'); toggle.classList.toggle('open');
+                // scroll main
+                const sec = document.querySelector(toggle.getAttribute('href'));
+                if(sec) setTimeout(()=> sec.scrollIntoView({behavior:'smooth', block:'start'}), 200);
             });
         });
 
-        document.getElementById('sideNavName').textContent = settings.name;
-        document.getElementById('page').textContent = settings.name;
-        document.getElementById('name').textContent = settings.name;
+        // Update titles
+        ['sideNavName','page','name','versionHeader'].forEach(id=>{
+            const el = document.getElementById(id);
+            if(el) el.textContent = id==='versionHeader'?settings.header?.status:settings.name;
+        });
         document.getElementById('version').textContent = settings.version;
-        document.getElementById('versionHeader').textContent = settings.header?.status || '';
-    }).catch(() => {});
-
-})(); </script>
+    })
+    .catch(()=>{ nav.innerHTML='<a class="side-nav-link">Gagal memuat menu</a>'; });
+})();
+</script>
 
 </body>
 </html>
