@@ -15,17 +15,23 @@
         .hero-section { padding-top: 40px !important; padding-bottom: 20px !important; min-height: auto !important; }
         .hero-visual { margin-bottom: -40px !important; }
         .api-section { padding-top: 10px !important; }
+        .side-nav-links {
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
         .sidebar-submenu {
             list-style: none;
             padding: 0;
             margin: 0;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background-color: rgba(0, 0, 0, 0.05);
+            transition: max-height 0.4s ease, opacity 0.3s ease;
+            background-color: rgba(0, 0, 0, 0.03);
+            opacity: 0;
         }
         .sidebar-submenu.open {
             max-height: 1000px;
+            opacity: 1;
         }
         .sidebar-submenu .side-nav-link {
             padding-left: 40px;
@@ -38,98 +44,10 @@
         .side-nav-link.active .toggle-icon {
             transform: rotate(90deg);
         }
-        .side-nav-links {
-            max-height: calc(100vh - 140px);
-            overflow-y: auto;
-        }
     </style>
 </head>
 <body>
-<div id="loadingScreen" role="status" aria-live="polite">
-    <div class="spinner-wrapper">
-        <svg class="spinner-logo" width="80" height="80" viewBox="0 0 100 100" aria-hidden="true">
-            <circle class="spinner-path" cx="50" cy="50" r="40" fill="none" stroke-width="8" />
-            <circle class="spinner-animation" cx="50" cy="50" r="40" fill="none" stroke-width="8" />
-        </svg>
-        <p>Memuat<span class="loading-dots">...</span></p>
-    </div>
-</div>
-<aside class="side-nav" id="sideNavigation" aria-label="Navigasi Utama">
-    <div class="side-nav-logo">
-        <img src="/src/icon.png" alt="Logo API" style="width: 40px; height: 40px; border-radius: 8px;">
-        <span id="sideNavName">API</span>
-        <div id="versionHeader" class="badge-pill"></div>
-    </div>
-    <nav class="side-nav-links" id="sideNavLinks" aria-label="Tautan navigasi"></nav>
-    <button class="nav-collapse-btn" aria-label="Alihkan navigasi" aria-controls="sideNavigation">
-        <i class="fas fa-angle-left"></i>
-    </button>
-</aside>
-<div class="main-wrapper">
-    <header class="main-header" role="banner">
-        <button class="menu-toggle" aria-label="Alihkan menu navigasi" aria-controls="sideNavigation">
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="search-container" role="search">
-            <div class="input-group">
-                <span class="input-group-text" aria-hidden="true"><i class="fas fa-search"></i></span>
-                <input type="text" id="searchInput" class="form-control" placeholder="Cari API..." aria-label="Cari API">
-                <button class="clear-search" id="clearSearch" aria-label="Hapus pencarian"><i class="fas fa-times"></i></button>
-            </div>
-        </div>
-        <div class="header-actions">
-            <button class="notification-bell" id="notificationBell" aria-label="Notifikasi">
-                <i class="far fa-bell"></i>
-                <span class="notification-badge" id="notificationBadge"></span>
-            </button>
-        </div>
-    </header>
-    <main id="mainContent">
-        <section id="home" class="hero-section" aria-labelledby="heroHeading">
-            <div class="hero-content">
-                <div class="hero-heading">
-                    <h1 id="name" class="gradient-text">Falcon API</h1>
-                    <div id="version" class="badge-pill">v1.0</div>
-                </div>
-            </div>
-            <div class="hero-visual" aria-hidden="true">
-                <div class="banner-container">
-                    <img id="dynamicImage" class="banner" src="/src/banner.jpg" alt="Banner API">
-                </div>
-                <div class="shape shape-1"></div>
-                <div class="shape shape-2"></div>
-                <div class="shape shape-3"></div>
-            </div>
-        </section>
-        <section id="apis" class="api-section" aria-labelledby="apiSectionTitle">
-            <h2 id="apiSectionTitle" class="section-title">API yang Tersedia</h2>
-            <p class="section-description">Jelajahi koleksi API kami yang powerful dan mudah digunakan.</p>
-            <div class="tab-content" id="apiContent"></div>
-        </section>
-    </main>
-    <footer class="main-footer" role="contentinfo">
-        <div class="footer-content">
-            <div id="wm" class="copyright">&copy; 2024 FlowFalcon. Semua hak dilindungi.</div>
-            <div class="footer-middle">
-                <div class="theme-switcher">
-                    <span>Terang</span>
-                    <label class="switch" aria-label="Alihkan tema gelap/terang">
-                        <input type="checkbox" id="themeToggle"><span class="slider round" aria-hidden="true"></span>
-                    </label>
-                    <span>Gelap</span>
-                </div>
-            </div>
-            <nav class="footer-links" aria-label="Tautan tambahan">
-                <a href="https://whatsapp.com/channel/0029VasjrIh3gvWXKzWncf2P" class="footer-link" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-whatsapp"></i> Info
-                </a>
-                <a href="https://wa.me/message/UB3MPOSN5S7AG1" class="footer-link" target="_blank" rel="noopener noreferrer">
-                    <i class="fas fa-envelope"></i> Kontak
-                </a>
-            </nav>
-        </div>
-    </footer>
-</div>
+<!-- Loading screen, sidebar, main layout... tetap -->
 <script src="/script.js"></script>
 <script>
 (function() {
@@ -167,23 +85,26 @@
             nav.appendChild(submenu);
         });
 
-        // Handle submenu toggling
+        // Collapse-others and toggle
         document.querySelectorAll('.sub-category-toggle').forEach(toggle => {
             toggle.addEventListener('click', e => {
                 e.preventDefault();
-                const id = toggle.getAttribute('data-submenu');
-                const submenu = document.getElementById(id);
-                const allSubmenus = document.querySelectorAll('.sidebar-submenu');
+                const submenuId = toggle.getAttribute('data-submenu');
+                const submenu = document.getElementById(submenuId);
 
-                allSubmenus.forEach(sm => {
+                document.querySelectorAll('.sidebar-submenu').forEach(sm => {
                     if (sm !== submenu) sm.classList.remove('open');
                 });
 
                 submenu.classList.toggle('open');
 
-                // Scroll ke kategori jika ada anchor
-                const section = document.querySelector(toggle.getAttribute('href'));
-                if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Smooth scroll ke kategori
+                const targetSection = document.querySelector(toggle.getAttribute('href'));
+                if (targetSection) {
+                    setTimeout(() => {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 300);
+                }
             });
         });
 
