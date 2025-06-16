@@ -24,7 +24,7 @@
             background-color: rgba(0, 0, 0, 0.05);
         }
         .sidebar-submenu.open {
-            max-height: 500px;
+            max-height: 1000px;
         }
         .sidebar-submenu .side-nav-link {
             padding-left: 40px;
@@ -36,6 +36,13 @@
         }
         .side-nav-link.active .toggle-icon {
             transform: rotate(90deg);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .side-nav-links {
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -55,9 +62,7 @@
         <span id="sideNavName">API</span>
         <div id="versionHeader" class="badge-pill"></div>
     </div>
-    <nav class="side-nav-links" id="sideNavLinks" aria-label="Tautan navigasi">
-        <!-- Akan diisi oleh JS -->
-    </nav>
+    <nav class="side-nav-links" id="sideNavLinks" aria-label="Tautan navigasi"></nav>
     <button class="nav-collapse-btn" aria-label="Alihkan navigasi" aria-controls="sideNavigation">
         <i class="fas fa-angle-left"></i>
     </button>
@@ -132,51 +137,54 @@
 (function() {
     const nav = document.getElementById('sideNavLinks');
     if (!nav) return;
-    fetch('/src/settings.json').then(res => res.json()).then(settings => {
-        nav.innerHTML = '';
-        const home = document.createElement('a');
-        home.href = '#home';
-        home.className = 'side-nav-link active';
-        home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
-        nav.appendChild(home);settings.categories.forEach((cat, index) => {
-        const catId = `cat-${index}`;
-        const categoryLink = document.createElement('a');
-        categoryLink.href = `#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
-        categoryLink.className = 'side-nav-link sub-category-toggle';
-        categoryLink.setAttribute('data-submenu', catId);
-        categoryLink.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span><i class="fas fa-chevron-right toggle-icon"></i>`;
-        nav.appendChild(categoryLink);
+    fetch('/src/settings.json')
+        .then(res => res.json())
+        .then(settings => {
+            nav.innerHTML = '';
+            const home = document.createElement('a');
+            home.href = '#home';
+            home.className = 'side-nav-link active';
+            home.innerHTML = '<i class="fas fa-home"></i><span>Beranda</span>';
+            nav.appendChild(home);settings.categories.forEach((cat, index) => {
+            const catId = `cat-${index}`;
+            const categoryLink = document.createElement('a');
+            categoryLink.href = `#${cat.name.toLowerCase().replace(/\s+/g,'-')}`;
+            categoryLink.className = 'side-nav-link sub-category-toggle';
+            categoryLink.setAttribute('data-submenu', catId);
+            categoryLink.innerHTML = `<i class="${cat.icon}"></i><span>${cat.name}</span><i class="fas fa-chevron-right toggle-icon"></i>`;
+            nav.appendChild(categoryLink);
 
-        const submenu = document.createElement('ul');
-        submenu.className = 'sidebar-submenu';
-        submenu.id = catId;
+            const submenu = document.createElement('ul');
+            submenu.className = 'sidebar-submenu';
+            submenu.id = catId;
 
-        cat.items.forEach(item => {
-            const link = document.createElement('a');
-            link.href = `#${item.name.toLowerCase().replace(/\s+/g,'-')}`;
-            link.className = 'side-nav-link';
-            link.textContent = item.name;
-            submenu.appendChild(link);
+            cat.items.forEach(item => {
+                const link = document.createElement('a');
+                const anchorId = item.name.toLowerCase().replace(/\s+/g,'-');
+                link.href = `#${anchorId}`;
+                link.className = 'side-nav-link';
+                link.textContent = item.name;
+                submenu.appendChild(link);
+            });
+            nav.appendChild(submenu);
         });
-        nav.appendChild(submenu);
-    });
 
-    document.querySelectorAll('.sub-category-toggle').forEach(toggle => {
-        toggle.addEventListener('click', e => {
-            const id = toggle.getAttribute('data-submenu');
-            const submenu = document.getElementById(id);
-            if (submenu) submenu.classList.toggle('open');
+        document.querySelectorAll('.sub-category-toggle').forEach(toggle => {
+            toggle.addEventListener('click', e => {
+                const id = toggle.getAttribute('data-submenu');
+                const submenu = document.getElementById(id);
+                if (submenu) submenu.classList.toggle('open');
+            });
         });
-    });
 
-    document.getElementById('sideNavName').textContent = settings.name;
-    document.getElementById('page').textContent = settings.name;
-    document.getElementById('name').textContent = settings.name;
-    document.getElementById('version').textContent = settings.version;
-    document.getElementById('versionHeader').textContent = settings.header?.status || '';
-}).catch(() => {});
+        document.getElementById('sideNavName').textContent = settings.name;
+        document.getElementById('page').textContent = settings.name;
+        document.getElementById('name').textContent = settings.name;
+        document.getElementById('version').textContent = settings.version;
+        document.getElementById('versionHeader').textContent = settings.header?.status || '';
+    }).catch(() => {});
 
 })(); </script>
 
 </body>
-</html>
+                    </html>
