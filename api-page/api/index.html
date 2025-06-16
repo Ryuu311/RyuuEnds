@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
     <link rel="stylesheet" href="/styles.css">
     <style>
+        html { scroll-behavior: smooth; }
         .hero-section { padding-top: 40px !important; padding-bottom: 20px !important; min-height: auto !important; }
         .hero-visual { margin-bottom: -40px !important; }
         .api-section { padding-top: 10px !important; }
@@ -36,9 +37,6 @@
         }
         .side-nav-link.active .toggle-icon {
             transform: rotate(90deg);
-        }
-        html {
-            scroll-behavior: smooth;
         }
         .side-nav-links {
             max-height: calc(100vh - 140px);
@@ -169,11 +167,23 @@
             nav.appendChild(submenu);
         });
 
+        // Handle submenu toggling
         document.querySelectorAll('.sub-category-toggle').forEach(toggle => {
             toggle.addEventListener('click', e => {
+                e.preventDefault();
                 const id = toggle.getAttribute('data-submenu');
                 const submenu = document.getElementById(id);
-                if (submenu) submenu.classList.toggle('open');
+                const allSubmenus = document.querySelectorAll('.sidebar-submenu');
+
+                allSubmenus.forEach(sm => {
+                    if (sm !== submenu) sm.classList.remove('open');
+                });
+
+                submenu.classList.toggle('open');
+
+                // Scroll ke kategori jika ada anchor
+                const section = document.querySelector(toggle.getAttribute('href'));
+                if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
 
@@ -187,4 +197,4 @@
 })(); </script>
 
 </body>
-                    </html>
+</html>
