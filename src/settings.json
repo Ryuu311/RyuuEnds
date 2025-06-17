@@ -216,7 +216,7 @@
         {
           "name": "Free Fire",
           "desc": "Stalk akun Free Fire",
-          "path": "/stalk/ff?id=",
+          "path": "/stalk/ff?id=&apikey=",
           "status": "ready",
           "params": {
             "id": "Player ID Free Fire"
