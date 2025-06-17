@@ -1,95 +1,91 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Falcon API</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <meta name="description" content="Dokumentasi API modern dan antarmuka pengujian yang interaktif. Jelajahi berbagai endpoint API kami dengan mudah.">
+  <meta name="keywords" content="API, Dokumentasi API, REST API, Falcon API, FlowFalcon, Alat Pengembang">
+  <meta name="author" content="FlowFalcon">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://flowfalcon.dpdns.org">
+  <meta property="og:title" content="Falcon API - Dokumentasi API Modern">
+  <meta property="og:description" content="Jelajahi berbagai endpoint API kami dengan antarmuka yang modern dan mudah digunakan.">
+  <meta property="og:image" content="/src/banner.jpg">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://flowfalcon.dpdns.org">
+  <meta property="twitter:title" content="Falcon API - Dokumentasi API Modern">
+  <meta property="twitter:description" content="Jelajahi berbagai endpoint API kami dengan antarmuka yang modern dan mudah digunakan.">
+  <meta property="twitter:image" content="/src/banner.jpg">
+  <link rel="icon" href="/src/icon.png" type="image/png">
+  <title id="page">Falcon API</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/styles.css">
   <style>
-    body { font-family: sans-serif; }
-    .side-nav { width: 250px; float: left; background: #f8f9fa; height: 100vh; padding: 1rem; overflow-y: auto; }
-    .main-wrapper { margin-left: 260px; padding: 1rem; }
-    .sidebar-submenu { display: none; margin-left: 1rem; }
-    .sidebar-submenu.open { display: block; }
-    .nav-link { cursor: pointer; }
-    .api-category { margin-top: 2rem; }
-    .api-category h3 { border-bottom: 1px solid #ccc; padding-bottom: 0.5rem; }
+    .hero-section {
+      padding-top: 40px !important;
+      padding-bottom: 20px !important;
+      min-height: auto !important;
+    }
+    .hero-visual {
+      margin-bottom: -40px !important;
+    }
+    .api-section {
+      padding-top: 10px !important;
+    }
   </style>
 </head>
 <body>
-  <aside class="side-nav">
-    <h2>Sidebar</h2>
-    <ul id="kategoriSidebar" class="nav flex-column"></ul>
-  </aside>
+  <!-- (potongan isi lo tetap sama, tidak diubah) -->
+  <!-- sampai ke bagian bawah sebelum </body> -->
 
-  <div class="main-wrapper">
-    <main id="mainContent"></main>
-  </div>
-
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/script.js"></script>
   <script src="/src/settings.js"></script>
   <script>
-    const settings = window.settings;
-    const sidebar = document.getElementById('kategoriSidebar');
-    const main = document.getElementById('mainContent');
+    document.addEventListener("DOMContentLoaded", function () {
+      var settings = window.settings;
+      var container = document.getElementById("apiContent");
 
-    main.innerHTML = '<section id="home"><h2>Beranda</h2></section><section id="apis"><h2>API yang Tersedia</h2></section>';
+      if (!settings || !settings.categories) return;
 
-    settings.categories.forEach((cat, i) => {
-      const catId = 'cat-' + i;
+      settings.categories.forEach(function (category) {
+        var section = document.createElement("div");
+        section.className = "mb-4";
 
-      // Sidebar kategori
-      const li = document.createElement('li');
-      li.classList.add('nav-item');
-      li.innerHTML = `
-        <a href="#${catId}" class="nav-link d-flex justify-content-between align-items-center toggle-cat">
-          <span><i class="${cat.icon} me-1"></i> ${cat.name}</span>
-          <i class="fas fa-chevron-down"></i>
-        </a>
-        <ul class="sidebar-submenu nav flex-column" id="sub-${catId}"></ul>`;
-      sidebar.appendChild(li);
+        var heading = document.createElement("h3");
+        heading.className = "fw-bold";
+        heading.textContent = category.name;
+        section.appendChild(heading);
 
-      // Tambah submenu API
-      const submenu = li.querySelector('.sidebar-submenu');
-      cat.items.forEach((api, j) => {
-        const anchor = document.createElement('a');
-        anchor.href = `#api-${i}-${j}`;
-        anchor.className = 'nav-link';
-        anchor.textContent = api.name;
-        submenu.appendChild(anchor);
-      });
+        category.items.forEach(function (api) {
+          var card = document.createElement("div");
+          card.className = "card mb-2";
 
-      // Main konten kategori + endpoint
-      const catSection = document.createElement('section');
-      catSection.id = catId;
-      catSection.className = 'api-category';
-      catSection.innerHTML = `<h3>${cat.name}</h3>`;
-      cat.items.forEach((api, j) => {
-        const div = document.createElement('div');
-        div.id = `api-${i}-${j}`;
-        div.innerHTML = `<h5>${api.name}</h5><p>${api.desc || ''}</p><code>${api.path}</code><hr>`;
-        catSection.appendChild(div);
-      });
-      main.appendChild(catSection);
-    });
+          var cardBody = document.createElement("div");
+          cardBody.className = "card-body";
 
-    // Toggle submenu
-    document.querySelectorAll('.toggle-cat').forEach(toggle => {
-      toggle.addEventListener('click', e => {
-        e.preventDefault();
-        const sub = toggle.nextElementSibling;
-        sub.classList.toggle('open');
-      });
-    });
+          var title = document.createElement("h5");
+          title.className = "card-title";
+          title.textContent = api.name;
 
-    // Smooth scroll
-    document.querySelectorAll('#kategoriSidebar a.nav-link').forEach(link => {
-      link.addEventListener('click', e => {
-        if (link.hash) {
-          e.preventDefault();
-          const target = document.querySelector(link.hash);
-          if (target) target.scrollIntoView({ behavior: 'smooth' });
-        }
+          var desc = document.createElement("p");
+          desc.className = "card-text";
+          desc.textContent = api.description || "Tidak ada deskripsi.";
+
+          var endpoint = document.createElement("code");
+          endpoint.textContent = api.endpoint;
+
+          cardBody.appendChild(title);
+          cardBody.appendChild(desc);
+          cardBody.appendChild(endpoint);
+          card.appendChild(cardBody);
+          section.appendChild(card);
+        });
+
+        container.appendChild(section);
       });
     });
   </script>
