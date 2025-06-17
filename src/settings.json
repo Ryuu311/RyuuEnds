@@ -203,8 +203,8 @@
           }
         },
         {
-          "name": "Mobile Legends",
-          "desc": "Stalk akun Mobile Legends",
+          "name": "Mobile Legends First TopUp",
+          "desc": "Cek First TopUp Moble Legends",
           "path": "/stalk/mlbb2?userId=&zoneId=&apikey=",
           "status": "ready",
           "params": {
