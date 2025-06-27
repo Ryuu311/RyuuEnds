@@ -79,7 +79,7 @@ app.get('/imagecreator/removebg', async (req, res) => {
         }
 });
 
-app.get('/imagecreator/remini', async (req, res) => {
+app.get('/tools/remini', async (req, res) => {
        const { url } = req.query
         try {
             let image = await getBuffer(url)
@@ -93,7 +93,7 @@ app.get('/imagecreator/remini', async (req, res) => {
         }
 });
 
-app.get('/imagecreator/upscale', async (req, res) => {
+app.get('/tools/upscale', async (req, res) => {
        const { url } = req.query
         try {
             let image = await getBuffer(url)
