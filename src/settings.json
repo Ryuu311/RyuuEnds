@@ -280,15 +280,7 @@
           }
         },
         {
-          "name": "Remini",
-          "desc": "Tingkatkan kualitas foto buram",
-          "path": "/tools/remini?imageUr1=&&apikey=",
-          "status": "ready",
-          "params": {
-            "image": "URL gambar yang ingin ditingkatkan"
-          }
-        },
-        {
+
           "name": "Emojimix",
           "desc": "Gabungkan dua emoji jadi satu",
           "path": "/tools/emojimix?emoji1=&emoji2=",
@@ -305,6 +297,15 @@
           "status": "ready",
           "params": {
             "imageUrl": "URL gambar yang ingin dihapus background-nya"
+          }
+        },
+        {
+         "name": "Remini",
+          "desc": "Tingkatkan kualitas foto buram",
+          "path": "/tools/remini?imageUr1=&&apikey=",
+          "status": "ready",
+          "params": {
+            "image": "URL gambar yang ingin ditingkatkan"
           }
         },
         {
