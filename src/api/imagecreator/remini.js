@@ -65,7 +65,7 @@ const pxpic = {
 }
 
 module.exports = function(app) {
-app.get('/tools/removebg', async (req, res) => {
+app.get('/imagecreator/removebg', async (req, res) => {
        const { apikey, url } = req.query
        if (!global.apikey.includes(apikey)) return res.json({ status: false, error: 'Apikey invalid' })
         try {
@@ -80,7 +80,7 @@ app.get('/tools/removebg', async (req, res) => {
         }
 });
 
-app.get('/tools/remini', async (req, res) => {
+app.get('/imagecreator/remini', async (req, res) => {
        const { apikey, url } = req.query
        if (!global.apikey.includes(apikey)) return res.json({ status: false, error: 'Apikey invalid' })
         try {
@@ -95,7 +95,7 @@ app.get('/tools/remini', async (req, res) => {
         }
 });
 
-app.get('/tools/upscale', async (req, res) => {
+app.get('/imagecreator/upscale', async (req, res) => {
        const { apikey, url } = req.query
        if (!global.apikey.includes(apikey)) return res.json({ status: false, error: 'Apikey invalid' })
         try {
@@ -110,7 +110,7 @@ app.get('/tools/upscale', async (req, res) => {
         }
 });
 
-app.get('/tools/colorize', async (req, res) => {
+app.get('/imagecreator/colorize', async (req, res) => {
        const { apikey, url } = req.query
        if (!global.apikey.includes(apikey)) return res.json({ status: false, error: 'Apikey invalid' })
         try {
