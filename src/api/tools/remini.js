@@ -1,5 +1,5 @@
 const axios = require('axios');
-const setting = require('../../src/setting'); // pastikan path ini sesuai
+const setting = require('../../src/setting'); // atau .json jika kamu tetap pakai JSON
 
 module.exports = function(app) {
   app.get('/tools/remini', async (req, res) => {
@@ -12,13 +12,15 @@ module.exports = function(app) {
       });
     }
 
+    const apiKey = setting.apiSettings.apikey[0]; // gunakan key pertama
+
     try {
       const apiUrl = `https://api.hikaruyouki.my.id/api/tools/remini?url=${encodeURIComponent(url)}`;
       const response = await axios.get(apiUrl, {
         headers: {
-          'apikey': setting.apikey
+          'apikey': apiKey
         },
-        timeout: 15000 // biar gak ngegantung kalau API lambat
+        timeout: 15000
       });
 
       const { status, statuscode, result } = response.data;
@@ -34,7 +36,7 @@ module.exports = function(app) {
       console.error('Remini Error:', error.message);
       res.status(500).json({
         status: false,
-        message: 'Gagal memproses gambar. Cek URL atau API key.',
+        message: 'Gagal memproses gambar.',
         error: error.message
       });
     }
