@@ -282,8 +282,8 @@
         {
           "name": "Remini",
           "desc": "Tingkatkan kualitas foto buram",
-          "path": "/tools/remini?image=",
-          "status": "error",
+          "path": "/tools/remini?imageUr1=&&apikey=",
+          "status": "ready",
           "params": {
             "image": "URL gambar yang ingin ditingkatkan"
           }
