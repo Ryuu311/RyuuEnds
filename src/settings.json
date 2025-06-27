@@ -92,7 +92,7 @@
           "path": "/ai/openai?text=",
           "status": "ready",
           "params": {
-            "text": "Text for Open AI to respond to"
+            "text": "Text for Venice AI to respond to"
           }
         },
         {
@@ -177,15 +177,6 @@
           }
         },
         {
-          "name": "Facebook",
-          "desc": "Download Video Fb",
-          "path": "/download/facebook?url=",
-          "status": "ready",
-          "params": {
-            "url": "Masukan URL nya"
-          }
-        },
-        {
           "name": "YouTube",
           "desc": "Download Video/Musik Dari YouTube",
           "path": "/download/youtube?url=",
@@ -228,8 +219,7 @@
           "path": "/stalk/ff?id=&apikey=",
           "status": "ready",
           "params": {
-            "id": "Player ID Free Fire",
-            "apikey": "Your API key"
+            "id": "Player ID Free Fire"
           }
         }
       ]
@@ -290,6 +280,15 @@
           }
         },
         {
+          "name": "Remini",
+          "desc": "Tingkatkan kualitas foto buram",
+          "path": "/tools/remini?image=",
+          "status": "error",
+          "params": {
+            "image": "URL gambar yang ingin ditingkatkan"
+          }
+        },
+        {
           "name": "Emojimix",
           "desc": "Gabungkan dua emoji jadi satu",
           "path": "/tools/emojimix?emoji1=&emoji2=",
@@ -305,18 +304,7 @@
           "path": "/tools/removebg?apikey=&imageUrl=",
           "status": "ready",
           "params": {
-            "imageUrl": "URL gambar yang ingin dihapus background-nya",
-            "apikey": "Your API key"
-          }
-        },
-        {
-          "name": "Remini",
-          "desc": "Tingkatkan kualitas foto buram",
-          "path": "/tools/remini?imageUrl=&apikey=",
-          "status": "ready",
-          "params": {
-            "imageUrl": "URL gambar yang ingin ditingkatkan",
-            "apikey": "Your API key"
+            "imageUrl": "URL gambar yang ingin dihapus background-nya"
           }
         },
         {
