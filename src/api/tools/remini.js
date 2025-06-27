@@ -103,7 +103,7 @@ app.get('/imagecreator/removebg', async (req, res) => {
         }
 });
 
-app.get('/imagecreator/remini', async (req, res) => {
+app.get('/tools/remini', async (req, res) => {
        const { url } = req.query;
            const { apikey } = req.query;
            if (!global.apikey.includes(apikey)) return res.status(400).json({ status: false, error: 'Apikey invalid' })
