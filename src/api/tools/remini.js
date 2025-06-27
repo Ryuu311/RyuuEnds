@@ -1,5 +1,5 @@
 const axios = require('axios');
-const setting = require('./setting'); // pastikan path ini sesuai dengan lokasi file setting.js
+const setting = require('./src/setting'); // pastikan path ini sesuai dengan lokasi file setting.js
 
 module.exports = function(app) {
   app.get('/tools/remini', async (req, res) => {
