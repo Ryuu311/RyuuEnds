@@ -3,25 +3,6 @@ const FormData = require('form-data');
 const { fromBuffer } = require('file-type');
 const qs = require('qs');
 
-const getBuffer = async (url, options) => {
-	try {
-		options ? options : {}
-		const res = await axios({
-			method: "get",
-			url,
-			headers: {
-				'DNT': 1,
-				'Upgrade-Insecure-Request': 1
-			},
-			...options,
-			responseType: 'arraybuffer'
-		})
-		return res.data
-	} catch (err) {
-		return err
-	}
-}
-
 const tool = [ 'removebg', 'enhance', 'upscale', 'restore', 'colorize' ];
 
 const pxpic = {
@@ -84,13 +65,9 @@ const pxpic = {
 }
 
 module.exports = function(app) {
-app.get('/imagecreator/removebg', async (req, res) => {
-       const { url } = req.query;
-           const { apikey } = req.query;
-           if (!global.apikey.includes(apikey)) return res.status(400).json({ status: false, error: 'Apikey invalid' })
-            if (!url) {
-                return res.status(400).json({ status: false, error: 'Url is required' });
-            }
+app.get('/tools/removebg', async (req, res) => {
+       const { apikey, url } = req.query
+       if (!global.apikey.includes(apikey)) return res.json({ status: false, error: 'Apikey invalid' })
         try {
             let image = await getBuffer(url)
             const result = await pxpic.create(image, "removebg")
@@ -104,12 +81,8 @@ app.get('/imagecreator/removebg', async (req, res) => {
 });
 
 app.get('/tools/remini', async (req, res) => {
-       const { url } = req.query;
-           const { apikey } = req.query;
-           if (!global.apikey.includes(apikey)) return res.status(400).json({ status: false, error: 'Apikey invalid' })
-            if (!url) {
-                return res.status(400).json({ status: false, error: 'Url is required' });
-            }
+       const { apikey, url } = req.query
+       if (!global.apikey.includes(apikey)) return res.json({ status: false, error: 'Apikey invalid' })
         try {
             let image = await getBuffer(url)
             const result = await pxpic.create(image, "enhance")
@@ -122,13 +95,9 @@ app.get('/tools/remini', async (req, res) => {
         }
 });
 
-app.get('/imagecreator/upscale', async (req, res) => {
-       const { url } = req.query;
-           const { apikey } = req.query;
-           if (!global.apikey.includes(apikey)) return res.status(400).json({ status: false, error: 'Apikey invalid' })
-            if (!url) {
-                return res.status(400).json({ status: false, error: 'Url is required' });
-            }
+app.get('/tools/upscale', async (req, res) => {
+       const { apikey, url } = req.query
+       if (!global.apikey.includes(apikey)) return res.json({ status: false, error: 'Apikey invalid' })
         try {
             let image = await getBuffer(url)
             const result = await pxpic.create(image, "upscale")
@@ -141,13 +110,9 @@ app.get('/imagecreator/upscale', async (req, res) => {
         }
 });
 
-app.get('/imagecreator/colorize', async (req, res) => {
-       const { url } = req.query;
-           const { apikey } = req.query;
-           if (!global.apikey.includes(apikey)) return res.status(400).json({ status: false, error: 'Apikey invalid' })
-            if (!url) {
-                return res.status(400).json({ status: false, error: 'Url is required' });
-            }
+app.get('/tools/colorize', async (req, res) => {
+       const { apikey, url } = req.query
+       if (!global.apikey.includes(apikey)) return res.json({ status: false, error: 'Apikey invalid' })
         try {
             let image = await getBuffer(url)
             const result = await pxpic.create(image, "colorize")
