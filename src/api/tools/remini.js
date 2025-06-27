@@ -1,5 +1,5 @@
 const axios = require('axios');
-const setting = require('../../src/setting'); // atau .json jika kamu tetap pakai JSON
+const setting = require('../../src/apikey'); // ganti ke file baru
 
 module.exports = function(app) {
   app.get('/tools/remini', async (req, res) => {
@@ -12,7 +12,7 @@ module.exports = function(app) {
       });
     }
 
-    const apiKey = setting.apiSettings.apikey[0]; // gunakan key pertama
+    const apiKey = setting.list[0]; // aman
 
     try {
       const apiUrl = `https://api.hikaruyouki.my.id/api/tools/remini?url=${encodeURIComponent(url)}`;
