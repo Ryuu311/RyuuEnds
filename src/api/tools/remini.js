@@ -1,21 +1,21 @@
 const axios = require('axios');
-const setting = require('../../src/apikey'); // ganti ke file baru
+const setting = require('../../src/setting'); // <- pastikan path ke setting.js benar
 
 module.exports = function(app) {
   app.get('/tools/remini', async (req, res) => {
-    const { url } = req.query;
+    const { imageUrl } = req.query;
 
-    if (!url) {
+    if (!imageUrl) {
       return res.status(400).json({
         status: false,
-        message: 'Parameter "url" wajib diisi'
+        message: 'Parameter "imageUrl" wajib diisi'
       });
     }
 
-    const apiKey = setting.list[0]; // aman
+    const apiKey = setting.apiSettings.apikey[0]; // pakai "RyuuXiao" (apikey pertama)
 
     try {
-      const apiUrl = `https://api.hikaruyouki.my.id/api/tools/remini?url=${encodeURIComponent(url)}`;
+      const apiUrl = `https://api.hikaruyouki.my.id/api/tools/remini?url=${encodeURIComponent(imageUrl)}`;
       const response = await axios.get(apiUrl, {
         headers: {
           'apikey': apiKey
@@ -28,7 +28,7 @@ module.exports = function(app) {
       res.status(200).json({
         status,
         statusCode: statuscode,
-        creator: 'RyuuXiao',
+        creator: setting.apiSettings.creator || 'RyuuXiao',
         result
       });
 
