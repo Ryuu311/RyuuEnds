@@ -289,15 +289,7 @@
           }
         },
         {
-          "name": "Remini",
-          "desc": "Tingkatkan kualitas foto buram",
-          "path": "/tools/remini?image=",
-          "status": "ready",
-          "params": {
-            "image": "URL gambar yang ingin ditingkatkan"
-          }
-        },
-        {
+          
           "name": "Emojimix",
           "desc": "Gabungkan dua emoji jadi satu",
           "path": "/tools/emojimix?emoji1=&emoji2=",
