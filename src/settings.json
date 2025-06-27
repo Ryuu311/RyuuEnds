@@ -131,6 +131,21 @@
       ]
     },
     {
+      "name": "Image Creator",
+      "icon": "fas fa-image",
+      "items": [
+        {
+          "name": "Remini",
+          "desc": "Tingkatkan kualitas foto buram",
+          "path": "/imagecreator/remini?apikey=&imageUrl=",
+          "status": "ready",
+          "params": {
+            "imageUrl": "URL gambar yang ingin ditingkatkan"
+          }
+        }
+      ]
+    },
+    {
       "name": "Random",
       "icon": "fas fa-random",
       "items": [
@@ -280,7 +295,6 @@
           }
         },
         {
-
           "name": "Emojimix",
           "desc": "Gabungkan dua emoji jadi satu",
           "path": "/tools/emojimix?emoji1=&emoji2=",
@@ -297,15 +311,6 @@
           "status": "ready",
           "params": {
             "imageUrl": "URL gambar yang ingin dihapus background-nya"
-          }
-        },
-        {
-         "name": "Remini",
-          "desc": "Tingkatkan kualitas foto buram",
-          "path": "/tools/remini?apikey=&imageUrl=",
-          "status": "ready",
-          "params": {
-            "image": "URL gambar yang ingin ditingkatkan"
           }
         },
         {
