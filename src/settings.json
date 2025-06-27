@@ -309,6 +309,15 @@
           }
         },
         {
+          "name": "Remini",
+          "desc": "Tingkatkan kualitas foto buram",
+          "path": "/tools/remini?imageUrl=",
+          "status": "ready",
+          "params": {
+            "image": "URL gambar yang ingin ditingkatkan"
+          }
+        },
+        {
           "name": "Jarak",
           "desc": "Hitung jarak antar dua lokasi",
           "path": "/tools/jarak?lokasi1=&lokasi2=",
