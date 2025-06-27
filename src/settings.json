@@ -137,7 +137,7 @@
         {
           "name": "Remini",
           "desc": "Tingkatkan kualitas foto buram",
-          "path": "/imagecreator/remini?apikey=&imageUrl=",
+          "path": "/imagecreator/remini?apikey=&url=",
           "status": "ready",
           "params": {
             "imageUrl": "URL gambar yang ingin ditingkatkan"
