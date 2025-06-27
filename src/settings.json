@@ -177,6 +177,15 @@
           }
         },
         {
+         "name": "Facebook",
+          "desc": "Download Video Fb",
+          "path": "/download/facebook?url=",
+          "status": "ready",
+          "params": {
+            "url": "Masukan URL nya"
+          }
+        },
+        {
           "name": "YouTube",
           "desc": "Download Video/Musik Dari YouTube",
           "path": "/download/youtube?url=",
