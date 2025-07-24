@@ -1,8 +1,8 @@
 :root {
     /* Color Palette - Purple Gradient Theme */
-    --primary-color: #6c5ce7;
-    --primary-hover: #5649d1;
-    --secondary-color: #a29bfe;
+    --primary-color: #f7b267;       /* Soft orange pastel */
+   --primary-hover: #f4a261;       /* Sedikit lebih gelap, tetap lembut */
+    --secondary-color: #ffe382;     /* Lemon pastel yang kalem dan manja */
     --accent-color: #00cec9;
     --success-color: #00b894;
     --error-color: #ff7675;
@@ -47,9 +47,9 @@
 }
 
 .dark-mode {
-    --primary-color: #a29bfe;
-    --primary-hover: #8983d8;
-    --secondary-color: #6c5ce7;
+    --primary-color: #f7b267;       /* Soft orange pastel */
+    --primary-hover: #f4a261;       /* Sedikit lebih gelap, tetap lembut */
+    --secondary-color: #ffe382;     /* Lemon pastel yang kalem dan manja */
     --accent-color: #00cec9;
     --background-color: #1a1b2e; 
     --card-background: #252640; 
