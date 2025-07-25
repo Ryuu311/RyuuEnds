@@ -87,6 +87,30 @@
           }
         },
         {
+           "name": "Voice Changer HololiveID",
+           "desc": "Ubah suara menjadi karakter Hololive Indonesia dengan RVC (Realtime Voice Changer).",
+           "path": "/ai/rvc?text=&teks=",
+           "method": "GET",
+           "status": "ready",
+           "params": {
+             "text": {
+               "required": true,
+               "type": "string",
+               "desc": "Nama model karakter HololiveID (contoh: moona, risu, ollie, zeta, dll)."
+             },
+             "teks": {
+               "required": true,
+               "type": "string",
+               "desc": "Link URL file audio (.mp3) yang ingin diubah suaranya."
+             },
+             "transpose": {
+               "required": false,
+               "type": "number",
+               "desc": "Opsional. Atur pitch suara (positif lebih tinggi, negatif lebih rendah). Contoh: 2, -1, 0."
+             }
+          }
+        }, 
+        {
           "name": "Open AI",
           "desc": "Talk with Open AI",
           "path": "/ai/openai?text=",
