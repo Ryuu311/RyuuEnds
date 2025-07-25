@@ -89,7 +89,7 @@
         {
            "name": "Voice Changer HololiveID",
            "desc": "Ubah suara menjadi karakter Hololive Indonesia dengan RVC (Realtime Voice Changer).",
-           "path": "/ai/rvc?model=&linkAudio=&pitch=",
+           "path": "/ai/rvc?model=&linkAudio=",
            "method": "GET",
            "status": "ready",
            "params": {
