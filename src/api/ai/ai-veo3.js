@@ -1,6 +1,5 @@
 const express = require('express');
 const axios = require('axios');
-const crypto = require('crypto');
 
 module.exports = function (app) {
   app.get('/ai/veo3', async (req, res) => {
@@ -25,9 +24,10 @@ module.exports = function (app) {
         }
       });
 
-      const uid = crypto.createHash('md5').update(Date.now().toString()).digest('hex');
+      // Buat UID sederhana tanpa crypto
+      const uid = 'uid_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 10);
 
-      // Buat task video
+      // Kirim request buat task video
       const { data: task } = await axios.post(
         'https://aiarticle.erweima.ai/api/v1/secondary-page/api/create',
         {
@@ -66,7 +66,7 @@ module.exports = function (app) {
         });
       }
 
-      // Polling status
+      // Mulai polling untuk cek status
       const maxWait = 120000; // 2 menit
       const start = Date.now();
 
@@ -79,7 +79,7 @@ module.exports = function (app) {
                 uniqueid: uid,
                 verify: cf.result.token
               },
-              timeout: 10000 // 10 detik max setiap polling
+              timeout: 10000
             }
           );
 
