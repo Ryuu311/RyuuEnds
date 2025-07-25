@@ -341,15 +341,6 @@
           }
         },
         {
-          "name": "Brat",
-          "desc": "Ubah Teks Menjadi Stiker",
-          "path": "/tools/brat?text=",
-          "status": "ready",
-          "params": {
-            "text": "Teks yang ingin diubah ke gaya Bratz"
-          }
-        },
-        {
           "name": "Fake TikTok Generator",
           "desc": "Buat profil TikTok palsu dengan nama dan foto",
           "path": "/tools/faketiktok?name=&username=&pp=",
@@ -387,6 +378,15 @@
           "params": {
             "lokasi1": "Lokasi pertama (contoh: Jakarta)",
             "lokasi2": "Lokasi kedua (contoh: Bandung)"
+          }
+        },
+        {
+          "name": "Brat",
+          "desc": "Ubah Teks Menjadi Stoker",
+          "path": "/tools/brat?text=",
+          "status": "ready",
+          "params": {
+            "text": "Teks yang ingin diubah ke gaya Bratz"
           }
         }
       ]
