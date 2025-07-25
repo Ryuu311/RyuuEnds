@@ -28,24 +28,24 @@ module.exports = function (app) {
       // Buat task video
       const { data: task } = await axios.post('https://aiarticle.erweima.ai/api/v1/secondary-page/api/create', {
         prompt: prompt,
-        imgUrls: [],
-        quality: '720p',
-        duration: 8,
-        autoSoundFlag: false,
-        soundPrompt: '',
-        autoSpeechFlag: false,
-        speechPrompt: '',
-        speakerId: 'Auto',
-        aspectRatio: '16:9',
-        secondaryPageId: 1811,
-        channel: 'VEO3',
-        source: 'aivideogenerator.me',
-        type: 'features',
-        watermarkFlag: false,
-        privateFlag: false,
-        isTemp: true,
-        vipFlag: false,
-        model: 'veo-3-fast'
+            imgUrls: [],
+            quality: '720p',
+            duration: 8,
+            autoSoundFlag: false,
+            soundPrompt: '',
+            autoSpeechFlag: false,
+            speechPrompt: '',
+            speakerId: 'Auto',
+            aspectRatio: '16:9',
+            secondaryPageId: 1811,
+            channel: 'VEO3',
+            source: 'aivideogenerator.me',
+            type: 'features',
+            watermarkFlag: false,
+            privateFlag: false,
+            isTemp: true,
+            vipFlag: false,
+            model: 'veo-3-fast'
       }, {
         headers: {
           uniqueid: uid,
@@ -54,7 +54,7 @@ module.exports = function (app) {
       });
 
       // Polling cek status video
-      const maxWait = 60000; // 60 detik timeout
+      const maxWait = 6000000; // 6jt detik timeout
       const start = Date.now();
 
       while (Date.now() - start < maxWait) {
