@@ -211,6 +211,12 @@
           "desc": "Blue Archive Random Images",
           "path": "/random/ba",
           "status": "ready"
+        },
+        {
+          "name": "Blue Archive cosplay",
+          "desc": "Blue Archive Random Cosplay Images",
+          "path": "/random/cosplay-ba",
+          "status": "ready"
         }
       ]
     },
