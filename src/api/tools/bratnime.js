@@ -91,7 +91,7 @@ async function generateBratSticker(text) {
 }
 
 module.exports = function(app) {
-  app.get('/sticker/bratnime', async (req, res) => {
+  app.get('/tools/bratnime', async (req, res) => {
     try {
       const { apikey, text } = req.query;
       if (!global.apikey.includes(apikey)) return res.status(403).json({ status: false, message: 'Invalid apikey' });
