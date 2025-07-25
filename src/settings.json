@@ -104,7 +104,7 @@
                "desc": "Link URL file audio (.mp3) yang ingin diubah suaranya."
              },
              "pitch": {
-               "required": true,
+               "required": false,
                "type": "number",
                "desc": "Opsional. Atur pitch suara (positif lebih tinggi, negatif lebih rendah). Contoh: 2, -1, 0."
              }
