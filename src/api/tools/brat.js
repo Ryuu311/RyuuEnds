@@ -8,7 +8,7 @@ module.exports = function(app) {
       if (!global.apikey.includes(apikey)) return res.status(403).send('Invalid API key');
       if (!text) return res.status(400).send('Text is required');
 
-      const url = `https://aqul-brat.hf.space/?text=${encodeURIComponent(text)}`;
+      const url = `https://api.nekorinn.my.id/maker/brat-v2?text=${encodeURIComponent(text)}`;
 
       // 🎭 Header penyamar tingkat dewa
       const response = await fetch(url, {
