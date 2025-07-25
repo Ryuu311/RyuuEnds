@@ -322,18 +322,6 @@
           }
         },
         {
-          "name": "Anime Brat",
-          "desc": "Buat stiker bergaya karakter bratnime dengan teks custom.",
-          "path": "/tools/bratnime?text=",
-          "method": "GET",
-          "status": "ready",
-          "params": {
-            "text": {
-              "required": true,
-              "type": "string",
-              "desc": "Teks yang ingin ditampilkan pada stiker bratnime."
-        },
-        {
           "name": "Fake TikTok Generator",
           "desc": "Buat profil TikTok palsu dengan nama dan foto",
           "path": "/tools/faketiktok?name=&username=&pp=",
