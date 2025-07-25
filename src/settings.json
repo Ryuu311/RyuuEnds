@@ -79,35 +79,6 @@
               "type": "string",
               "desc": "Teks yang ingin dikirim ke GPT-4.1"
             },
-            {
-                "name": "RVC HololiveID Voice",
-                "desc": "Ubah teks jadi suara karakter HololiveID (Voice Changer) menggunakan model RVC. Cocok buat VTuber AI.",
-                "path": "/ai/rvc",
-                "method": "POST",
-                "status": "ready",
-                "params": {
-                  "text": {
-                    "required": true,
-                    "type": "string",
-                    "desc": "Teks yang ingin diubah menjadi suara"
-                  },
-                  "model": {
-                    "required": false,
-                    "type": "string",
-                    "desc": "Nama model karakter HololiveID (contoh: moona, risu, kobo, reine, zeta, dll). Default: risu"
-                  },
-                  "transpose": {
-                    "required": false,
-                    "type": "number",
-                    "desc": "Tingkat perubahan nada suara (semakin tinggi makin cempreng atau unik). Default: 0"
-                  }
-                },
-                "example": {
-                  "text": "Halo Reinzz, kamu lucu banget hari ini~",
-                  "model": "kobo",
-                  "transpose": 5
-                }
-              },
             "imageUrl": {
               "required": false,
               "type": "string",
