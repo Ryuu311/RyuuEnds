@@ -1,51 +1,55 @@
+// /src/api/writecream.js
 const axios = require('axios');
 
 module.exports = function (app) {
-  app.get('/api/imagecreator/writecreamimg', async (req, res) => {
+  app.get('/ai/writecream', async (req, res) => {
     try {
-      const { prompt, ratio } = req.query;
+      const prompt = req.query.prompt?.trim();
+      const ratio = req.query.ratio?.trim();
+
       const availableRatios = ['1:1', '16:9', '2:3', '3:2', '4:5', '5:4', '9:16', '21:9', '9:21'];
 
-      if (!prompt) {
-        return res.status(400).json({ status: false, message: 'Parameter "prompt" wajib diisi.' });
+      if (!prompt || !ratio) {
+        return res.status(400).json({
+          status: false,
+          message: 'Parameter "prompt" dan "ratio" wajib diisi.'
+        });
       }
 
       if (!availableRatios.includes(ratio)) {
         return res.status(400).json({
           status: false,
-          message: `Rasio tidak valid. Rasio tersedia: ${availableRatios.join(', ')}`
+          message: `Ratio tidak valid. Gunakan salah satu: ${availableRatios.join(', ')}`
         });
       }
 
       const { data } = await axios.get('https://1yjs1yldj7.execute-api.us-east-1.amazonaws.com/default/ai_image', {
         headers: {
-          'accept': '*/*',
+          accept: '*/*',
           'content-type': 'application/json',
-          'origin': 'https://www.writecream.com',
-          'referer': 'https://www.writecream.com/',
-          'user-agent': req.headers['user-agent'] || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-          'sec-fetch-site': 'same-origin',
-          'sec-fetch-mode': 'cors',
-          'sec-fetch-dest': 'empty',
+          origin: 'https://www.writecream.com',
+          referer: 'https://www.writecream.com/',
+          'user-agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Mobile Safari/537.36'
         },
         params: {
-          prompt: prompt,
+          prompt,
           aspect_ratio: ratio,
           link: 'writecream.com'
         }
       });
 
-      if (!data.image_link) {
+      if (!data?.image_link) {
         return res.status(500).json({
           status: false,
-          message: 'Gagal mendapatkan gambar. Writecream tidak merespons dengan benar.'
+          message: 'Gagal mendapatkan gambar dari API Writecream.'
         });
       }
 
-      res.json({
+      return res.json({
         status: true,
-        message: 'Gambar berhasil dibuat!',
-        image: data.image_link
+        message: 'Gambar berhasil dibuat.',
+        image_url: data.image_link,
+        source: 'writecream.com'
       });
 
     } catch (err) {
