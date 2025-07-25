@@ -22,6 +22,25 @@
           "status": "ready"
         },
         {
+          "name": "Writecream AI Image",
+          "desc": "Generate gambar AI dari prompt + rasio tertentu.",
+          "path": "/ai/writecream?prompt=&ratio=",
+          "method": "GET",
+          "status": "ready",
+          "params": {
+            "prompt": {
+              "required": true,
+              "type": "string",
+              "desc": "Teks deskripsi gambar, contoh: 'cewek anime pakai hoodie di tengah hujan'"
+            },
+            "ratio": {
+              "required": true,
+              "type": "string",
+              "desc": "Rasio gambar (1:1, 16:9, 2:3, dll)"
+            }
+          }
+        },
+        {
           "name": "Dopple AI",
           "desc": "Talk with Dopple AI",
           "path": "/ai/dopple?text=",
