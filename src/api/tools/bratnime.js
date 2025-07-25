@@ -6,7 +6,7 @@ const { createCanvas, loadImage, registerFont } = require('canvas');
 const sharp = require('sharp');
 
 module.exports = function (app) {
-  app.get('/ai/bratnime', async (req, res) => {
+  app.get('/tools/bratnime', async (req, res) => {
     const text = req.query.text?.trim();
     if (!text) {
       return res.status(400).json({
