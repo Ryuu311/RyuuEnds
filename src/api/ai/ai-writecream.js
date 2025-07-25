@@ -1,5 +1,6 @@
 const axios = require('axios');
 
+module.exports = function (app) {
 app.get('/ai/writecream', async (req, res) => {
   const prompt = req.query.prompt;
   const ratio = req.query.ratio;
@@ -57,3 +58,4 @@ app.get('/ai/writecream', async (req, res) => {
     });
   }
 });
+};
