@@ -9,13 +9,22 @@ module.exports = function(app) {
       if (!text) return res.status(400).send('Text is required');
 
       const url = `https://aqul-brat.hf.space/?text=${encodeURIComponent(text)}`;
-      const response = await fetch(url);
+
+      // 🎭 Header penyamar tingkat dewa
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
+          'Accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Referer': 'https://www.google.com/', // 🔁 Seolah dari hasil pencarian Google
+          'Origin': 'https://www.google.com'    // 🪪 Asal seolah dari browser biasa
+        }
+      });
 
       if (!response.ok) return res.status(502).send('Failed to fetch image from API');
 
       const buffer = await response.buffer();
 
-      // ✅ Mode preview JSON
       if (preview === 'true') {
         return res.status(200).json({
           status: true,
@@ -24,7 +33,6 @@ module.exports = function(app) {
         });
       }
 
-      // ✅ Mode normal: kirim gambar PNG
       res.set('Content-Type', 'image/png');
       res.status(200).send(buffer);
 
