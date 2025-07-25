@@ -2,7 +2,7 @@
 const axios = require('axios');
 
 module.exports = function (app) {
-  app.get('/api/imagecreator/writecreamimg', async (req, res) => {
+  app.get('/api/imagecreator/writecream', async (req, res) => {
     try {
       const { prompt, ratio } = req.query;
 
