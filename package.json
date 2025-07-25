@@ -10,6 +10,7 @@
   "author": "Skyzopedia",
   "license": "MIT",
   "dependencies": {
+    "@rynn-k/proxy-agent": "latest"
     "axios": "^1.6.8",
     "body-parser": "^1.20.3",
     "chalk": "^4.1.2",
@@ -35,6 +36,8 @@
     "node-upload-images": "^1.0.1",
     "nodemon": "^3.1.7",
     "path": "^0.12.7",
+    "sharp": "^0.32.2",
+    "canvafy": "^7.1.0",
     "qrcode": "^1.5.4", 
     "qs": "^6.14.0"
   }
