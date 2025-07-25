@@ -384,7 +384,7 @@
           "name": "Brat",
           "desc": "Ubah Teks Menjadi Stoker",
           "path": "/tools/brat?text=",
-          "status": "error",
+          "status": "ready",
           "params": {
             "text": "Teks yang ingin diubah ke gaya Bratz"
           }
