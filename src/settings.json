@@ -369,6 +369,20 @@
           "params": {
             "text": "Teks yang ingin diubah ke gaya Bratz"
           }
+        },
+        {
+          "name": "Anime Brat",
+          "desc": "Buat stiker bergaya karakter bratnime dengan teks custom.",
+          "path": "/ai/bratnime?text=",
+          "method": "GET",
+          "status": "ready",
+          "params": {
+            "text": {
+              "required": true,
+              "type": "string",
+              "desc": "Teks yang ingin ditampilkan pada stiker bratnime."
+            }
+          }
         }
       ]
     }
