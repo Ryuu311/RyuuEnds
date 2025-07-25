@@ -373,7 +373,7 @@
         {
           "name": "Anime Brat",
           "desc": "Buat stiker bergaya karakter bratnime dengan teks custom.",
-          "path": "/ai/bratnime?text=",
+          "path": "/tools/bratnime?text=",
           "method": "GET",
           "status": "ready",
           "params": {
