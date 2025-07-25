@@ -128,7 +128,7 @@ class RVCHoloID {
 
 module.exports = function (app) {
     app.get('/ai/rvc', async (req, res) => {
-        const { model: model = 'kobo', linkAudio: audio, transpose = 0 } = req.query;
+        const { model: model = 'kobo', linkAudio: audio, pitch = 0 } = req.query;
 
         if (!audio) {
             return res.status(400).json({
