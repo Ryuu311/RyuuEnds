@@ -388,25 +388,6 @@
           "params": {
             "text": "Teks yang ingin diubah ke gaya Bratz"
           }
-        },
-        {
-          "name": "Brat anime Sticker",
-          "desc": "Generate stiker brat anime dari teks",
-          "path": "/tools/bratnime?text=",
-          "method": "GET",
-          "status": "ready",
-          "params": {
-            "apikey": {
-              "required": true,
-              "type": "string",
-              "desc": "API key yang valid"
-            },
-            "text": {
-              "required": true,
-              "type": "string",
-              "desc": "Teks yang akan ditulis pada stiker brat anime"
-            }
-          }
         }
       ]
     }
