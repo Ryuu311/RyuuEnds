@@ -123,7 +123,7 @@
               "desc": "Deskripsi video yang ingin dibuat (dalam bahasa Inggris)."
             }
           }
-        }
+        },
         {
           "name": "Open AI",
           "desc": "Talk with Open AI",
