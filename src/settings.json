@@ -382,8 +382,8 @@
         },
         {
           "name": "Brat",
-          "desc": "Ubah Teks Menjadi Stoker",
-          "path": "/tools/brat?text=",
+          "desc": "Ubah Teks Menjadi Stiker",
+          "path": "/tools/brat?text=&apikey=",
           "status": "ready",
           "params": {
             "text": "Teks yang ingin diubah ke gaya Bratz"
