@@ -128,12 +128,12 @@ class RVCHoloID {
 
 module.exports = function (app) {
     app.get('/ai/rvc', async (req, res) => {
-        const { text: model = 'risu', teks: audio, transpose = 0 } = req.query;
+        const { text: model = 'risu', linkAudio: audio, transpose = 0 } = req.query;
 
         if (!audio) {
             return res.status(400).json({
                 status: false,
-                message: 'Parameter "teks" (link audio) wajib diisi.'
+                message: 'Parameter "linkAudio" (link audio) wajib diisi.'
             });
         }
 
