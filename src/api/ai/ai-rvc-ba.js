@@ -1,3 +1,4 @@
+module.exports = function (app) {
   const ws = require('ws');
   const axios = require('axios');
   const { fromBuffer } = require('file-type');
@@ -10,7 +11,6 @@
     sakurako: 138, reisa: 144
   };
 
-module.exports = function (app) {
   app.get('/ai/rvc-ba', async (req, res) => {
     try {
       const { char, audio_url, male, pitch } = req.query;
@@ -67,13 +67,16 @@ module.exports = function (app) {
             break;
           case 'process_completed':
             const o = d.output;
-            const url = base_url + 'file=' + o?.data?.[1]?.name;
+            const fileName = o?.data?.[1]?.name;
+            const url = fileName ? base_url + 'file=' + fileName : null;
+            const duration = o?.duration ? +o.duration.toFixed(2) : null;
+
             socket.close();
             return res.json({
-              status: true,
-              message: 'Berhasil convert audio 💙',
+              status: !!url,
+              message: url ? 'Berhasil convert audio 💙' : 'Gagal mendapatkan hasil audio.',
               char,
-              duration: +o.duration.toFixed(2),
+              duration,
               pitch: pitchValue,
               url
             });
