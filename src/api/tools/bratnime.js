@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const axios = require('axios');
 const sharp = require('sharp');
 
@@ -21,21 +19,17 @@ function wrapText(text, maxCharsPerLine = 30) {
   return lines;
 }
 
-module.exports = function(app) {
+module.exports = function (app) {
   app.get('/tools/bratnime', async (req, res) => {
+    const { apikey, text } = req.query;
+    if (!global.apikey.includes(apikey)) return res.status(403).send('Invalid API key');
+    if (!text) return res.status(400).send('Parameter "text" diperlukan.');
+    if (text.length > 70) return res.status(400).send('Maksimal 70 karakter.');
+
     try {
-      const { apikey, text } = req.query;
-
-      if (!global.apikey.includes(apikey)) return res.status(403).send('Invalid API key');
-      if (!text) return res.status(400).send('Parameter "text" diperlukan.');
-      if (text.length > 70) return res.status(400).send('Maksimal 70 karakter.');
-
       const imageUrl = 'https://files.catbox.moe/kwkiyb.png';
-      const imagePath = path.join(__dirname, '../session/file.jpg');
-      const outputPath = path.join(__dirname, '../session/file.webp');
-
       const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-      fs.writeFileSync(imagePath, Buffer.from(response.data));
+      const imageBuffer = Buffer.from(response.data);
 
       const width = 856;
       const height = 808;
@@ -69,19 +63,18 @@ module.exports = function(app) {
 
       const svgBuffer = Buffer.from(svgOverlay);
 
-      await sharp(imagePath)
+      const finalBuffer = await sharp(imageBuffer)
         .composite([{ input: svgBuffer, top: 0, left: 0 }])
         .webp({ quality: 100 })
-        .toFile(outputPath);
+        .toBuffer();
 
-      const result = fs.readFileSync(outputPath);
       res.set('Content-Type', 'image/webp');
-      res.status(200).send(result);
-
+      res.send(finalBuffer);
     } catch (err) {
       res.status(500).json({
         status: false,
-        message: err.message || 'Terjadi kesalahan internal'
+        message: 'Terjadi kesalahan saat membuat stiker',
+        error: err.message
       });
     }
   });
