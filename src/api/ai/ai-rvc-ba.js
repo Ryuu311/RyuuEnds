@@ -1,9 +1,9 @@
-const axios = require('axios');
 const ws = require('ws');
+const axios = require('axios');
 
 class RVCBlueArchive {
-  constructor() {
-    this.char = {
+    constructor() {
+        this.char = {
       arisu: 0,
       wakamo: 6,
       himari: 12,
@@ -30,111 +30,118 @@ class RVCBlueArchive {
       sakurako: 138,
       reisa: 144
     };
-  }
+    }
 
-  generateSession() {
-    return Math.random().toString(36).substring(2);
-  }
+    generate = async function ({ audio, char = 'arisu', is_audio_male = true }) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                if (!(char.toLowerCase() in this.char)) {
+                    return reject(`Karakter '${char}' tidak ditemukan.`);
+                }
 
-  generate = async function ({ audio, char = 'arisu', is_audio_male = true }) {
-    return new Promise((resolve, reject) => {
-      if (!(char.toLowerCase() in this.char)) {
-        return reject(`Karakter '${char}' tidak ditemukan.`);
-      }
+                const base_url = 'https://andhikagg-rvc-blue-archive.hf.space/';
+                const session_hash = this.generateSession();
+                const socket = new ws('wss://andhikagg-rvc-blue-archive.hf.space/queue/join');
 
-      const base_url = 'https://andhikagg-rvc-blue-archive.hf.space/';
-      const session_hash = this.generateSession();
-      const socket = new ws('wss://andhikagg-rvc-blue-archive.hf.space/queue/join');
+                const aud = {
+                    data: 'data:audio/mpeg;base64,' + audio.toString('base64'),
+                    name: `audio_${Date.now()}.mp3`
+                };
 
-      const aud = {
-        data: 'data:audio/mpeg;base64,' + audio.toString('base64'),
-        name: `audio_${Date.now()}.mp3`
-      };
+                socket.on('message', (data) => {
+                    const d = JSON.parse(data.toString('utf8'));
+                    switch (d.msg) {
+                        case 'send_hash': {
+                            socket.send(JSON.stringify({
+                                fn_index: this.char[char],
+                                session_hash,
+                            }));
+                            break;
+                        }
+                        case 'send_data': {
+                            socket.send(JSON.stringify({
+                                fn_index: this.char[char],
+                                session_hash,
+                                data: ['Upload audio', '', aud, '', 'en-US-AnaNeural-Female', is_audio_male ? 12 : -12, 'pm', 0.7, 3, 0, 1, 0.5],
+                            }));
+                            break;
+                        }
+                        case 'process_completed': {
+                            const o = d.output;
+                            const name = o.data[1]?.name;
+                            socket.close();
+                            return resolve({
+                                duration: +o.duration.toFixed(2),
+                                path: name,
+                                url: base_url + 'file=' + name,
+                            });
+                        }
+                        default: break;
+                    }
+                });
 
-      socket.on('message', (data) => {
-        const d = JSON.parse(data.toString('utf8'));
+                socket.on('error', () => {
+                    reject('WebSocket error');
+                });
 
-        switch (d.msg) {
-          case 'send_hash':
-            socket.send(JSON.stringify({
-              fn_index: this.char[char],
-              session_hash,
-            }));
-            break;
+            } catch (err) {
+                reject('Gagal memproses audio');
+            }
+        });
+    };
 
-          case 'send_data':
-            socket.send(JSON.stringify({
-              fn_index: this.char[char],
-              session_hash,
-              data: ['Upload audio', '', aud, '', 'en-US-AnaNeural-Female', is_audio_male ? 12 : -12, 'pm', 0.7, 3, 0, 1, 0.5],
-            }));
-            break;
-
-          case 'process_completed':
-            socket.close();
-            const o = d.output;
-            const name = o.data[1]?.name;
-            return resolve({
-              duration: +o.duration.toFixed(2),
-              url: base_url + 'file=' + name
-            });
-
-          default:
-            break;
-        }
-      });
-
-      socket.on('error', (err) => reject('WebSocket error: ' + err));
-      socket.on('close', () => console.log('WebSocket closed'));
-    });
-  }
+    generateSession = function () {
+        return Math.random().toString(36).substring(2);
+    };
 }
 
-const rvc = new RVCBlueArchive();
+module.exports = async function (app) {
+    const converter = new RVCBlueArchive();
 
-module.exports = function (app) {
-  app.get('/ai/rvc-ba', async (req, res) => {
-    const { char, audio_url, pitch } = req.query;
+    app.get('/ai/rvc-ba', async (req, res) => {
+        try {
+            const { char, audio_url, pitch } = req.query;
 
-    if (!char || !audio_url) {
-      return res.json({
-        status: false,
-        creator: "RyuuDev",
-        message: "Parameter 'char' dan 'audio_url' wajib diisi.",
-      });
-    }
+            if (!char || !audio_url) {
+                return res.status(400).json({
+                    status: false,
+                    creator: 'RyuuDev',
+                    message: 'Parameter "char" dan "audio_url" wajib diisi.',
+                });
+            }
 
-    try {
-      const response = await axios.get(audio_url, { responseType: 'arraybuffer' });
-      const buffer = Buffer.from(response.data);
+            const response = await axios.get(audio_url, {
+                responseType: 'arraybuffer'
+            });
 
-      const result = await rvc.generate({
-        char,
-        audio: buffer,
-        is_audio_male: pitch !== undefined ? parseInt(pitch) >= 0 : true
-      });
+            const audioBuffer = Buffer.from(response.data);
 
-      return res.json({
-        status: true,
-        creator: "RyuuDev",
-        message: "Berhasil mengubah suara~",
-        char,
-        pitch: pitch !== undefined ? parseInt(pitch) : -7,
-        duration: result.duration,
-        url: result.url
-      });
+            const result = await converter.generate({
+                char,
+                audio: audioBuffer,
+                is_audio_male: pitch !== '-12'
+            });
 
-    } catch (e) {
-      console.error(e);
-      return res.json({
-        status: false,
-        creator: "RyuuDev",
-        message: "Gagal mendapatkan hasil audio.",
-        char,
-        duration: null,
-        pitch: pitch !== undefined ? parseInt(pitch) : -7,
-        url: null
-      });
-    }
-  });
+            return res.json({
+                status: true,
+                creator: 'RyuuDev',
+                message: 'Berhasil diubah',
+                char,
+                pitch: pitch || 'default',
+                duration: result.duration,
+                url: result.url
+            });
+
+        } catch (e) {
+            return res.status(500).json({
+                status: false,
+                creator: 'RyuuDev',
+                message: 'Gagal mendapatkan hasil audio.',
+                char: req.query.char || null,
+                pitch: req.query.pitch || null,
+                duration: null,
+                url: null
+            });
+        }
+    });
 };
