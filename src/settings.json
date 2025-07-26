@@ -184,7 +184,7 @@
         {
           "name": "Writecream Image",
           "desc": "Generate gambar AI berdasarkan prompt dan rasio dengan API Writecream.",
-          "path": "/api/imagecreator/writecream?prompt=&ratio=",
+          "path": "/imagecreator/writecream?prompt=&ratio=",
           "method": "GET",
           "status": "ready",
           "params": {
