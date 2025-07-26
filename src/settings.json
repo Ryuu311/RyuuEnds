@@ -394,6 +394,15 @@
           "params": {
             "text": "Teks yang ingin diubah ke gaya Bratz"
           }
+        },
+        {
+          "name": "Brat Anime",
+          "desc": "Ubah Teks Menjadi Stiker dengan karakter anime",
+          "path": "/tools/bratnime?text=&apikey=",
+          "status": "ready",
+          "params": {
+            "text": "Teks yang ingin diubah ke gaya Brat karakter anime"
+          }
         }
       ]
     }
