@@ -13,7 +13,6 @@ module.exports = function (app) {
 
     try {
       const result = await veo3(rawPrompt)
-
       if (!result?.data?.video_url) {
         return res.status(500).json({
           status: false,
@@ -21,11 +20,9 @@ module.exports = function (app) {
         })
       }
 
-      return res.json({
-        status: true,
-        message: 'Video berhasil dibuat!',
-        result
-      })
+      // 🎯 Langsung redirect ke video
+      return res.redirect(result.data.video_url)
+
     } catch (e) {
       return res.status(500).json({
         status: false,
@@ -35,7 +32,6 @@ module.exports = function (app) {
   })
 }
 
-// Fungsi utama logic video-nya
 async function veo3(prompt, { model = 'veo-3-fast', auto_sound = false, auto_speech = false } = {}) {
   const allowedModels = ['veo-3-fast', 'veo-3']
   if (!prompt) throw new Error('Prompt wajib diisi')
