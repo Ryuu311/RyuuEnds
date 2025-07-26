@@ -10,7 +10,7 @@ const charMap = {
   sakurako: 138, reisa: 144
 };
 
-module.exports = app => {
+module.exports = function (app) {
   app.get('/ai/rvc-ba', async (req, res) => {
     try {
       const { char, audio_url, male } = req.query;
