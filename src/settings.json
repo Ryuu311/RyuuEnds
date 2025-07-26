@@ -109,6 +109,30 @@
                "desc": "Opsional. Atur pitch suara (positif lebih tinggi, negatif lebih rendah). Contoh: 2, -1, 0."
              }
           }
+        },
+        {
+          "name": "Voice Changer Blue Archive",
+          "desc": "Ubah suara kamu menjadi karakter cewek Blue Archive menggunakan teknologi RVC (Realtime Voice Conversion).",
+          "path": "/ai/rvc-ba?char=&audio_url=&male=",
+          "method": "GET",
+          "status": "ready",
+          "params": {
+            "char": {
+              "required": true,
+              "type": "string",
+              "desc": "Nama karakter Blue Archive. Contoh: arona, wakamo, hina, shiroko, dll."
+            },
+            "audio_url": {
+              "required": true,
+              "type": "string",
+              "desc": "Link URL file audio (.mp3) yang ingin diubah. Bisa dari Dropbox, Catbox, dll."
+            },
+            "male": {
+              "required": false,
+              "type": "boolean",
+              "desc": "Opsional. Jika suara asli laki-laki, isi true untuk penyesuaian pitch otomatis."
+            }
+          }
         }, 
         {
           "name": "Veo 3 Video",
