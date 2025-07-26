@@ -311,7 +311,7 @@
           "desc": "Create qris payment",
           "path": "/orderkuota/createpayment?apikey=&amount=&codeqr=",
           "status": "ready",
-          "innerDesc": "Buy apikey >> wa.me/6285143569870",
+          "innerDesc": "Buy apikey >> wa.me/6288246552068",
           "params": {
             "apikey": "Your API key",
             "amount": "Total harga",
@@ -323,7 +323,7 @@
           "desc": "Cek status payment",
           "path": "/orderkuota/cekstatus?apikey=&merchant=&keyorkut=",
           "status": "ready",
-          "innerDesc": "Buy apikey >> wa.me/6285143569870",
+          "innerDesc": "Buy apikey >> wa.me/6288246552068",
           "params": {
             "apikey": "Your API key",
             "merchant": "Merchant ID",
