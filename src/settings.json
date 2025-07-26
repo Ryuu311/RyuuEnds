@@ -199,20 +199,6 @@
               "desc": "Rasio gambar yang diinginkan. Pilihan: 1:1, 16:9, 2:3, 3:2, 4:5, 5:4, 9:16, 21:9, 9:21"
             }
           }
-        },
-        {
-          "name": "NSFW AI Image Generator",
-          "desc": "Generate gambar NSFW-style dari prompt saja",
-          "path": "/imagecreator/nsfw-image?prompt=",
-          "method": "GET",
-          "status": "ready",
-          "params": {
-            "prompt": {
-              "required": true,
-              "type": "string",
-              "desc": "Deskripsikan gambar"
-            }
-          }
         }
       ]
     },
