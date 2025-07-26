@@ -113,7 +113,7 @@
         {
           "name": "Voice Changer Blue Archive",
           "desc": "Ubah suara kamu menjadi karakter cewek Blue Archive menggunakan teknologi RVC (Realtime Voice Conversion).",
-          "path": "/ai/rvc-ba?char=&audio_url=&male=",
+          "path": "/ai/rvc-ba?char=&audio_url=&pitch=",
           "method": "GET",
           "status": "ready",
           "params": {
@@ -127,10 +127,10 @@
               "type": "string",
               "desc": "Link URL file audio (.mp3) yang ingin diubah. Bisa dari Dropbox, Catbox, dll."
             },
-            "male": {
+            "pitch": {
               "required": false,
               "type": "boolean",
-              "desc": "Opsional. Jika suara asli laki-laki, isi true untuk penyesuaian pitch otomatis."
+              "desc": "Opsional."
             }
           }
         }, 
