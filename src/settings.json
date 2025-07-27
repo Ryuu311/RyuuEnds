@@ -135,6 +135,16 @@
           }
         }, 
         {
+          "name": "Genshin RVC",
+          "desc": "Ubah suara kamu jadi karakter Genshin Impact (Voice Changer only)",
+          "path": "/ai/genshin-rvc?char=&url=",
+          "status": "ready",
+          "params": {
+            "char": "Nama karakter Genshin (contoh: furina, hutao, diluc)",
+            "url": "Link file audio (mp3, wav, dll)"
+          }
+        },
+        {
           "name": "Veo 3 Video",
           "desc": "Generate video dari teks menggunakan AI VEO-3 (erweima).",
           "path": "/ai/veo3?prompt=",
