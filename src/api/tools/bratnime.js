@@ -23,7 +23,7 @@ module.exports = function(app) {
 
       ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
 
-      GlobalFonts(fontPath, { family: 'EmojiFont' });
+      GlobalFonts.registerFromPath(fontPath, 'EmojiFont');
 
       // Posisi papan teks
       let boardX = canvas.width * 0.18;
