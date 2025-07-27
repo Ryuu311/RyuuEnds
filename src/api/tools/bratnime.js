@@ -34,9 +34,6 @@ module.exports = function(app) {
       const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
       const baseImage = Buffer.from(response.data);
 
-      const fontPath = path.join(__dirname, '../Geist-Regular.ttf');
-      const geistFont = fs.readFileSync(fontPath).toString('base64');
-
       const width = 856;
       const height = 808;
       const fontSize = 45;
@@ -55,20 +52,14 @@ module.exports = function(app) {
 
       const svgOverlay = `
 <svg width="${width}" height="${height}">
-  <defs>
-    <style type="text/css">
-      @font-face {
-        font-family: 'Geist';
-        src: url('data:font/ttf;base64,${geistFont}') format('truetype');
-      }
-      .text {
-        fill: black;
-        font-size: ${fontSize}px;
-        font-family: 'Geist', sans-serif;
-        font-weight: bold;
-      }
-    </style>
-  </defs>
+  <style>
+    .text {
+      fill: black;
+      font-size: ${fontSize}px;
+      font-family: sans-serif;
+      font-weight: bold;
+    }
+  </style>
   <rect x="0" y="564" width="${width}" height="130" fill="rgba(255,255,255,0.4)" />
   ${svgText}
 </svg>`;
