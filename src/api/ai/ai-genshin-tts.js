@@ -1,6 +1,6 @@
+// genshin-tts-endpoint.js
 const axios = require("axios");
 
-// karakter Genshin Impact RVC
 const char_female = {
   lumine: [5, 84],
   paimon: [10, 127], 
@@ -29,28 +29,35 @@ const char_male = {
   wriothesley: [105, 959],
 };
 
-const char_list = { ...char_female, ...char_male };
+const char_all = { ...char_female, ...char_male };
 
-module.exports = function(app) {
+module.exports = function (app) {
   app.get("/ai/genshin-tts", async (req, res) => {
     const { char, text } = req.query;
     if (!char || !text) {
-      return res.status(400).json({ status: false, message: 'Parameter "char" dan "text" diperlukan.' });
+      return res.status(400).json({
+        status: false,
+        msg: 'Parameter "char" dan "text" diperlukan.',
+        char: Object.keys(char_all),
+      });
     }
 
-    const allChars = Object.keys(char_list);
-    if (!allChars.includes(char)) {
-      return res.status(400).json({ status: false, message: `Karakter tidak valid. Pilih dari: ${allChars.join(", ")}` });
+    if (!char_all[char]) {
+      return res.status(400).json({
+        status: false,
+        msg: `Karakter tidak ditemukan.`,
+        char: Object.keys(char_all),
+      });
     }
 
     try {
       const BASEURL = "https://arkandash-rvc-genshin-impact.hf.space";
       const session_hash = Math.random().toString(36).substring(2);
+      const [fn_index, trigger_id] = char_all[char];
+
       const charVoice = Object.keys(char_female).includes(char)
         ? "id-ID-GadisNeural-Female"
         : "id-ID-ArdiNeural-Male";
-
-      const [fn_index, trigger_id] = char_list[char];
 
       const payload = {
         data: [
@@ -82,37 +89,37 @@ module.exports = function(app) {
             try {
               const json = JSON.parse(line.substring(6));
               if (json.msg !== "process_completed") return;
-              if (!json.success) {
-                return res.status(500).json({ status: false, message: "Gagal memproses TTS." });
-              }
+              if (!json.success) return res.json({ status: false, msg: "Proses gagal." });
 
               const dt = json.output.data;
-              const fileData = dt.find(x => typeof x === 'object' && x.name && x.name.endsWith(".wav"));
-              if (!fileData) {
-                return res.status(500).json({ status: false, message: "File audio tidak ditemukan dalam output." });
-              }
+              const fileData = dt.find(x => typeof x === "object" && x.name && x.name.endsWith(".wav"));
+
+              if (!fileData)
+                return res.status(500).json({ status: false, msg: "File audio tidak ditemukan." });
 
               return res.json({
                 status: true,
-                creator: "RyuuDev",
-                thanksTo: "Nekorinn owner",
+                msg: `${BASEURL}/file=${fileData.name}`,
                 voice: charVoice,
-                result: `${BASEURL}/file=${fileData.name}`
+                char,
               });
 
             } catch (err) {
-              return res.status(500).json({ status: false, message: "Gagal parsing stream.", detail: err.message });
+              return res.status(500).json({
+                status: false,
+                msg: "Gagal parsing data stream.",
+                error: err.message
+              });
             }
           }
         }
       });
 
     } catch (err) {
-      console.error(err);
       res.status(500).json({
         status: false,
-        message: "Internal Server Error",
-        detail: err.message
+        msg: "Internal server error.",
+        error: err.message
       });
     }
   });
