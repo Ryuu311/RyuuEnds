@@ -159,6 +159,16 @@
           }
         },
         {
+          "name": "Genshin TTS",
+          "desc": "Ubah teks menjadi suara karakter Genshin Impact (Text to Speech)",
+          "path": "/ai/genshin-tts?char=&text=",
+          "status": "ready",
+          "params": {
+            "char": "Nama karakter Genshin (contoh: furina, hutao, diluc)",
+            "text": "Teks yang ingin diubah menjadi suara"
+          }
+        },
+        {
           "name": "Open AI",
           "desc": "Talk with Open AI",
           "path": "/ai/openai?text=",
