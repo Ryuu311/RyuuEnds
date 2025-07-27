@@ -257,6 +257,12 @@
           "status": "ready"
         },
         {
+          "name": "Randow Waifu",
+          "desc": "Random Waifu Images",
+          "path": "/random/waifupic",
+          "status": "ready"
+        },
+        {
           "name": "Blue Archive cosplay",
           "desc": "Blue Archive Random Cosplay Images",
           "path": "/random/cosplay-ba",
