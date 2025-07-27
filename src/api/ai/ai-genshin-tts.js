@@ -1,5 +1,6 @@
 const axios = require("axios");
 
+// karakter Genshin Impact RVC
 const char_female = {
   lumine: [5, 84],
   paimon: [10, 127], 
@@ -63,7 +64,7 @@ module.exports = function(app) {
         trigger_id
       };
 
-      await axios.post(`${BASEURL}/queue/join?`, payload);
+      await axios.post(`${BASEURL}/queue/join`, payload);
 
       const stream = await axios.get(`${BASEURL}/queue/data?session_hash=${session_hash}`, {
         headers: { "content-type": "text/event-stream" },
@@ -84,16 +85,23 @@ module.exports = function(app) {
               if (!json.success) {
                 return res.status(500).json({ status: false, message: "Gagal memproses TTS." });
               }
+
               const dt = json.output.data;
+              const fileData = dt.find(x => typeof x === 'object' && x.name && x.name.endsWith(".wav"));
+              if (!fileData) {
+                return res.status(500).json({ status: false, message: "File audio tidak ditemukan dalam output." });
+              }
+
               return res.json({
                 status: true,
                 creator: "RyuuDev",
                 thanksTo: "Nekorinn owner",
                 voice: charVoice,
-                result: dt[0]
+                result: `${BASEURL}/file=${fileData.name}`
               });
+
             } catch (err) {
-              return res.status(500).json({ status: false, message: "Gagal parsing stream." });
+              return res.status(500).json({ status: false, message: "Gagal parsing stream.", detail: err.message });
             }
           }
         }
