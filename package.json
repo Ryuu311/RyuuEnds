@@ -11,6 +11,7 @@
   "license": "MIT",
   "dependencies": {
     "@rynn-k/proxy-agent": "latest",
+    "@napi-rs/canvas": "^0.1.43",
     "axios": "^1.6.8",
     "body-parser": "^1.20.3",
     "chalk": "^4.1.2",
