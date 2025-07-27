@@ -1,6 +1,6 @@
 const axios = require('axios');
 const path = require('path');
-const { createCanvas, loadImage, registerFont } = require('@napi-rs/canvas');
+const { createCanvas, loadImage, GlobalFonts } = require('@napi-rs/canvas');
 const sharp = require('sharp');
 
 module.exports = function(app) {
@@ -23,7 +23,7 @@ module.exports = function(app) {
 
       ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
 
-      registerFont(fontPath, { family: 'EmojiFont' });
+      GlobalFonts(fontPath, { family: 'EmojiFont' });
 
       // Posisi papan teks
       let boardX = canvas.width * 0.18;
