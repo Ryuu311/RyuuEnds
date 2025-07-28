@@ -399,7 +399,7 @@
         {
           "name": "Quote chat Generator",
           "desc": "Buat quote dengan teks, warna dan foto profil",
-          "path": "/tools/qc2?text=&profile=&color=&name=",
+          "path": "/tools/qc?text=&profile=&color=&name=",
           "params": {
     "text": "Teks untuk dijadikan quote (max 100)",
             "profile": "URL gambar profil pengguna",
