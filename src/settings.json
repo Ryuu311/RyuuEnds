@@ -397,6 +397,17 @@
           }
         },
         {
+          "name": "Quote chat Generator",
+          "desc": "Buat quote dengan teks, warna dan foto profil",
+          "path": "/tools/qc2?text=&profile=&color=&name=",
+          "params": {
+    "text": "Teks untuk dijadikan quote (max 100)",
+            "profile": "URL gambar profil pengguna",
+            "color": "Warna latar (opsional)",
+            "name": "Nama pengirim"
+          }
+        },
+        {
           "name": "Fake TikTok Generator",
           "desc": "Buat profil TikTok palsu dengan nama dan foto",
           "path": "/tools/faketiktok?name=&username=&pp=",
