@@ -226,6 +226,14 @@
           }
         },
         {
+          "name": "Image Upscaler 4K",
+          "desc": "Upscale gambar jadi 4K kualitas tinggi",
+          "path": "/imagecreator/upscaler4k?url=",
+          "params": {
+            "url": "Link gambar PNG/JPG yang ingin ditingkatkan resolusinya"
+          }
+        },
+        {
           "name": "Writecream Image",
           "desc": "Generate gambar AI berdasarkan prompt dan rasio dengan API Writecream.",
           "path": "/imagecreator/writecream?prompt=&ratio=",
