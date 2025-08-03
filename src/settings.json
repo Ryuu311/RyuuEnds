@@ -232,6 +232,14 @@
           }
         },
         {
+          "name": "FluxLora Ai Image Generator",
+          "desc": "Generate gambar AI dengan gaya LoRA seperti icon, logo, sketsa, dll",
+          "path": "/imagecreator/flux-lora?prompt=",
+          "params": {
+            "prompt": "Teks deskripsi gambar yang ingin dibuat (wajib)"
+          }
+        },
+        {
           "name": "ZonerAI Txt2Img",
           "desc": "Buat gambar dari teks menggunakan AI",
           "path": "/imagecreator/txt2img?prompt=&resolusi=&upscale=",
@@ -299,9 +307,15 @@
       "icon": "fas fa-search",
       "items": [
         {
-          "name": "YouTube",
+          "name": "YouTube Search",
           "desc": "Video search",
           "path": "/search/youtube?q=",
+          "status": "ready"
+        },
+        {
+          "name": "Pinterest Search",
+          "desc": "Pin foto search",
+          "path": "/search/pinterest?query=",
           "status": "ready"
         }
       ]
