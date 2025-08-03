@@ -1,28 +1,97 @@
 const axios = require('axios');
-const cheerio = require('cheerio');
 
-function pinterest(querry){
-	return new Promise(async(resolve,reject) => {
-		 axios.get('https://id.pinterest.com/search/pins/?autologin=true&q=' + querry, {
-			headers: {
-			"cookie" : "_auth=1; _b=\"AVna7S1p7l1C5I9u0+nR3YzijpvXOPc6d09SyCzO+DcwpersQH36SmGiYfymBKhZcGg=\"; _pinterest_sess=TWc9PSZHamJOZ0JobUFiSEpSN3Z4a2NsMk9wZ3gxL1NSc2k2NkFLaUw5bVY5cXR5alZHR0gxY2h2MVZDZlNQalNpUUJFRVR5L3NlYy9JZkthekp3bHo5bXFuaFZzVHJFMnkrR3lTbm56U3YvQXBBTW96VUgzVUhuK1Z4VURGKzczUi9hNHdDeTJ5Y2pBTmxhc2owZ2hkSGlDemtUSnYvVXh5dDNkaDN3TjZCTk8ycTdHRHVsOFg2b2NQWCtpOWxqeDNjNkk3cS85MkhhSklSb0hwTnZvZVFyZmJEUllwbG9UVnpCYVNTRzZxOXNJcmduOVc4aURtM3NtRFo3STlmWjJvSjlWTU5ITzg0VUg1NGhOTEZzME9SNFNhVWJRWjRJK3pGMFA4Q3UvcHBnWHdaYXZpa2FUNkx6Z3RNQjEzTFJEOHZoaHRvazc1c1UrYlRuUmdKcDg3ZEY4cjNtZlBLRTRBZjNYK0lPTXZJTzQ5dU8ybDdVS015bWJKT0tjTWYyRlBzclpiamdsNmtpeUZnRjlwVGJXUmdOMXdTUkFHRWloVjBMR0JlTE5YcmhxVHdoNzFHbDZ0YmFHZ1VLQXU1QnpkM1FqUTNMTnhYb3VKeDVGbnhNSkdkNXFSMXQybjRGL3pyZXRLR0ZTc0xHZ0JvbTJCNnAzQzE0cW1WTndIK0trY05HV1gxS09NRktadnFCSDR2YzBoWmRiUGZiWXFQNjcwWmZhaDZQRm1UbzNxc21pV1p5WDlabm1UWGQzanc1SGlrZXB1bDVDWXQvUis3elN2SVFDbm1DSVE5Z0d4YW1sa2hsSkZJb1h0MTFpck5BdDR0d0lZOW1Pa2RDVzNySWpXWmUwOUFhQmFSVUpaOFQ3WlhOQldNMkExeDIvMjZHeXdnNjdMYWdiQUhUSEFBUlhUVTdBMThRRmh1ekJMYWZ2YTJkNlg0cmFCdnU2WEpwcXlPOVZYcGNhNkZDd051S3lGZmo0eHV0ZE42NW8xRm5aRWpoQnNKNnNlSGFad1MzOHNkdWtER0xQTFN5Z3lmRERsZnZWWE5CZEJneVRlMDd2VmNPMjloK0g5eCswZUVJTS9CRkFweHc5RUh6K1JocGN6clc1JmZtL3JhRE1sc0NMTFlpMVErRGtPcllvTGdldz0=; _ir=0"
-		}
-			}).then(({ data }) => {
-		const $ = cheerio.load(data)
-		const result = [];
-		const hasil = [];
-   		 $('div > a').get().map(b => {
-        const link = $(b).find('img').attr('src')
-            result.push(link)
-		});
-   		result.forEach(v => {
-		 if(v == undefined) return
-		 hasil.push(v.replace(/236/g,'736'))
-			})
-			hasil.shift();
-		resolve(hasil)
-		})
-	})
+async function getCookies() {
+    try {
+        const response = await axios.get('https://www.pinterest.com/csrf_error/');
+        const setCookieHeaders = response.headers['set-cookie'];
+        if (setCookieHeaders) {
+            const cookies = setCookieHeaders.map(cookieString => {
+                const cookieParts = cookieString.split(';');
+                const cookieKeyValue = cookieParts[0].trim();
+                return cookieKeyValue;
+            });
+            return cookies.join('; ');
+        } else {
+            console.warn('No set-cookie headers found in the response.');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching cookies:', error);
+        return null;
+    }
+}
+
+async function pinterest(query) {
+    try {
+        const cookies = await getCookies();
+        if (!cookies) {
+            console.log('Failed to retrieve cookies. Exiting.');
+            return;
+        }
+
+        const url = 'https://www.pinterest.com/resource/BaseSearchResource/get/';
+
+        const params = {
+            source_url: `/search/pins/?q=${query}`,
+            data: JSON.stringify({
+                "options": {
+                    "isPrefetch": false,
+                    "query": query,
+                    "scope": "pins",
+                    "no_fetch_context_on_resource": false
+                },
+                "context": {}
+            }),
+            _: Date.now()
+        };
+
+        const headers = {
+            'accept': 'application/json, text/javascript, */*, q=0.01',
+            'accept-encoding': 'gzip, deflate',
+            'accept-language': 'en-US,en;q=0.9',
+            'cookie': cookies,
+            'dnt': '1',
+            'referer': 'https://www.pinterest.com/',
+            'sec-ch-ua': '"Not(A:Brand";v="99", "Microsoft Edge";v="133", "Chromium";v="133"',
+            'sec-ch-ua-full-version-list': '"Not(A:Brand";v="99.0.0.0", "Microsoft Edge";v="133.0.3065.92", "Chromium";v="133.0.6943.142"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-model': '""',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-ch-ua-platform-version': '"10.0.0"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-origin',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0',
+            'x-app-version': 'c056fb7',
+            'x-pinterest-appstate': 'active',
+            'x-pinterest-pws-handler': 'www/[username]/[slug].js',
+            'x-pinterest-source-url': '/hargr003/cat-pictures/',
+            'x-requested-with': 'XMLHttpRequest'
+        };
+
+        const { data } = await axios.get(url, {
+            headers: headers,
+            params: params
+        })
+
+        const container = [];
+        const results = data.resource_response.data.results.filter((v) => v.images?.orig);
+        results.forEach((result) => {
+            container.push({
+                upload_by: result.pinner.username,
+                fullname: result.pinner.full_name,
+                followers: result.pinner.follower_count,
+                caption: result.grid_title,
+                image: result.images.orig.url,
+                source: "https://id.pinterest.com/pin/" + result.id,
+            });
+        });
+
+        return container;
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
 }	
 
 module.exports = function (app) {
@@ -36,9 +105,9 @@ module.exports = function (app) {
       });
     }
 
-    const hasil = await pinterest(query);
+    const container = await pinterest(query);
 
-    if (!hasil.length) {
+    if (!container.length) {
       return res.status(500).json({
         status: false,
         creator: 'RyuuDev',
@@ -49,7 +118,7 @@ module.exports = function (app) {
     res.json({
       status: true,
       creator: 'RyuuDev',
-      result: hasil
+      result: container
     });
   });
 };
