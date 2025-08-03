@@ -20,6 +20,12 @@
           "desc": "Talk Chatgpt",
           "path": "/ai/gptturbo?text=",
           "status": "ready"
+        },
+        {
+          "name": "Mahiru AI",
+          "desc": "Chat mahiru",
+          "path": "/ai/mahiru-ai?text=",
+          "status": "ready"
         },        
         {
           "name": "Dopple AI",
