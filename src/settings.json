@@ -2,7 +2,7 @@
   "name": "RyuuDev-Api UI",
   "version": "v1.0.0",
   "description": "Simple API Gratis.",
-  "bannerImage": "/img/banner.jpg",
+  "bannerImage": "src/banner.jpg",
   "header": {
     "status": "Online!"
   },
@@ -345,10 +345,11 @@
         {
           "name": "YouTube",
           "desc": "Download Video/Musik Dari YouTube",
-          "path": "/download/youtube?url=",
+          "path": "/download/youtube?url=&type=",
           "status": "ready",
           "params": {
-            "url": "Masukan URL nya"
+            "url": "Masukan URL nya",
+            "type": "Pilih type mp4/mp3"
           }
         }
       ]
