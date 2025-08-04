@@ -55,14 +55,14 @@ app.get('/download/youtube', async (req, res) => {
         const result = await XeonInstaMp4(url);
         res.json({
             success: true,
-            creator "RyuuDev",
+            creator: "RyuuDev",
             output: result
         });
     } catch (err) {
         console.error(err);
         res.status(500).json({
             success: false,
-            creator "RyuuDev",
+            creator: "RyuuDev",
             message: err.message || 'Internal Server Error'
         });
     }
