@@ -1,103 +1,62 @@
-const express = require('express');
 const axios = require('axios');
-const FormData = require('form-data');
 const cheerio = require('cheerio');
-const cors = require('cors');
+const FormData = require('form-data');
 
 module.exports = function(app) {
+  async function getHash(link) {
+    const { data } = await axios.get(`https://ytmp3.lat/download/${encodeURIComponent(link)}`);
+    const $ = cheerio.load(data);
+    const id = $('#convertForm input[name=id]').val();
+    const v = $('#convertForm input[name=v]').val();
+    const k = $('#convertForm input[name=k]').val();
+    const token = $('#convertForm input[name=_token]').val();
 
-// Fungsi utama ssyoutube
-const ssyoutube = {
-  dl: async (url) => {
-    let d = new FormData();
-    d.append("videoURL", url);
+    return { id, v, k, token };
+  }
 
-    let headers = {
-      ...d.getHeaders(),
-      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-      "Accept-Encoding": "gzip, deflate, br",
-      "Accept-Language": "en-US,en;q=0.9",
-      "Cache-Control": "no-cache",
-      "Connection": "keep-alive",
-      "DNT": "1",
-      "Host": "ssyoutube.online",
-      "Origin": "https://ssyoutube.online",
-      "Pragma": "no-cache",
-      "Referer": "https://ssyoutube.online/",
-      "Sec-Fetch-Dest": "document",
-      "Sec-Fetch-Mode": "navigate",
-      "Sec-Fetch-Site": "same-origin",
-      "Sec-Fetch-User": "?1",
-      "Upgrade-Insecure-Requests": "1",
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    };
+  async function getStatus({ id, v, k, token }, type) {
+    const data = new FormData();
+    data.append('type', type);
+    data.append('v', v);
+    data.append('k', k);
+    data.append('_token', token);
 
-    let { data } = await axios.post(
-      "https://ssyoutube.online/yt-video-detail/",
-      d,
-      { headers }
-    );
-
-    let $ = cheerio.load(data);
-
-    const videoInfo = {
-      title: $('.videoTitle').text().trim(),
-      duration: $('.duration label').text().replace('Duration: ', '').trim(),
-      views: $('.view label').text().trim(),
-      likes: $('.like label').text().trim(),
-      comments: $('.comment label').text().trim(),
-      thumbnail: $('.thumbnail').attr('src')
-    };
-
-    const downloadOptions = [];
-
-    $('.format-section tr').each((i, el) => {
-      const row = $(el);
-      const quality = row.find('td:first-child').text().trim();
-      const size = row.eq(1).text().trim();
-      const url = row.find('button').attr('data-url');
-
-      if (quality && url) {
-        downloadOptions.push({
-          quality: quality.replace(/\s+/g, ' '),
-          size,
-          url,
-          hasAudio: row.find('button').attr('data-has-audio') === 'true',
-          type: quality.includes('M4A') ? 'audio' : 'video'
-        });
-      }
+    const res = await axios.post(`https://ytmp3.lat/status/${id}`, data, {
+      headers: data.getHeaders()
     });
+
+    const result = res.data;
+    if (!result || !result.status || !result.url) {
+      throw new Error('Gagal mendapatkan link unduhan.');
+    }
 
     return {
-      videoInfo,
-      downloadOptions
+      url: result.url,
+      status: result.status,
+      format: result.ext,
+      size: result.size
     };
   }
+
+  app.get('/download/youtube', async (req, res) => {
+    const { url, type = 'mp3' } = req.query;
+    if (!url) return res.status(400).json({ success: false, message: 'Parameter "url" dibutuhkan' });
+
+    try {
+      const hash = await getHash(url);
+      const result = await getStatus(hash, type);
+
+      res.json({
+        success: true,
+        result: {
+          downloadUrl: result.url,
+          format: result.format,
+          size: result.size,
+          status: result.status
+        }
+      });
+    } catch (e) {
+      res.status(500).json({ success: false, message: e.message });
+    }
+  });
 };
-
-// Endpoint GET /api/ssyoutube?url=link_youtube
-app.get('/download/youtube', async (req, res) => {
-  const { url } = req.query;
-
-  if (!url) {
-    return res.status(400).json({
-      success: false,
-      message: 'Parameter "url" is required'
-    });
-  }
-
-  try {
-    const result = await ssyoutube.dl(url);
-    res.json({
-      success: true,
-      result
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      success: false,
-      message: error.message || 'Internal Server Error'
-    });
-  }
-});
-}
