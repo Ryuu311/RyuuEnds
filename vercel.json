@@ -9,7 +9,6 @@
   "routes": [
   {
     "src": "/(src/api|api-page)/.*",
-    "status": 403,
     "dest": "/api-page/403.html"
   },
   {
