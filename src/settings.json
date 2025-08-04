@@ -2,7 +2,7 @@
   "name": "RyuuDev-Api UI",
   "version": "v1.0.0",
   "description": "Simple API Gratis.",
-  "bannerImage": "/src/banner.jpg",
+  "bannerImage": "/img/banner.jpg",
   "header": {
     "status": "Online!"
   },
