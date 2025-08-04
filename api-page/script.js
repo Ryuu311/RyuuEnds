@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let settings = {}; // Untuk menyimpan data dari settings.json
     let currentApiData = null; // Untuk menyimpan data API yang sedang ditampilkan di modal
     let allNotifications = []; // Untuk menyimpan semua notifikasi dari JSON
+    let sponsorSettings = {} // To store sponsor data from sponsor.json
 
     // --- Fungsi Utilitas ---
     const showToast = (message, type = 'info', title = 'Notifikasi') => {
@@ -103,7 +104,146 @@ document.addEventListener('DOMContentLoaded', async () => {
             timeout = setTimeout(() => func.apply(this, args), delay);
         };
     };
+// --- Sponsor Functions ---
+  const loadSponsorSettings = async () => {
+    try {
+      const response = await fetch("/api-page/sponsor.json")
+      if (!response.ok) throw new Error(`Failed to load sponsor settings: ${response.status}`)
+      sponsorSettings = await response.json()
 
+      // Show sponsor modal if enabled and should show on load
+      if (sponsorSettings.enabled && sponsorSettings.showOnLoad) {
+        setTimeout(() => {
+          showSponsorModal()
+        }, 800) // Reduced from 2000ms to 800ms - much faster!
+      }
+    } catch (error) {
+      console.error("Error loading sponsor settings:", error)
+    }
+  }
+
+  const showSponsorModal = () => {
+    if (!sponsorSettings.enabled || !sponsorSettings.sponsors) return
+
+    const modalBody = document.getElementById("sponsorModalBody")
+    const modalTitle = document.getElementById("sponsorModalLabel")
+
+    // Set modal title
+    modalTitle.textContent = sponsorSettings.title || "Sponsored Ads"
+
+    // Clear existing content
+    modalBody.innerHTML = ""
+
+    // Filter active sponsors
+    const activeSponsors = sponsorSettings.sponsors.filter((sponsor) => sponsor.active)
+
+    if (activeSponsors.length === 0) return
+
+    // Create sponsor cards
+    activeSponsors.forEach((sponsor) => {
+      const sponsorCard = document.createElement("div")
+      sponsorCard.className = "sponsor-card"
+
+      // Create sponsor header
+      const sponsorHeader = document.createElement("div")
+      sponsorHeader.className = "sponsor-card-header"
+
+      const sponsorLogo = document.createElement("div")
+      sponsorLogo.className = "sponsor-logo"
+      sponsorLogo.textContent = sponsor.name.charAt(0)
+
+      // Use actual logo image URL if provided
+      if (sponsor.logo && sponsor.logo.startsWith("http")) {
+        const logoImg = document.createElement("img")
+        logoImg.src = sponsor.logo
+        logoImg.alt = sponsor.name
+        logoImg.onerror = () => {
+          // Fallback to text if image fails to load
+          sponsorLogo.innerHTML = sponsor.name.charAt(0)
+        }
+        sponsorLogo.innerHTML = ""
+        sponsorLogo.appendChild(logoImg)
+      }
+
+      const sponsorName = document.createElement("h4")
+      sponsorName.className = "sponsor-name"
+      sponsorName.textContent = sponsor.name
+
+      sponsorHeader.appendChild(sponsorLogo)
+      sponsorHeader.appendChild(sponsorName)
+
+      // Create sponsor body
+      const sponsorBody = document.createElement("div")
+      sponsorBody.className = "sponsor-card-body"
+      sponsorBody.style.background = sponsor.backgroundColor || "var(--card-background)"
+      sponsorBody.style.color = sponsor.textColor || "var(--text-color)"
+
+      // Add banner image if provided
+      if (sponsor.bannerImage && sponsor.bannerImage.startsWith("http")) {
+        const bannerImg = document.createElement("img")
+        bannerImg.src = sponsor.bannerImage
+        bannerImg.alt = `${sponsor.name} banner`
+        bannerImg.className = "sponsor-banner-image"
+        sponsorBody.appendChild(bannerImg)
+      }
+
+      // Create content wrapper
+      const sponsorContent = document.createElement("div")
+      sponsorContent.className = "sponsor-content"
+
+      const sponsorTitle = document.createElement("h3")
+      sponsorTitle.className = "sponsor-title"
+      sponsorTitle.textContent = sponsor.title
+
+      const sponsorSubtitle = document.createElement("p")
+      sponsorSubtitle.className = "sponsor-subtitle"
+      sponsorSubtitle.textContent = sponsor.subtitle
+
+      const sponsorDescription = document.createElement("p")
+      sponsorDescription.className = "sponsor-description"
+      sponsorDescription.textContent = sponsor.description
+
+      if (sponsor.location) {
+        const sponsorLocation = document.createElement("p")
+        sponsorLocation.className = "sponsor-location"
+        sponsorLocation.textContent = sponsor.location
+        sponsorContent.appendChild(sponsorLocation)
+      }
+
+      const sponsorButton = document.createElement("a")
+      sponsorButton.className = "sponsor-button"
+      sponsorButton.href = sponsor.url
+      sponsorButton.target = "_blank"
+      sponsorButton.rel = "noopener noreferrer"
+      sponsorButton.textContent = sponsor.buttonText || "Learn More"
+      sponsorButton.style.backgroundColor = sponsor.buttonColor || "var(--primary-color)"
+      sponsorButton.style.color = "white"
+
+      sponsorContent.appendChild(sponsorTitle)
+      sponsorContent.appendChild(sponsorSubtitle)
+      sponsorContent.appendChild(sponsorDescription)
+      sponsorContent.appendChild(sponsorButton)
+
+      sponsorBody.appendChild(sponsorContent)
+      sponsorCard.appendChild(sponsorHeader)
+      sponsorCard.appendChild(sponsorBody)
+      modalBody.appendChild(sponsorCard)
+    })
+
+    // Show the modal
+    const sponsorModal = new window.bootstrap.Modal(document.getElementById("sponsorModal"))
+    sponsorModal.show()
+
+    // Set up interval for periodic showing if configured
+    if (sponsorSettings.showInterval && sponsorSettings.showInterval > 0) {
+      setInterval(() => {
+        if (sponsorSettings.enabled) {
+          showSponsorModal()
+        }
+      }, sponsorSettings.showInterval)
+    }
+  }
+  
     // --- Fungsi Notifikasi ---
     const loadNotifications = async () => {
         try {

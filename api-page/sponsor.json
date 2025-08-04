@@ -1,0 +1,25 @@
+{
+  "enabled": true,
+  "title": "Sponsored Ads",
+  "subtitle": "Support these amazing services ❤",
+  "showOnLoad": true,
+  "showInterval": 300000,
+  "sponsors": [
+    {
+      "id": "orangevps",
+      "name": "RyuuHiruu Api",
+      "logo": "https://ryuu-endss-api.vercel.app/src/icon.png",
+      "title": "Dapatkan layanan Api Gratis",
+      "subtitle": "Mulai dari Gratis sampai berbayar",
+      "description": "Coba layanan Api Gratis",
+      "location": "Gratis Layanan Api Selamanya ",
+      "buttonText": "Click here!",
+      "buttonColor": "#ff6b35",
+      "backgroundColor": "#1a1a1a",
+      "textColor": "#ffffff",
+      "bannerImage": "",
+      "url": "https://ryuu-endss-api.vercel.app/",
+      "active": true
+    }
+  ]
+}
