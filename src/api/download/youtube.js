@@ -2,61 +2,74 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const FormData = require('form-data');
 
-module.exports = function(app) {
-  async function getHash(link) {
-    const { data } = await axios.get(`https://ytmp3.lat/download/${encodeURIComponent(link)}`);
+module.exports = function (app) {
+  async function getFormData(url) {
+    const { data } = await axios.get(`https://ytmp3.lat/download/${encodeURIComponent(url)}`);
     const $ = cheerio.load(data);
-    const id = $('#convertForm input[name=id]').val();
-    const v = $('#convertForm input[name=v]').val();
-    const k = $('#convertForm input[name=k]').val();
-    const token = $('#convertForm input[name=_token]').val();
-
-    return { id, v, k, token };
-  }
-
-  async function getStatus({ id, v, k, token }, type) {
-    const data = new FormData();
-    data.append('type', type);
-    data.append('v', v);
-    data.append('k', k);
-    data.append('_token', token);
-
-    const res = await axios.post(`https://ytmp3.lat/status/${id}`, data, {
-      headers: data.getHeaders()
-    });
-
-    const result = res.data;
-    if (!result || !result.status || !result.url) {
-      throw new Error('Gagal mendapatkan link unduhan.');
-    }
 
     return {
-      url: result.url,
-      status: result.status,
-      format: result.ext,
-      size: result.size
+      id: $('input[name=id]').val(),
+      v: $('input[name=v]').val(),
+      k: $('input[name=k]').val(),
+      token: $('input[name=_token]').val()
     };
+  }
+
+  async function waitForReady(form, type, retries = 6, delay = 2000) {
+    const formData = new FormData();
+    formData.append('type', type);
+    formData.append('v', form.v);
+    formData.append('k', form.k);
+    formData.append('_token', form.token);
+
+    for (let i = 0; i < retries; i++) {
+      try {
+        const res = await axios.post(`https://ytmp3.lat/status/${form.id}`, formData, {
+          headers: formData.getHeaders()
+        });
+
+        const { status, url, ext, size } = res.data;
+
+        if (status === 'ok' && url) {
+          return { url, format: ext, size };
+        }
+      } catch (e) {
+        if (e.response?.status === 404) {
+          await new Promise(r => setTimeout(r, delay));
+        } else {
+          throw e;
+        }
+      }
+    }
+
+    throw new Error('Gagal mengambil link unduhan setelah mencoba beberapa kali');
   }
 
   app.get('/download/youtube', async (req, res) => {
     const { url, type = 'mp3' } = req.query;
-    if (!url) return res.status(400).json({ success: false, message: 'Parameter "url" dibutuhkan' });
+    if (!url) {
+      return res.status(400).json({
+        creator: 'RyuuDev',
+        success: false,
+        message: 'Parameter "url" diperlukan'
+      });
+    }
 
     try {
-      const hash = await getHash(url);
-      const result = await getStatus(hash, type);
+      const form = await getFormData(url);
+      const result = await waitForReady(form, type);
 
       res.json({
+        creator: 'RyuuDev',
         success: true,
-        result: {
-          downloadUrl: result.url,
-          format: result.format,
-          size: result.size,
-          status: result.status
-        }
+        output: result
       });
     } catch (e) {
-      res.status(500).json({ success: false, message: e.message });
+      res.status(500).json({
+        creator: 'RyuuDev',
+        success: false,
+        message: e.message
+      });
     }
   });
 };
