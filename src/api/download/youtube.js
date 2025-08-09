@@ -52,7 +52,7 @@ class Youtubers {
 
   async infoVideo(linkYoutube) {
     const cdn = await this.getCDN();
-    const res = await fetch(`https://${cdn}/v2/info`, {
+    const res = await fetch(`https://cdn402/v2/info`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url: linkYoutube }),
