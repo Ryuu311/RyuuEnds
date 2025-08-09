@@ -114,7 +114,7 @@ module.exports = function (app) {
     }
   }
 
-  app.get('/api/youtube', async (req, res) => {
+  app.get('/download/youtube', async (req, res) => {
     try {
       const { url, type, quality } = req.query;
       if (!url) return res.json({ status: false, error: 'Masukkan URL YouTube' });
