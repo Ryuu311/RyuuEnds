@@ -8,15 +8,15 @@ module.exports = function (app) {
     }
 
     async getCDN() {
-      const cdn = [
-        "cdn100.savetube.su",
-        "cdn200.savetube.su",
-        "cdn300.savetube.su",
-        "cdn400.savetube.su",
-        "cdn500.savetube.su",
-      ];
-      return cdn[Math.floor(Math.random() * cdn.length)];
-    }
+  try {
+    const res = await fetch("https://media.savetube.me/api/random-cdn");
+    const json = await res.json();
+    if (json.cdn) return json.cdn;
+    throw new Error("CDN tidak ditemukan dari API");
+  } catch (err) {
+       console.error(err)
+       }
+}
 
     async fetchJsonWithChecks(url, opts = {}, timeout = 10000) {
       const controller = new AbortController();
