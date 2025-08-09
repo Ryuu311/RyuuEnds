@@ -19,16 +19,22 @@ module.exports = function (app) {
       });
     }
 
-    const styles = ['anime', 'real', 'photo'];
-    if (!styles.includes(style)) {
+    // Mapping style ke domain
+    const styleMap = {
+      anime: 'aiqtech-nsfw-anime',
+      real: 'aiqtech-nsfw-real',
+      photo: 'aiqtech-nsfw-photo'
+    };
+
+    if (!styleMap[style]) {
       return res.status(400).json({
         status: false,
         creator: 'RyuuDev',
-        message: `Style tidak valid. Pilih salah satu: ${styles.join(', ')}`
+        message: `Style tidak valid. Pilih salah satu: ${Object.keys(styleMap).join(', ')}`
       });
     }
 
-    const base = `https://heartsync-nsfw-uncensored${style !== 'anime' ? `-${style}` : ''}.hf.space`;
+    const base = `https://${styleMap[style]}.hf.space`;
     const session_hash = Math.random().toString(36).slice(2);
     const negative_prompt = 'lowres, bad anatomy, bad hands, text, error, missing finger, extra digits, cropped, worst quality, low quality, watermark, blurry';
 
@@ -61,7 +67,7 @@ module.exports = function (app) {
       // Step 2: Polling max 20 detik
       let resultUrl = null;
       const startTime = Date.now();
-      while (Date.now() - startTime < 20000) { // max 20 detik
+      while (Date.now() - startTime < 20000) {
         const { data: raw } = await axios.get(`${base}/gradio_api/queue/data?session_hash=${session_hash}`, {
           headers,
           timeout: 15000,
@@ -101,10 +107,10 @@ module.exports = function (app) {
       return res.send(img.data);
 
     } catch (err) {
-      return res.status(429).json({
+      return res.status(500).json({
         status: false,
         creator: 'RyuuDev',
-        message: 'Limit telah tercapai, tunggu beberapa jam kedepan'
+        message: 'Terjadi kesalahan saat memproses permintaan.'
       });
     }
   });
