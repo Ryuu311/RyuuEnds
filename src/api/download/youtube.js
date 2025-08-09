@@ -1,52 +1,122 @@
-const axios = require('axios');
-const cheerio = require('cheerio');
-const FormData = require('form-data');
+const crypto = require('crypto');
+const fetch = require('node-fetch');
 
 module.exports = function (app) {
-  async function getFormData(url) {
-    const { data } = await axios.get(`https://ytmp3.lat/download/${encodeURIComponent(url)}`);
-    const $ = cheerio.load(data);
-
-    return {
-      id: $('input[name=id]').val(),
-      v: $('input[name=v]').val(),
-      k: $('input[name=k]').val(),
-      token: $('input[name=_token]').val()
-    };
-  }
-
-  async function waitForReady(form, type, retries = 6, delay = 2000) {
-    const formData = new FormData();
-    formData.append('type', type);
-    formData.append('v', form.v);
-    formData.append('k', form.k);
-    formData.append('_token', form.token);
-
-    for (let i = 0; i < retries; i++) {
-      try {
-        const res = await axios.post(`https://ytmp3.lat/status/${form.id}`, formData, {
-          headers: formData.getHeaders()
-        });
-
-        const { status, url, ext, size } = res.data;
-
-        if (status === 'ok' && url) {
-          return { url, format: ext, size };
-        }
-      } catch (e) {
-        if (e.response?.status === 404) {
-          await new Promise(r => setTimeout(r, delay));
-        } else {
-          throw e;
-        }
-      }
+  class Youtubers {
+    constructor() {
+      this.hex = "C5D58EF67A7584E4A29F6C35BBC4EB12";
     }
 
-    throw new Error('Gagal mengambil link unduhan setelah mencoba beberapa kali');
+    async uint8(hex) {
+      const pecahan = hex.match(/[\dA-F]{2}/gi);
+      if (!pecahan) throw new Error("Format tidak valid");
+      return new Uint8Array(pecahan.map(h => parseInt(h, 16)));
+    }
+
+    b64Byte(b64) {
+      const bersih = b64.replace(/\s/g, "");
+      const biner = Buffer.from(bersih, 'base64').toString('binary');
+      const hasil = new Uint8Array(biner.length);
+      for (let i = 0; i < biner.length; i++) hasil[i] = biner.charCodeAt(i);
+      return hasil;
+    }
+
+    async key() {
+      const raw = await this.uint8(this.hex);
+      return await crypto.webcrypto.subtle.importKey(
+        "raw",
+        raw,
+        { name: "AES-CBC" },
+        false,
+        ["decrypt"]
+      );
+    }
+
+    async Data(base64Terenkripsi) {
+      const byteData = this.b64Byte(base64Terenkripsi);
+      if (byteData.length < 16) throw new Error("Data terlalu pendek");
+
+      const iv = byteData.slice(0, 16);
+      const data = byteData.slice(16);
+
+      const kunci = await this.key();
+      const hasil = await crypto.webcrypto.subtle.decrypt(
+        { name: "AES-CBC", iv },
+        kunci,
+        data
+      );
+
+      const teks = new TextDecoder().decode(new Uint8Array(hasil));
+      return JSON.parse(teks);
+    }
+
+    async getCDN() {
+      const res = await fetch("https://media.savetube.me/api/random-cdn");
+      const data = await res.json();
+      return data.cdn;
+    }
+
+    async infoVideo(linkYoutube) {
+      const cdn = await this.getCDN();
+      const res = await fetch(`https://${cdn}/v2/info`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: linkYoutube }),
+      });
+
+      const hasil = await res.json();
+      if (!hasil.status) throw new Error(hasil.message || "Gagal ambil data video");
+
+      const isi = await this.Data(hasil.data);
+      return {
+        judul: isi.title,
+        durasi: isi.durationLabel,
+        thumbnail: isi.thumbnail,
+        kode: isi.key,
+        kualitas: isi.video_formats.map(f => ({
+          label: f.label,
+          kualitas: f.height,
+          default: f.default_selected
+        })),
+        infoLengkap: isi
+      };
+    }
+
+    async getDownloadLink(kodeVideo, kualitas, type) {
+      const cdn = await this.getCDN();
+      const res = await fetch(`https://${cdn}/download`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          downloadType: kualitas === "128" ? "audio" : type,
+          quality: kualitas,
+          key: kodeVideo,
+        }),
+      });
+
+      const json = await res.json();
+      if (!json.status) throw new Error(json.message);
+      return json.data.downloadUrl;
+    }
+
+    async downloadyt(linkYoutube, kualitas, type) {
+      const data = await this.infoVideo(linkYoutube);
+      const linkUnduh = await this.getDownloadLink(data.kode, kualitas, type);
+      return {
+        status: true,
+        judul: data.judul,
+        kualitasTersedia: data.kualitas,
+        thumbnail: data.thumbnail,
+        durasi: data.durasi,
+        url: linkUnduh,
+      };
+    }
   }
 
+  // Endpoint API
   app.get('/download/youtube', async (req, res) => {
-    const { url, type = 'mp3' } = req.query;
+    const { url, quality, type } = req.query;
+
     if (!url) {
       return res.status(400).json({
         creator: 'RyuuDev',
@@ -56,13 +126,16 @@ module.exports = function (app) {
     }
 
     try {
-      const form = await getFormData(url);
-      const result = await waitForReady(form, type);
+      const kualitasDefault = quality || (type === 'mp3' ? '128' : '720');
+      const tipeDefault = type || (quality === '128' ? 'audio' : 'video');
+
+      const yt = new Youtubers();
+      const hasil = await yt.downloadyt(url, kualitasDefault, tipeDefault);
 
       res.json({
         creator: 'RyuuDev',
         success: true,
-        output: result
+        output: hasil
       });
     } catch (e) {
       res.status(500).json({
