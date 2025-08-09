@@ -232,6 +232,13 @@
           }
         },
         {
+          "name": "Arting IMG",
+          "desc": "Generate gambar AI dengan gaya anime",
+          "path": "/imagecreator/arting?prompt=",
+          "params": {
+            "prompt": "Teks deskripsi gambar yang ingin dibuat (wajib)"
+          },
+        {
           "name": "FluxLora Ai Image Generator",
           "desc": "Generate gambar AI dengan gaya LoRA seperti icon, logo, sketsa, dll",
           "path": "/imagecreator/flux-lora?prompt=",
