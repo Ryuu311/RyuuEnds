@@ -133,7 +133,7 @@ module.exports = function (app) {
         judul: hasil.judul,
         durasi: hasil.durasi,
         kualitas: `${kualitas}p`,
-        link: hasil.url        
+        link: hasil.url,        
         thumbnail: hasil.thumbnail
       }
     });
