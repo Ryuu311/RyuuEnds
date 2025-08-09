@@ -1,7 +1,6 @@
-const crypto = require('crypto');
-const fetch = require('node-fetch');
-
 module.exports = function (app) {
+  const crypto = require('crypto');
+  const fetch = require('node-fetch');
 
   class Youtubers {
     constructor() {
@@ -9,17 +8,15 @@ module.exports = function (app) {
     }
 
     async uint8(hex) {
-      const pecahan = hex.match(/[\dA-F]{2}/gi);
-      if (!pecahan) throw new Error("Format tidak valid");
-      return new Uint8Array(pecahan.map(h => parseInt(h, 16)));
+      const arr = hex.match(/[\dA-F]{2}/gi);
+      if (!arr) throw new Error("Format hex tidak valid");
+      return new Uint8Array(arr.map(h => parseInt(h, 16)));
     }
 
     b64Byte(b64) {
-      const bersih = b64.replace(/\s/g, "");
-      const biner = Buffer.from(bersih, 'base64').toString('binary');
-      const hasil = new Uint8Array(biner.length);
-      for (let i = 0; i < biner.length; i++) hasil[i] = biner.charCodeAt(i);
-      return hasil;
+      const clean = b64.replace(/\s/g, "");
+      const buf = Buffer.from(clean, "base64");
+      return new Uint8Array(buf);
     }
 
     async key() {
@@ -54,6 +51,7 @@ module.exports = function (app) {
     async getCDN() {
       const res = await fetch("https://media.savetube.me/api/random-cdn");
       const data = await res.json();
+      if (!data.cdn) throw new Error("Gagal ambil CDN");
       return data.cdn;
     }
 
@@ -64,6 +62,11 @@ module.exports = function (app) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: linkYoutube }),
       });
+
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        throw new Error("Respon bukan JSON, mungkin URL salah / CDN error");
+      }
 
       const hasil = await res.json();
       if (!hasil.status) throw new Error(hasil.message || "Gagal ambil data video");
@@ -95,6 +98,11 @@ module.exports = function (app) {
         }),
       });
 
+      const contentType = res.headers.get("content-type") || "";
+      if (!contentType.includes("application/json")) {
+        throw new Error("Respon bukan JSON saat ambil link download");
+      }
+
       const json = await res.json();
       if (!json.status) throw new Error(json.message);
       return json.data.downloadUrl;
@@ -114,6 +122,7 @@ module.exports = function (app) {
     }
   }
 
+  // Endpoint API
   app.get('/download/youtube', async (req, res) => {
     try {
       const { url, type, quality } = req.query;
