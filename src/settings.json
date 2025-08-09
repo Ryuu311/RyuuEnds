@@ -345,7 +345,7 @@
         {
           "name": "YouTube",
           "desc": "Download Video/Musik Dari YouTube",
-          "path": "/download/youtube?url=&type=",
+          "path": "/download/youtube?url=&quality=&type=",
           "status": "ready",
           "params": {
             "url": "Masukan URL nya",
@@ -399,7 +399,7 @@
           "name": "Create Payment",
           "desc": "Create qris payment",
           "path": "/orderkuota/createpayment?apikey=&amount=&codeqr=",
-          "status": "ready",
+          "status": "error",
           "innerDesc": "Buy apikey >> wa.me/6288246552068",
           "params": {
             "apikey": "Your API key",
@@ -411,7 +411,7 @@
           "name": "Cek Status",
           "desc": "Cek status payment",
           "path": "/orderkuota/cekstatus?apikey=&merchant=&keyorkut=",
-          "status": "ready",
+          "status": "error",
           "innerDesc": "Buy apikey >> wa.me/6288246552068",
           "params": {
             "apikey": "Your API key",
