@@ -129,15 +129,13 @@ module.exports = function (app) {
     res.json({
       creator: "RyuuDev",
       status: true,
-      data: [
-      {
+      data: {
         judul: hasil.judul,
         durasi: hasil.durasi,
         kualitas: `${kualitas}p`,
         link: hasil.url        
         thumbnail: hasil.thumbnail
       }
-     ]
     });
   } catch (err) {
     res.json({
