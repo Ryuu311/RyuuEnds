@@ -237,6 +237,7 @@
           "path": "/imagecreator/arting?prompt=",
           "params": {
             "prompt": "Teks deskripsi gambar yang ingin dibuat (wajib)"
+            }
           },
         {
           "name": "FluxLora Ai Image Generator",
