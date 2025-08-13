@@ -9,16 +9,16 @@
       "id": "orangevps",
       "name": "RyuuHiruu Api",
       "logo": "https://ryuu-endss-api.vercel.app/src/icon.png",
-      "title": "Dapatkan layanan Api Gratis",
+      "title": "Follow saluran WhatsApp untuk info lebih lanjut",
       "subtitle": "Mulai dari Gratis sampai berbayar",
-      "description": "Coba layanan Api Gratis",
-      "location": "Gratis Layanan Api Selamanya ",
+      "description": "Info layanan Api Gratis",
+      "location": "Follow untuk info lebih lanjut tentang api",
       "buttonText": "Click here!",
       "buttonColor": "#ff6b35",
       "backgroundColor": "#1a1a1a",
       "textColor": "#ffffff",
-      "bannerImage": "",
-      "url": "https://ryuu-endss-api.vercel.app/",
+      "bannerImage": "https://ryuu-endss-api.vercel.app/src/banner.jpg",
+      "url": "https://whatsapp.com/channel/0029Vb5xetZBadmS2IPdmG1X",
       "active": true
     }
   ]
