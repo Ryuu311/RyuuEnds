@@ -510,6 +510,16 @@
           "status": "ready",
           "params": {
             "text": "Teks yang ingin diubah ke gaya Brat karakter anime"
+          },
+        {
+          "name": "Stiker Meme",
+          "desc": "Tambahkan text di fotk bagian atas dan bawah",
+          "path": "/tools/smeme?img=&atas=&bawah=",
+          "status": "ready",
+          "params": {
+            "img": "link foto",
+            "atas": "text atas",
+            "bawah": "text bawah"
           }
         }
       ]
