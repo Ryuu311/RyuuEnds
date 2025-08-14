@@ -24,8 +24,17 @@ module.exports = function (app) {
       ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
 
       // Load font emoji
-      const fontPath = path.join(__dirname, '../NotoColorEmoji.ttf');
-      GlobalFonts.registerFromPath(fontPath, 'EmojiFont');
+      // Daftarkan font Arial Narrow (huruf & angka)
+        GlobalFonts.registerFromPath(
+            path.join(__dirname, './lib/arialnarrow.ttf'),
+            'Arial Narrow'
+        );
+
+        // Daftarkan font Noto Color Emoji (emoji)
+        GlobalFonts.registerFromPath(
+            path.join(__dirname, './lib/NotoColorEmoji.ttf'),
+            'Noto Color Emoji'
+        );
 
       ctx.textAlign = 'center';
       ctx.fillStyle = '#fff';
@@ -33,12 +42,12 @@ module.exports = function (app) {
 
       const drawText = (text, y, baseline) => {
         let fontSize = Math.floor(canvas.height * 0.10); // 10% dari tinggi gambar
-        ctx.font = `900 ${fontSize}px EmojiFont`;
+        ctx.font = `900 ${fontSize}px "Arial Narrow", "Noto Color Emoji"`;
 
         // Kecilkan font kalau teks kepanjangan
         while (ctx.measureText(text).width > canvas.width * 0.9 && fontSize > 30) {
           fontSize -= 2;
-          ctx.font = `900 ${fontSize}px EmojiFont`;
+          ctx.font = `900 ${fontSize}px "Arial Narrow", "Noto Color Emoji"`;
         }
 
         ctx.textBaseline = baseline;
