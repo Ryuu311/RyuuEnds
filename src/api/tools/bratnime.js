@@ -13,7 +13,8 @@ module.exports = function(app) {
 
       // Ambil gambar dasar
       const imageUrl = 'https://files.catbox.moe/kwkiyb.png';
-      const fontPath = path.join(__dirname, '../NotoColorEmoji.ttf'); // ubah sesuai path kamu
+      const TextfontPath = path.join(__dirname, '../arialnarrow.ttf'); 
+      const EmojifontPath = path.join(__dirname, '../NotoColorEmoji.ttf'); // ubah sesuai path kamu
 
       const imageResp = await axios.get(imageUrl, { responseType: 'arraybuffer' });
       const baseImage = await loadImage(Buffer.from(imageResp.data));
@@ -23,7 +24,8 @@ module.exports = function(app) {
 
       ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
 
-      GlobalFonts.registerFromPath(fontPath, 'EmojiFont');
+      GlobalFonts.registerFromPath(TextfontPath, 'Arial Narrow');
+  GlobalFonts.registerFromPath(EmojifontPath, 'Noto Color Emoji');
 
       // Posisi papan teks
       let boardX = canvas.width * 0.18;
@@ -39,7 +41,7 @@ module.exports = function(app) {
       let fontSize = maxFontSize;
 
       const isTextFit = (text, fontSize) => {
-        ctx.font = `bold ${fontSize}px EmojiFont`;
+        ctx.font = `bold ${fontSize}px "Arial Narrow", "Noto Color Emoji"`;
         const words = text.split(' ');
         const lineHeight = fontSize * 1.2;
         const maxWidth = boardWidth * 0.9;
@@ -61,7 +63,7 @@ module.exports = function(app) {
       };
 
       while (!isTextFit(text, fontSize) && fontSize > minFontSize) fontSize -= 2;
-      ctx.font = `bold ${fontSize}px EmojiFont`;
+      ctx.font = `bold ${fontSize}px "Arial Narrow", "Noto Color Emoji"`;
 
       const words = text.split(' ');
       const lineHeight = fontSize * 1.2;
