@@ -27,8 +27,8 @@ module.exports = function (app) {
       const imageResp = await axios.get(img, { responseType: 'arraybuffer' });
       const baseImage = await loadImage(Buffer.from(imageResp.data));
 
-      // Canvas 360x360
-      const size = 360;
+      // Canvas 480x480
+      const size = 480;
       const canvas = createCanvas(size, size);
       const ctx = canvas.getContext('2d');
 
