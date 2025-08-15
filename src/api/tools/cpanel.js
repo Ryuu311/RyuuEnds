@@ -112,6 +112,7 @@ module.exports = function(app) {
       res.status(200).json({
         status: true,
         message: 'Successfully add user + server',
+        pw: username + '001',
         user: userData.attributes,
         server: serverData.attributes
       });
