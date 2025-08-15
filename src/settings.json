@@ -139,20 +139,10 @@
               "desc": "Opsional."
             }
           }
-        }, 
-        {
-          "name": "Genshin RVC",
-          "desc": "Ubah suara kamu jadi karakter Genshin Impact (Voice Changer only)",
-          "path": "/ai/genshin-rvc?char=&url=",
-          "status": "error",
-          "params": {
-            "char": "Nama karakter Genshin (contoh: furina, hutao, diluc)",
-            "url": "Link file audio (mp3, wav, dll)"
-          }
         },
         {
           "name": "Veo 3 Video",
-          "desc": "Generate video dari teks menggunakan AI VEO-3 (erweima).",
+          "desc": "Masih dalam pengembangan.....",
           "path": "/ai/veo3?prompt=",
           "method": "GET",
           "status": "error",
@@ -162,16 +152,6 @@
               "type": "string",
               "desc": "Deskripsi video yang ingin dibuat (dalam bahasa Inggris)."
             }
-          }
-        },
-        {
-          "name": "Genshin TTS",
-          "desc": "Ubah teks menjadi suara karakter Genshin Impact (Text to Speech)",
-          "path": "/ai/genshin-tts?char=&text=",
-          "status": "error",
-          "params": {
-            "char": "Nama karakter Genshin (contoh: furina, hutao, diluc)",
-            "text": "Teks yang ingin diubah menjadi suara"
           }
         },
         {
@@ -408,49 +388,9 @@
       ]
     },
     {
-      "name": "Orderkuota Gateway",
-      "icon": "fas fa-wallet",
-      "items": [
-        {
-          "name": "Create Payment",
-          "desc": "Create qris payment",
-          "path": "/orderkuota/createpayment?apikey=&amount=&codeqr=",
-          "status": "error",
-          "innerDesc": "Buy apikey >> wa.me/6288246552068",
-          "params": {
-            "apikey": "Your API key",
-            "amount": "Total harga",
-            "codeqr": "Kode unik QR"
-          }
-        },
-        {
-          "name": "Cek Status",
-          "desc": "Cek status payment",
-          "path": "/orderkuota/cekstatus?apikey=&merchant=&keyorkut=",
-          "status": "error",
-          "innerDesc": "Buy apikey >> wa.me/6288246552068",
-          "params": {
-            "apikey": "Your API key",
-            "merchant": "Merchant ID",
-            "keyorkut": "Key untuk validasi"
-          }
-        }
-      ]
-    },
-    {
       "name": "Tools",
       "icon": "fas fa-tools",
       "items": [
-        {
-          "name": "Fake NGL Generator",
-          "desc": "Generate pertanyaan dan jawaban gaya NGL",
-          "path": "/tools/ngl?title=&text=",
-          "status": "ready",
-          "params": {
-            "title": "Judul pertanyaan",
-            "text": "Isi pertanyaan atau jawaban"
-          }
-        },
         {
           "name": "Create Panel",
           "desc": "Buat panel dengan versi node.js 21",
@@ -481,43 +421,12 @@
           }
         },
         {
-          "name": "Fake TikTok Generator",
-          "desc": "Buat profil TikTok palsu dengan nama dan foto",
-          "path": "/tools/faketiktok?name=&username=&pp=",
-          "status": "ready",
-          "params": {
-            "name": "Nama pengguna",
-            "username": "Username TikTok palsu",
-            "pp": "URL foto profil"
-          }
-        },
-        {
-          "name": "Emojimix",
-          "desc": "Gabungkan dua emoji jadi satu",
-          "path": "/tools/emojimix?emoji1=&emoji2=",
-          "status": "error",
-          "params": {
-            "emoji1": "Emoji pertama (misal: 😀)",
-            "emoji2": "Emoji kedua (misal: 💀)"
-          }
-        },
-        {
           "name": "Removebg",
           "desc": "Hapus background gambar",
           "path": "/tools/removebg?apikey=&imageUrl=",
           "status": "ready",
           "params": {
             "imageUrl": "URL gambar yang ingin dihapus background-nya"
-          }
-        },
-        {
-          "name": "Jarak",
-          "desc": "Hitung jarak antar dua lokasi",
-          "path": "/tools/jarak?lokasi1=&lokasi2=",
-          "status": "error",
-          "params": {
-            "lokasi1": "Lokasi pertama (contoh: Jakarta)",
-            "lokasi2": "Lokasi kedua (contoh: Bandung)"
           }
         },
         {
