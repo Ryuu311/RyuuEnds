@@ -352,7 +352,7 @@
         },
         {
           "name": "YouTube Video",
-          "desc": "Download Musik Dari YouTube",
+          "desc": "Download Video Dari YouTube",
           "path": "/download/ytmp4?url=",
           "status": "ready",
           "params": {
