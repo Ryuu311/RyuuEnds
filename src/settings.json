@@ -462,7 +462,7 @@
             "ram": "jumlah ram",
             "disk": "jumlah disk",
             "name": "nama user + server",
-            "nestID": "nest id"
+            "nestID": "nest id",
             "egg": "egg server",
             "location": "location egg",
             "domain": "domain panel mu"
