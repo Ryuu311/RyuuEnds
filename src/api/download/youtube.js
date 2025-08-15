@@ -55,7 +55,11 @@ module.exports = function (app) {
       method: "POST",
       headers: { 
         "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Linux; Android 15; CPH2591 Build/UP1A.230905.001) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Mobile Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (Linux; Android 15; CPH2591 Build/UP1A.230905.001) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Mobile Safari/537.36",
+        "Referer": "https://savetube.me",
+        "Origin": "https://savetube.me",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "en-US,en;q=0.9"
       },
       body: JSON.stringify({ url: linkYoutube }),
     });
@@ -141,3 +145,4 @@ module.exports = function (app) {
     }
   });
 };
+
