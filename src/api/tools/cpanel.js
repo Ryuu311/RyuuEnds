@@ -13,7 +13,8 @@ module.exports = function(app) {
         name,
         nestID,
         egg,
-        location
+        location,
+        cpu
       } = req.query;
 
       if (!domain) return res.status(400).json({ status: false, message: 'Parameter domain wajib diisi' });
@@ -89,7 +90,7 @@ module.exports = function(app) {
             swap: 0,
             disk: parseInt(disk),
             io: 500,
-            cpu: 30
+            cpu: cpu
           },
           feature_limits: {
             databases: 5,
