@@ -351,13 +351,21 @@
           }
         },
         {
-          "name": "YouTube",
-          "desc": "Download Video/Musik Dari YouTube",
-          "path": "/download/youtube?url=&quality=&type=",
+          "name": "YouTube Video",
+          "desc": "Download Musik Dari YouTube",
+          "path": "/download/ytmp4?url=",
           "status": "ready",
           "params": {
-            "url": "Masukan URL nya",
-            "type": "Pilih type mp4/mp3"
+            "url": "Masukan URL nya"
+          }
+        },
+        {
+          "name": "YouTube Audio",
+          "desc": "Download Musik Dari YouTube",
+          "path": "/download/ytmp3?url=",
+          "status": "ready",
+          "params": {
+            "url": "Masukan URL nya"
           }
         }
       ]
