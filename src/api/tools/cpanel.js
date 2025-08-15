@@ -45,7 +45,7 @@ module.exports = function(app) {
           username,
           first_name: username,
           last_name: username,
-          password: password,
+          pw: username + '001',
           language: "en",
           password
         })
