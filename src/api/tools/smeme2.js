@@ -5,7 +5,7 @@ const { createCanvas, loadImage, GlobalFonts } = require('@napi-rs/canvas');
 const sharp = require('sharp');
 
 module.exports = function (app) {
-  app.get('/tools/smeme', async (req, res) => {
+  app.get('/tools/smeme2', async (req, res) => {
     try {
       const { img, atas, bawah } = req.query;
 
