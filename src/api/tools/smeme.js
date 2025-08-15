@@ -13,7 +13,7 @@ module.exports = function (app) {
       if (!atas) return res.status(400).send('Parameter atas wajib diisi');
       if (!bawah) return res.status(400).send('Parameter bawah wajib diisi');
 
-      // Cek file font
+      // Cek font
       const fontArialPath = path.join(__dirname, '../arialnarrow.ttf');
       const fontEmojiPath = path.join(__dirname, '../NotoColorEmoji.ttf');
       if (!fs.existsSync(fontArialPath)) return res.status(500).send('Font Arial Narrow tidak ditemukan');
@@ -27,8 +27,8 @@ module.exports = function (app) {
       const imageResp = await axios.get(img, { responseType: 'arraybuffer' });
       const baseImage = await loadImage(Buffer.from(imageResp.data));
 
-      // Canvas kotak (biar konsisten seperti versi case)
-      const size = Math.max(baseImage.width, baseImage.height);
+      // Canvas 360x360
+      const size = 360;
       const canvas = createCanvas(size, size);
       const ctx = canvas.getContext('2d');
 
@@ -36,41 +36,68 @@ module.exports = function (app) {
       ctx.fillStyle = '#000';
       ctx.fillRect(0, 0, size, size);
 
-      // Hitung scale biar gambar muat tanpa ketarik
+      // Scale gambar tanpa crop
       const scale = Math.min(size / baseImage.width, size / baseImage.height);
       const newWidth = baseImage.width * scale;
       const newHeight = baseImage.height * scale;
       const offsetX = (size - newWidth) / 2;
       const offsetY = (size - newHeight) / 2;
 
-      // Gambar sesuai proporsi
       ctx.drawImage(baseImage, offsetX, offsetY, newWidth, newHeight);
 
-      ctx.textAlign = 'center';
       ctx.fillStyle = '#fff';
       ctx.strokeStyle = '#000';
+      ctx.textAlign = 'center';
 
+      // Fungsi drawText handle newline + wrap 12 karakter + font resize otomatis
       const drawText = (text, yPos, baseline) => {
         let fontSize = Math.floor(size * 0.10);
-        ctx.font = `900 ${fontSize}px "Arial Narrow", "Noto Color Emoji"`;
-
-        while (ctx.measureText(text).width > size * 0.9 && fontSize > 30) {
-          fontSize -= 2;
-          ctx.font = `900 ${fontSize}px "Arial Narrow", "Noto Color Emoji"`;
-        }
-
         ctx.textBaseline = baseline;
 
-        // Outline pertama (tebal banget)
-        ctx.lineWidth = Math.floor(fontSize / 4);
-        ctx.strokeText(text.toUpperCase(), size / 2, yPos);
+        // Split per newline dulu
+        const paragraphs = text.split('\n');
+        let lines = [];
 
-        // Outline kedua (rapihin pinggiran)
-        ctx.lineWidth = Math.floor(fontSize / 10);
-        ctx.strokeText(text.toUpperCase(), size / 2, yPos);
+        paragraphs.forEach(p => {
+          for (let i = 0; i < p.length; i += 12) {
+            lines.push(p.slice(i, i + 12));
+          }
+        });
 
-        // Isi teks
-        ctx.fillText(text.toUpperCase(), size / 2, yPos);
+        const maxWidth = size * 0.9;
+        let fit = false;
+
+        // Auto resize font
+        while (!fit && fontSize > 12) {
+          fit = true;
+          ctx.font = `900 ${fontSize}px "Arial Narrow", "Noto Color Emoji"`;
+          for (const line of lines) {
+            if (ctx.measureText(line).width > maxWidth) {
+              fontSize -= 1;
+              fit = false;
+              break;
+            }
+          }
+        }
+
+        const lineHeight = fontSize * 1.2;
+
+        lines.forEach((line, i) => {
+          const lineY = baseline === 'top'
+            ? yPos + i * lineHeight
+            : yPos - (lines.length - 1 - i) * lineHeight;
+
+          // Outline tebal
+          ctx.lineWidth = Math.floor(fontSize / 3);
+          ctx.strokeText(line, size / 2, lineY);
+
+          // Outline tipis
+          ctx.lineWidth = Math.floor(fontSize / 10);
+          ctx.strokeText(line, size / 2, lineY);
+
+          // Fill text
+          ctx.fillText(line, size / 2, lineY);
+        });
       };
 
       // Gambar teks atas & bawah
