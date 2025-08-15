@@ -452,6 +452,23 @@
           }
         },
         {
+          "name": "Create Panel",
+          "desc": "Buat panel dengan versi node.js 21",
+          "path": "/tools/cpanel?capikey=&apikey=&ram=&disk=&name=&nestID=&egg=&location=&domain=",
+          "status": "ready",
+          "params": {
+            "capikey": " apikey ptlc",
+            "apikey": "apikey ptla",
+            "ram": "jumlah ram",
+            "disk": "jumlah disk",
+            "name": "nama user + server",
+            "nestID": "nest id"
+            "egg": "egg server",
+            "location": "location egg",
+            "domain": "domain panel mu"
+          }
+        },
+        {
           "name": "Quote chat Generator",
           "desc": "Buat quote dengan teks, warna dan foto profil",
           "path": "/tools/qc?text=&profile=&color=&name=",
