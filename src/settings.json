@@ -454,7 +454,7 @@
         {
           "name": "Create Panel",
           "desc": "Buat panel dengan versi node.js 21",
-          "path": "/tools/cpanel?capikey=&apikey=&ram=&disk=&name=&nestID=&egg=&location=&domain=",
+          "path": "/tools/cpanel?capikey=&apikey=&ram=&disk=&name=&nestID=&egg=&location=&cpu=&domain=",
           "status": "ready",
           "params": {
             "capikey": " apikey ptlc",
@@ -465,7 +465,8 @@
             "nestID": "nest id",
             "egg": "egg server",
             "location": "location egg",
-            "domain": "domain panel mu"
+            "domain": "domain panel mu",
+            "cpu": "penggunaan maksimal cpu server"
           }
         },
         {
