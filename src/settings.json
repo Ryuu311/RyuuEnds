@@ -142,10 +142,10 @@
         },
         {
           "name": "Veo 3 Video",
-          "desc": "Masih dalam pengembangan.....",
+          "desc": "Buat video menggunakan ai dengan durasi kurang dari 10 detik",
           "path": "/ai/veo3?prompt=",
           "method": "GET",
-          "status": "error",
+          "status": "ready",
           "params": {
             "prompt": {
               "required": true,
