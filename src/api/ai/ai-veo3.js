@@ -58,7 +58,7 @@ async function veo3(prompt, { model = 'veo-3-fast', auto_sound = false, auto_spe
             });
             
             if (data.data.state === 'success') return JSON.parse(data.data.completeData);
-            await new Promise(res => setTimeout(res, 1000));
+            await new Promise(res => setTimeout(res, 1000000));
         }
     } catch (error) {
         throw new Error(error.message);
