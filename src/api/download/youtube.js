@@ -53,7 +53,10 @@ module.exports = function (app) {
     const cdn = await this.getCDN();
     const res = await fetch(`https://${cdn}/v2/info`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Linux; Android 15; CPH2591 Build/UP1A.230905.001) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Mobile Safari/537.36"
+      },
       body: JSON.stringify({ url: linkYoutube }),
     });
 
@@ -79,7 +82,10 @@ module.exports = function (app) {
     const cdn = await this.getCDN();
     const res = await fetch(`https://${cdn}/download`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Linux; Android 15; CPH2591 Build/UP1A.230905.001) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Mobile Safari/537.36"
+      },
       body: JSON.stringify({
         downloadType: kualitas === "128" ? "audio" : type,
         quality: kualitas,
@@ -113,27 +119,25 @@ module.exports = function (app) {
   }
 }
 
-
   // Endpoint API
-    app.get('/download/youtube', async (req, res) => {
-  try {
-    const { url, type, quality } = req.query;
-    if (!url) return res.json({ status: false, error: 'Masukkan URL YouTube' });
+  app.get('/download/youtube', async (req, res) => {
+    try {
+      const { url, type, quality } = req.query;
+      if (!url) return res.json({ status: false, error: 'Masukkan URL YouTube' });
 
-    const yt = new Youtubers();
-    const hasil = await yt.downloadyt(url, quality, type);
+      const yt = new Youtubers();
+      const hasil = await yt.downloadyt(url, quality, type);
 
-    res.json({
-    creator: "RyuuDev",
-    output:
-     [hasil]
-     });
-  } catch (err) {
-    res.json({
-      creator: "RyuuDev",
-      status: false,
-      error: err.message
-     });
+      res.json({
+        creator: "RyuuDev",
+        output: [hasil]
+      });
+    } catch (err) {
+      res.json({
+        creator: "RyuuDev",
+        status: false,
+        error: err.message
+      });
     }
   });
 };
