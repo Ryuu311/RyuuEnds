@@ -347,6 +347,24 @@
           "params": {
             "url": "Masukan URL nya"
           }
+        },
+        {
+          "name": "YouTube Video versi 2",
+          "desc": "Download Video Dari YouTube (cadangan)",
+          "path": "/download/ytmp4v2?url=",
+          "status": "ready",
+          "params": {
+            "url": "Masukan URL nya"
+          }
+        },
+        {
+          "name": "YouTube Audio versi 2",
+          "desc": "Download Musik Dari YouTube (cadangan)",
+          "path": "/download/ytmp3v2?url=",
+          "status": "ready",
+          "params": {
+            "url": "Masukan URL nya"
+          }
         }
       ]
     },
