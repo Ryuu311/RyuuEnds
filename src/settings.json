@@ -410,6 +410,15 @@
           }
         },
         {
+          "name": "YouTube Summary",
+          "desc": "Analisis video dari YouTube menggunakan AI",
+          "path": "/tools/yt-summary?url=",
+          "status": "ready",
+          "params": {
+            "url": "Masukan URL nya"
+          }
+        },
+        {
           "name": "Quote chat Generator",
           "desc": "Buat quote dengan teks, warna dan foto profil",
           "path": "/tools/qc?text=&profile=&color=&name=",
