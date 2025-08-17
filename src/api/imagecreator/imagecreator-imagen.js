@@ -128,13 +128,13 @@ const imagen = {
 };
 app.get('/imagecreator/imagen', async (req, res) => {
     try {
-      const { prompt, style, Nstyle, size } = req.query;
+      const { style ,prompt, Nstyle, size } = req.query;
       if (!prompt) return res.json({ status: false, error: `Parameter "Prompt" wajid di isi` });
       if (!style) return res.json({ status: false, error: `Parameter "style" wajid di isi\nContoh:\nAnime\nFantasy\nCartoon` });      
       if (!size) return res.json({ status: false, error: `Parameter "size" wajid di isi, Contoh size valid:\n1:1\n3:4\n4:3\n16:9\n9:16` });
       if (!Nstyle) return res.json({ status: false, error: `Parameter "Nstyle" wajid di isi` });
      
-const hasil = await imagen.generate(prompt, style, Nstyle, size);
+const hasil = await imagen.generate(`${style} style, ${prompt}`, style, Nstyle, size);
       res.json({
         creator: "RyuuDev",
         output: [hasil]
