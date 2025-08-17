@@ -240,10 +240,11 @@
         {
           "name": "Imagen AI",
           "desc": "Buat gambar dari teks menggunakan AI",
-          "path": "/imagecreator/imagen?prompt=&style=&size=",
+          "path": "/imagecreator/imagen?prompt=&style=&Nstyle=&size=",
           "params": {
             "prompt": "Deskripsi gambar (required)",
             "style": "style: anime, cartoon, dll",
+            "Nstyle": "style: anime, cartoon, dll",
             "size": "1:1, 3:4, 4:3, 9:16, 16:9"
           }
         },
