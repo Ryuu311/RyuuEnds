@@ -65,7 +65,7 @@ const imagen = {
 
     let dimensions;
     switch (size) {
-      case '1:1': dimensions = [864, 1152]; break;
+      case '1:1': dimensions = [1152, 1152]; break;
       case '3:4': dimensions = [864, 1152]; break;
       case '4:3': dimensions = [1152, 864]; break;
       case '16:9': dimensions = [1366, 768]; break;
