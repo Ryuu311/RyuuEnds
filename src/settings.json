@@ -238,6 +238,16 @@
           }
         },
         {
+          "name": "Imagen AI",
+          "desc": "Buat gambar dari teks menggunakan AI",
+          "path": "/imagecreator/imagen?prompt=&style=&size=",
+          "params": {
+            "prompt": "Deskripsi gambar (required)",
+            "style": "style: anime, cartoon, dll",
+            "size": "1:1, 3:4, 4:3, 9:16, 16:9"
+          }
+        },
+        {
           "name": "Image Upscaler 4K",
           "desc": "Upscale gambar jadi 4K kualitas tinggi",
           "path": "/imagecreator/upscaler4k?url=",
