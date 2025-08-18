@@ -479,7 +479,7 @@
         {
           "name": "WelcomeLeave Image",
           "desc": "Kartu Welcome atau Leave message",
-          "path": "'/tools/WelcomeLeave?desc=&title=&profile=&background=",
+          "path": "/tools/WelcomeLeave?desc=&title=&profile=&background=",
           "status": "ready",
           "params": {
             "profile": "link foto profile"
