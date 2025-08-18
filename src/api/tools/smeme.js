@@ -51,7 +51,7 @@ module.exports = function (app) {
 
       // Fungsi drawText handle newline + wrap 12 karakter + font resize otomatis
       const drawText = (text, yPos, baseline) => {
-        let fontSize = Math.floor(size * 0.9);
+        let fontSize = Math.floor(size * 0.10);
         ctx.textBaseline = baseline;
 
         // Split per newline dulu
@@ -70,7 +70,7 @@ module.exports = function (app) {
         // Auto resize font
         while (!fit && fontSize > 12) {
           fit = true;
-          ctx.font = `855 ${fontSize}px "Milker", "Noto Color Emoji"`;
+          ctx.font = `900 ${fontSize}px "Milker", "Noto Color Emoji"`;
           for (const line of lines) {
             if (ctx.measureText(line).width > maxWidth) {
               fontSize -= 1;
@@ -92,7 +92,7 @@ module.exports = function (app) {
           ctx.strokeText(line, size / 2, lineY);
 
           // Outline tipis
-          ctx.lineWidth = Math.floor(fontSize / 15);
+          ctx.lineWidth = Math.floor(fontSize / 10);
           ctx.strokeText(line, size / 2, lineY);
 
           // Fill text
