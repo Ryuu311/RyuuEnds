@@ -204,11 +204,14 @@ class WelcomeLeave {
         
 const bgBuffer = (await axios.get(background, { responseType: 'arraybuffer' })).data;  
 const ppBuffer = (await axios.get(profile, { responseType: 'arraybuffer' })).data;  
+const judul = title
+const deskripsi = desc
+
 const welcomeCard = new WelcomeLeave()  
       .setAvatar(ppBuffer)  
       .setBackground("image", bgBuffer)  
-      .setTitle(title)  
-      .setDescription(desc)  
+      .setTitle(judul)  
+      .setDescription(deskripsi)  
       .setOverlayOpacity(0.5);  
         
       const buffer = await welcomeCard.build();  
