@@ -7,8 +7,8 @@ const { createCanvas, loadImage, GlobalFonts } = require('@napi-rs/canvas');
 class WelcomeLeave {  
   constructor(options) {  
     this.font = {  
-      name: "Milker",  
-      path: "../Milker.ttf"  
+      name: "Poppins",  
+      path: "../Poppins-Regular.ttf"  
     };  
     this.avatar = "https://cdn.discordapp.com/embed/avatars/0.png";  
     this.background = { type: "color", background: "#23272a" };  
@@ -92,8 +92,8 @@ class WelcomeLeave {
   }  
   
   async build() {  
-  const fontArialPath = path.join(__dirname, '../Milker.ttf');
-    if (this.font.path) GlobalFonts.registerFromPath(fontArialPath, 'Milker');  
+  const fontArialPath = path.join(__dirname, '../Poppins-Regular.ttf');
+    if (this.font.path) GlobalFonts.registerFromPath(fontArialPath, 'Poppins');  
   
     const canvas = createCanvas(700, 350);  
     const ctx = canvas.getContext("2d");  
