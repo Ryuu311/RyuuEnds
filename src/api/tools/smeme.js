@@ -92,7 +92,7 @@ module.exports = function (app) {
           ctx.strokeText(line, size / 2, lineY);
 
           // Outline tipis
-          ctx.lineWidth = Math.floor(fontSize / 10);
+          ctx.lineWidth = Math.floor(fontSize / 1);
           ctx.strokeText(line, size / 2, lineY);
 
           // Fill text
