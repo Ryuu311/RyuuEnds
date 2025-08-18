@@ -478,7 +478,7 @@
         },
         {
           "name": "WelcomeLeave Image",
-          "desc": "Tambahkan text di foto bagian atas dan bawah",
+          "desc": "Kartu Welcome atau Leave message",
           "path": "'/tools/WelcomeLeave?desc=&title=&profile=&background=",
           "status": "ready",
           "params": {
