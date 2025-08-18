@@ -87,12 +87,8 @@ module.exports = function (app) {
             ? yPos + i * lineHeight
             : yPos - (lines.length - 1 - i) * lineHeight;
 
-          // Outline tebal
-          ctx.lineWidth = Math.floor(fontSize / 1);
-          ctx.strokeText(line, size / 2, lineY);
-
-          // Outline tipis
-          ctx.lineWidth = Math.floor(fontSize / 10);
+          // Outline fix 3px
+          ctx.lineWidth = 3;
           ctx.strokeText(line, size / 2, lineY);
 
           // Fill text
