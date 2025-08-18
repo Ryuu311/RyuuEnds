@@ -1,5 +1,7 @@
 module.exports = function (app) {  
-const axios = require('axios');  
+const axios = require('axios');
+const path = require('path');
+const fs = require('fs');  
 const { createCanvas, loadImage, GlobalFonts } = require('@napi-rs/canvas');  
   
 class WelcomeLeave {  
