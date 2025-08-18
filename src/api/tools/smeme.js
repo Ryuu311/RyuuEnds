@@ -14,13 +14,13 @@ module.exports = function (app) {
       if (!bawah) return res.status(400).send('Parameter bawah wajib diisi');
 
       // Cek font
-      const fontArialPath = path.join(__dirname, '../arialnarrow.ttf');
+      const fontArialPath = path.join(__dirname, '../Milker.ttf');
       const fontEmojiPath = path.join(__dirname, '../NotoColorEmoji.ttf');
-      if (!fs.existsSync(fontArialPath)) return res.status(500).send('Font Arial Narrow tidak ditemukan');
+      if (!fs.existsSync(fontArialPath)) return res.status(500).send('Font Milker tidak ditemukan');
       if (!fs.existsSync(fontEmojiPath)) return res.status(500).send('Font Noto Color Emoji tidak ditemukan');
 
       // Register font
-      GlobalFonts.registerFromPath(fontArialPath, 'Arial Narrow');
+      GlobalFonts.registerFromPath(fontArialPath, 'Milker');
       GlobalFonts.registerFromPath(fontEmojiPath, 'Noto Color Emoji');
 
       // Ambil gambar
@@ -70,7 +70,7 @@ module.exports = function (app) {
         // Auto resize font
         while (!fit && fontSize > 12) {
           fit = true;
-          ctx.font = `900 ${fontSize}px "Arial Narrow", "Noto Color Emoji"`;
+          ctx.font = `900 ${fontSize}px "Milker", "Noto Color Emoji"`;
           for (const line of lines) {
             if (ctx.measureText(line).width > maxWidth) {
               fontSize -= 1;
@@ -88,7 +88,7 @@ module.exports = function (app) {
             : yPos - (lines.length - 1 - i) * lineHeight;
 
           // Outline tebal
-          ctx.lineWidth = Math.floor(fontSize / 3);
+          ctx.lineWidth = Math.floor(fontSize / 1);
           ctx.strokeText(line, size / 2, lineY);
 
           // Outline tipis
