@@ -475,6 +475,15 @@
           "params": {
             "img": "link foto"
           }
+        },
+        {
+          "name": "WelcomeLeave Image",
+          "desc": "Tambahkan text di foto bagian atas dan bawah",
+          "path": "'/tools/WelcomeLeave?desc=&title=&profile=&background=",
+          "status": "ready",
+          "params": {
+            "profile": "link foto profile"
+          }
         }
       ]
     }
