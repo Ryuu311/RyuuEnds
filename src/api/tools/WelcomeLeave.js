@@ -1,6 +1,7 @@
 module.exports = function (app) {
 const axios = require('axios');
 const { createCanvas, loadImage, GlobalFonts } = require('@napi-rs/canvas');
+const fontPopPath = path.join(__dirname, '../Poppins-Regular.ttf');
 
 class WelcomeLeave {
   constructor(options) {
@@ -90,7 +91,7 @@ class WelcomeLeave {
   }
 
   async build() {
-    if (this.font.path) GlobalFonts.registerFromPath(this.font.path, this.font.name);
+    if (this.font.path) GlobalFonts.registerFromPath(fontPopPath, 'Poppins');
 
     const canvas = createCanvas(700, 350);
     const ctx = canvas.getContext("2d");
@@ -163,7 +164,7 @@ class WelcomeLeave {
     ctx.fillText(this.title.data, canvas.width / 2, 225);
 
     // Description dengan wrap otomatis
-    ctx.font = `regular ${this.description.size}px ${this.font.name}`;
+    ctx.font = `normal ${this.description.size}px ${this.font.name}`;
     ctx.fillStyle = this.description.color;
     ctx.textAlign = "center";
     this.wrapText(ctx, this.description.data, canvas.width / 2, 260, 400, 35);
