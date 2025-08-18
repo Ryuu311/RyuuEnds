@@ -13,7 +13,7 @@ module.exports = function (app) {
 
       // Path font
       const fontArialPath = path.join(__dirname, '../arialnarrow.ttf');
-      const fontEmojiPath = path.join(__dirname, '../NotoColorEmoji.ttf');
+      const fontEmojiPath = path.join(__dirname, '../AppleColorEmoji.ttf');
 
       // Cek font
       if (!fs.existsSync(fontArialPath)) return res.status(500).send('Font Arial Narrow tidak ditemukan');
