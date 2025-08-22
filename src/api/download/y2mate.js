@@ -14,11 +14,30 @@ module.exports = function (app) {
     })
   }
 
-  const ytIdRegex = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/
+  // ambil YouTube ID dari URL atau ID mentah
+  function extractYoutubeID(input) {
+    try {
+      if (/^[a-zA-Z0-9_-]{6,11}$/.test(input)) {
+        return input // kalau input langsung ID mentah
+      }
+      const urlObj = new URL(input);
+      if (urlObj.hostname.includes('youtube.com')) {
+        return urlObj.searchParams.get('v');
+      } else if (urlObj.hostname.includes('youtu.be')) {
+        return urlObj.pathname.slice(1);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
 
   async function yt(url, quality, type, bitrate, server = 'en68') {
-    let ytId = ytIdRegex.exec(url)
-    url = 'https://youtu.be/' + ytId[1]
+    let ytId = extractYoutubeID(url)
+    if (!ytId) throw new Error("URL YouTube tidak valid")
+
+    url = 'https://youtu.be/' + ytId
 
     let res = await post(`https://www.y2mate.com/mates/${server}/analyze/ajax`, {
       url,
@@ -47,6 +66,8 @@ module.exports = function (app) {
     }
 
     let filesize = list[quality]
+    if (!filesize) throw new Error(`Kualitas ${quality} tidak tersedia`)
+
     let id = /var k__id = "(.*?)"/.exec(document.body.innerHTML) || ['', '']
     let thumb = document.querySelector('img').src
     let title = document.querySelector('b').innerHTML
@@ -54,7 +75,7 @@ module.exports = function (app) {
     let res2 = await post(`https://www.y2mate.com/mates/${server}/convert`, {
       type: 'youtube',
       _id: id[1],
-      v_id: ytId[1],
+      v_id: ytId,
       ajax: '1',
       token: '',
       ftype: type,
@@ -95,6 +116,7 @@ module.exports = function (app) {
       const hasil = await yta(url, '128kbps', 'en154')
       res.json({
         creator: "RyuuDev",
+        status: true,
         output: [hasil]
       });
     } catch (err) {
@@ -115,6 +137,7 @@ module.exports = function (app) {
       const hasil = await ytv(url, '480p', 'en154')
       res.json({
         creator: "RyuuDev",
+        status: true,
         output: [hasil]
       });
     } catch (err) {
