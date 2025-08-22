@@ -134,7 +134,7 @@ module.exports = function (app) {
       const { url } = req.query;
       if (!url) return res.json({ status: false, error: 'Masukkan URL YouTube' });
 
-      const hasil = await ytv(url, '360p', 'en154')
+      const hasil = await ytv(url, '720p', 'en154')
       res.json({
         creator: "RyuuDev",
         status: true,
