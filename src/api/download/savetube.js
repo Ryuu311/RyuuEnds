@@ -50,15 +50,27 @@ class Youtubers {
   }
 
   async getCDN() {
-    const res = await fetch("https://media.savetube.me/api/random-cdn");
-    const data = await res.json();
-    return data.cdn;
-  }
+  const res = await fetch("https://media.savetube.me/api/random-cdn", {
+    method: "GET",
+    headers: {
+      "Origin": "https://savetube.me",
+      "Referer": "https://savetube.me/",
+      "User-Agent": "Mozilla/5.0 (Linux; Android 15; CPH2591 Build/OPM1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0 Mobile Safari/537.36"
+    }
+  });
+  const data = await res.json();
+  return data.cdn;
+}
 
   async infoVideo(linkYoutube) {
     const cdn = await this.getCDN();
     const res = await fetch(`https://${cdn}/v2/info`, {
       method: "POST",
+      headers: {
+      "Origin": "https://savetube.me",
+      "Referer": "https://savetube.me/",
+      "User-Agent": "Mozilla/5.0 (Linux; Android 15; CPH2591 Build/OPM1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0 Mobile Safari/537.36"
+    },
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url: linkYoutube }),
     });
