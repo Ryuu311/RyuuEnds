@@ -343,7 +343,7 @@
         },
         {
           "name": "YouTube Video",
-          "desc": "Download Video Dari YouTube (Cloudku-tube)",
+          "desc": "Download Video Dari YouTube",
           "path": "/download/ytmp4?url=",
           "status": "ready",
           "params": {
@@ -352,7 +352,7 @@
         },
         {
           "name": "YouTube Audio",
-          "desc": "Download Musik Dari YouTube(Cloudki-tube)",
+          "desc": "Download Musik Dari YouTube",
           "path": "/download/ytmp3?url=",
           "status": "ready",
           "params": {
