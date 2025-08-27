@@ -343,8 +343,8 @@
         },
         {
           "name": "YouTube Video",
-          "desc": "Download Video Dari YouTube (Keepv)",
-          "path": "/download/keepv/mp4?url=",
+          "desc": "Download Video Dari YouTube (Cloudku-tube)",
+          "path": "/download/ytmp4?url=",
           "status": "ready",
           "params": {
             "url": "Masukan URL nya"
@@ -352,8 +352,8 @@
         },
         {
           "name": "YouTube Audio",
-          "desc": "Download Musik Dari YouTube(Keepv)",
-          "path": "/download/keepv/mp3?url=",
+          "desc": "Download Musik Dari YouTube(Cloudki-tube)",
+          "path": "/download/ytmp3?url=",
           "status": "ready",
           "params": {
             "url": "Masukan URL nya"
