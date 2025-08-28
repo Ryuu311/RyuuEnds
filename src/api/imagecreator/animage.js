@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 module.exports = function(app) {
 
-  class NSFWGenerator {
+  class nsfw {
     constructor() {
         this.basenya = 'https://nech-c-wainsfwillustrious-v140.hf.space';
         this.sessionHash = this.buatSesi();
@@ -78,13 +78,13 @@ module.exports = function(app) {
                     prompt || 'a cute anime girl',
                     qualityPrompt,
                     'blurry, low quality, watermark, monochrome, text',
-                    1336186770,
-                    true,
-                    1024,
-                    1024,
-                    12,
-                    30,
-                    1,
+                    1336186770, // seednya
+                    true,       // hidupkan kalau butuh quality prompt
+                    1024,       // width
+                    1024,       // height
+                    12,      // batch semakin tinggi makin bagus 0-12
+                    30,         // stepsnya bagus 30 
+                    1,          // samples 
                     null,
                     true
                 ],
@@ -103,9 +103,19 @@ module.exports = function(app) {
                 }
             );
 
-            return { success: true, joinResponse: joinResponse.data, sessionHash: this.sessionHash };
+            return {
+                success: true,
+                message: 'Session initialized berhasil',
+                sessionHash: this.sessionHash,
+                joinResponse: joinResponse.data
+            };
         } catch (error) {
-            return { success: false, error: error.message, sessionHash: this.sessionHash };
+            return {
+                success: false,
+                message: 'Gagal initialize session',
+                error: error.message,
+                sessionHash: this.sessionHash
+            };
         }
     }
 
@@ -133,9 +143,13 @@ module.exports = function(app) {
 
                     for (const line of lines) {
                         if (!line.startsWith('data: ')) continue;
-
+                        
                         let parsed;
-                        try { parsed = JSON.parse(line.slice(6)); } catch { continue; }
+                        try {
+                            parsed = JSON.parse(line.slice(6));
+                        } catch {
+                            continue;
+                        }
 
                         if (parsed.msg === 'process_completed') {
                             try {
@@ -147,62 +161,233 @@ module.exports = function(app) {
                                     for (const item of out) {
                                         if (typeof item === 'string') {
                                             if (item.startsWith('data:')) {
-                                                results.push({ type: 'base64_image', value: item, size: Math.floor(item.length * 3 / 4) });
+                                                results.push({
+                                                    type: 'base64_image',
+                                                    value: item,
+                                                    size: Math.floor(item.length * 3 / 4)
+                                                });
                                             } else if (item.startsWith('http')) {
-                                                results.push({ type: 'url', value: item, isAbsolute: true });
+                                                results.push({
+                                                    type: 'url',
+                                                    value: item,
+                                                    isAbsolute: true
+                                                });
                                             } else {
-                                                results.push({ type: 'string', value: item });
+                                                results.push({
+                                                    type: 'string',
+                                                    value: item
+                                                });
                                             }
                                         } else if (typeof item === 'object' && item !== null) {
-                                            if (item.url) results.push({ type: 'url', value: item.url, isAbsolute: true, source: 'object_url' });
-                                            else if (item.name) results.push({ type: 'url', value: `${this.basenya}/file=${item.name}`, isAbsolute: false, filename: item.name });
-                                            else if (item.path) results.push({ type: 'url', value: `${this.basenya}/file=${item.path}`, isAbsolute: false, path: item.path });
-                                            else results.push({ type: 'object', value: item });
+                                            if (item.url) {
+                                                results.push({
+                                                    type: 'url',
+                                                    value: item.url,
+                                                    isAbsolute: true,
+                                                    source: 'object_url'
+                                                });
+                                            } else if (item.name) {
+                                                results.push({
+                                                    type: 'url',
+                                                    value: `${this.basenya}/file=${item.name}`,
+                                                    isAbsolute: false,
+                                                    filename: item.name
+                                                });
+                                            } else if (item.path) {
+                                                results.push({
+                                                    type: 'url',
+                                                    value: `${this.basenya}/file=${item.path}`,
+                                                    isAbsolute: false,
+                                                    path: item.path
+                                                });
+                                            } else {
+                                                results.push({
+                                                    type: 'object',
+                                                    value: item
+                                                });
+                                            }
                                         }
+                                    }
+                                } else if (typeof out === 'string') {
+                                    if (out.startsWith('data:')) {
+                                        results.push({
+                                            type: 'base64_image',
+                                            value: out,
+                                            size: Math.floor(out.length * 3 / 4)
+                                        });
+                                    } else {
+                                        results.push({
+                                            type: 'string',
+                                            value: out
+                                        });
+                                    }
+                                } else if (typeof out === 'object' && out !== null) {
+                                    if (out.url) {
+                                        results.push({
+                                            type: 'url',
+                                            value: out.url,
+                                            isAbsolute: true,
+                                            source: 'object_url'
+                                        });
+                                    } else if (out.name) {
+                                        results.push({
+                                            type: 'url',
+                                            value: `${this.basenya}/file=${out.name}`,
+                                            isAbsolute: false,
+                                            filename: out.name
+                                        });
+                                    } else {
+                                        results.push({
+                                            type: 'object',
+                                            value: out
+                                        });
                                     }
                                 }
 
                                 if (!resolved) {
                                     resolved = true;
-                                    resolve({ status: 'SUCCESS', sessionHash: this.sessionHash, processingTime, results, resultCount: results.length, hasImages: results.some(r => r.type.includes('image') || r.type === 'url'), message: 'Berhasil membuat gambarnya' });
+                                    resolve({
+                                        status: 'SUCCESS',
+                                        sessionHash: this.sessionHash,
+                                        processingTime: processingTime,
+                                        results: results,
+                                        resultCount: results.length,
+                                        hasImages: results.some(r => r.type.includes('image') || r.type === 'url'),
+                                        message: 'Berhasil membuat gambarnya'
+                                    });
                                     response.data.destroy();
                                 }
                             } catch (err) {
-                                if (!resolved) { resolved = true; reject({ status: 'ERROR', sessionHash: this.sessionHash, error: err.message }); response.data.destroy(); }
+                                if (!resolved) {
+                                    resolved = true;
+                                    reject({
+                                        status: 'ERROR',
+                                        sessionHash: this.sessionHash,
+                                        error: err.message,
+                                        message: 'Gagal parse response datanya'
+                                    });
+                                    response.data.destroy();
+                                }
                             }
                         } else if (parsed.msg === 'process_failed') {
-                            if (!resolved) { resolved = true; reject({ status: 'FAILED', sessionHash: this.sessionHash, error: parsed.error || 'Unknown error' }); response.data.destroy(); }
+                            if (!resolved) {
+                                resolved = true;
+                                reject({
+                                    status: 'FAILED',
+                                    sessionHash: this.sessionHash,
+                                    error: parsed.error || 'Unknown error',
+                                    message: 'Gagal memproses di servernya'
+                                });
+                                response.data.destroy();
+                            }
                         }
                     }
                 });
 
-                response.data.on('error', err => { if (!resolved) { resolved = true; reject({ status: 'NETWORK_ERROR', sessionHash: this.sessionHash, error: err.message }); } });
-                response.data.on('end', () => { if (!resolved) { resolved = true; reject({ status: 'TIMEOUT', sessionHash: this.sessionHash, error: 'Stream ended without results' }); } });
+                response.data.on('error', err => {
+                    if (!resolved) {
+                        resolved = true;
+                        reject({
+                            status: 'NETWORK_ERROR',
+                            sessionHash: this.sessionHash,
+                            error: err.message,
+                            message: 'Jaringan mungkin buruk coba lagi bro'
+                        });
+                    }
+                });
+
+                response.data.on('end', () => {
+                    if (!resolved) {
+                        resolved = true;
+                        reject({
+                            status: 'TIMEOUT',
+                            sessionHash: this.sessionHash,
+                            error: 'Stream ended without results',
+                            message: 'Tidak ada data yang di dapat bro'
+                        });
+                    }
+                });
             });
         } catch (error) {
-            return { status: 'ERROR', sessionHash: this.sessionHash, error: error.message };
+            return {
+                status: 'ERROR',
+                sessionHash: this.sessionHash,
+                error: error.message,
+                message: 'Gagal membuat coba lagi'
+            };
         }
     }
 
-    async GenerateImage(prompt, qualityPrompt) {
-        const sessionResult = await this.generateImage(prompt, qualityPrompt);
-        if (!sessionResult.success) return sessionResult;
-        return await this.retrive();
+    async GenerateImage(prompt, qualityPrompt = 'masterpiece, best quality, fine details') {
+        try {
+            const sessionResult = await this.generateImage(prompt, qualityPrompt);
+            
+            if (!sessionResult.success) {
+                return sessionResult;
+            }
+
+            const generationResult = await this.retrive();
+            return generationResult;
+        } catch (error) {
+            return {
+                status: 'ERROR',
+                sessionHash: this.sessionHash,
+                error: error.message,
+                message: 'Kayaknya ada yang salah coba ganti prompt nya'
+            };
+        }
     }
-  }
+}
+
+async function GenerateImages( prompt ) {
+    const generator = new nsfw();
+    const result = await generator.GenerateImage(prompt);
+    
+    if (result.status === 'SUCCESS') {
+        console.log('Berhasil membuat');
+        console.log('Session Hash:', result.sessionHash);
+        console.log('Processing Time:', result.processingTime + 'ms');
+        console.log('Results Count:', result.resultCount);
+        console.log('Contains Images:', result.hasImages);
+        
+        result.results.forEach((item, index) => {
+            console.log(`\nResult ${index + 1}:`);
+            console.log('Type:', item.type);
+            
+            if (item.type === 'base64_image') {
+                console.log('Data Size:', item.size + ' bytes (approx)');
+                console.log('Preview: data:image/png;base64,' + item.value.substring(0, 50) + '...');
+            } else if (item.type === 'url') {
+                console.log('URL:', item.value);
+                console.log('Is Absolute URL:', item.isAbsolute);
+                if (item.filename) console.log('Filename:', item.filename);
+                if (item.path) console.log('Path:', item.path);
+            } else {
+                console.log('Value:', item.value);
+            }
+        });
+    } else {
+        console.log('Gagal Membuat');
+        console.log('Status:', result.status);
+        console.log('Error:', result.error);
+        console.log('Message:', result.message);
+        console.log('Session Hash:', result.sessionHash);
+    }
+    
+    return result;
+}
 
   app.get('/imagecreator/animage', async (req, res) => {
     try {
         const { prompt } = req.query;
         if (!prompt) return res.json({ status: false, error: 'Parameter "prompt" wajib diisi' });
 
-        const generator = new NSFWGenerator();
-        const result = await generator.GenerateImage(prompt);
+        const generator = new nsfw();
+        const results = await GenerateImages(prompt);
 
-        res.json({ creator: 'RyuuDev', output: [result] });
+        res.json({ creator: 'RyuuDev', output: results });
     } catch (err) {
         res.json({ creator: 'RyuuDev', status: false, error: err.message });
     }
   });
-
 };
