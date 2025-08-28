@@ -339,43 +339,6 @@ module.exports = function(app) {
     }
 }
 
-async function GenerateImages( prompt ) {
-    const generator = new nsfw();
-    const result = await generator.GenerateImage(prompt);
-    
-    if (result.status === 'SUCCESS') {
-        console.log('Berhasil membuat');
-        console.log('Session Hash:', result.sessionHash);
-        console.log('Processing Time:', result.processingTime + 'ms');
-        console.log('Results Count:', result.resultCount);
-        console.log('Contains Images:', result.hasImages);
-        
-        result.results.forEach((item, index) => {
-            console.log(`\nResult ${index + 1}:`);
-            console.log('Type:', item.type);
-            
-            if (item.type === 'base64_image') {
-                console.log('Data Size:', item.size + ' bytes (approx)');
-                console.log('Preview: data:image/png;base64,' + item.value.substring(0, 50) + '...');
-            } else if (item.type === 'url') {
-                console.log('URL:', item.value);
-                console.log('Is Absolute URL:', item.isAbsolute);
-                if (item.filename) console.log('Filename:', item.filename);
-                if (item.path) console.log('Path:', item.path);
-            } else {
-                console.log('Value:', item.value);
-            }
-        });
-    } else {
-        console.log('Gagal Membuat');
-        console.log('Status:', result.status);
-        console.log('Error:', result.error);
-        console.log('Message:', result.message);
-        console.log('Session Hash:', result.sessionHash);
-    }
-    
-    return result;
-}
 
   app.get('/imagecreator/animage', async (req, res) => {
     try {
@@ -383,7 +346,7 @@ async function GenerateImages( prompt ) {
         if (!prompt) return res.json({ status: false, error: 'Parameter "prompt" wajib diisi' });
 
         const generator = new nsfw();
-        const results = await GenerateImages(prompt);
+    const result = await generator.GenerateImage(prompt);
 
         res.json({ creator: 'RyuuDev', output: results });
     } catch (err) {
