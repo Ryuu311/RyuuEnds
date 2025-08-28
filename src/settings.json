@@ -212,9 +212,9 @@
           }
         },
         {
-          "name": "Arting IMG",
+          "name": "Animage IMG",
           "desc": "Generate gambar AI dengan gaya anime",
-          "path": "/imagecreator/arting?prompt=",
+          "path": "/imagecreator/animage?prompt=",
           "params": {
             "prompt": "Teks deskripsi gambar yang ingin dibuat (wajib)"
             }
