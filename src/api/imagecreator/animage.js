@@ -348,7 +348,9 @@ module.exports = function(app) {
         const generator = new nsfw();
     const result = await generator.GenerateImage(prompt);
 
-        res.json({ creator: 'RyuuDev', output: results });
+        res.json({ creator: 'RyuuDev', 
+        prompt: prompt, 
+        output: results });
     } catch (err) {
         res.json({ creator: 'RyuuDev', status: false, error: err.message });
     }
