@@ -350,7 +350,7 @@ module.exports = function(app) {
 
         res.json({ creator: 'RyuuDev', 
         prompt: prompt, 
-        output: results });
+        output: result });
     } catch (err) {
         res.json({ creator: 'RyuuDev', status: false, error: err.message });
     }
