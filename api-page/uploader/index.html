@@ -11,10 +11,9 @@
       background: url("https://api.ryuu-dev.offc.my.id/src/assest/mahiru/Mahiru-16.jpg") no-repeat center center fixed;
       background-size: cover;
     }
-    /* Dropzone dengan border strip tipis */
     .dropzone {
       position: relative;
-      border-radius: 0.75rem; /* sama dengan rounded-xl */
+      border-radius: 0.75rem;
       overflow: hidden;
       padding: 3rem;
       background: white;
@@ -26,7 +25,7 @@
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      padding: 3px; /* ketebalan border */
+      padding: 3px;
       background: repeating-linear-gradient(
         45deg,
         #fbbf24,
@@ -52,8 +51,7 @@
     <p class="text-gray-600 mb-6">Free and Simple File Sharing 🐚</p>
 
     <!-- Dropzone -->
-    <div id="dropzone" 
-         class="dropzone flex flex-col items-center justify-center">
+    <div id="dropzone" class="dropzone flex flex-col items-center justify-center">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-orange-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4-4m0 0l-4 4m4-4v12" />
@@ -75,7 +73,7 @@
     <div id="result" class="mt-6 text-sm"></div>
   </div>
 
-  <script src="/script.js">
-  </script>
+  <!-- Script eksternal -->
+  <script src="/uploader.js"></script>
 </body>
 </html>
