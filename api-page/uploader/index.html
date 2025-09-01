@@ -52,13 +52,21 @@
 
     <!-- Dropzone -->
     <div id="dropzone" class="dropzone flex flex-col items-center justify-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-orange-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4-4m0 0l-4 4m4-4v12" />
-      </svg>
-      <p class="text-gray-700">Select a file or drag & drop</p>
-      <input type="file" id="fileInput" accept="image/*,video/*" class="hidden"/>
-    </div>
+  <svg xmlns="http://www.w3.org/2000/svg" 
+       class="w-12 h-12 text-orange-400 mb-2" 
+       fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+      d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4-4m0 0l-4 4m4-4v12" />
+  </svg>
+
+  <!-- Teks jadi trigger -->
+  <p class="text-gray-700 cursor-pointer" onclick="document.getElementById('fileInput').click()">
+    Select a file or drag & drop
+  </p>
+
+  <!-- Input hidden -->
+  <input type="file" id="fileInput" accept="image/*,video/*" class="hidden"/>
+</div>
 
     <!-- Preview nama file -->
     <div id="filePreview" class="mt-4 text-sm text-gray-700"></div>
@@ -74,6 +82,6 @@
   </div>
 
   <!-- Script eksternal -->
-  <script src="/uploader.js"></script>
+  <script src="uploader.js"></script>
 </body>
 </html>
