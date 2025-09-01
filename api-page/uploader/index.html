@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mahiru File Uploader</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    body {
+      background: url("https://api.ryuu-dev.offc.my.id/src/assest/mahiru/Mahiru-16.jpg") no-repeat center center fixed;
+      background-size: cover;
+    }
+    /* Dropzone dengan border strip tipis */
+    .dropzone {
+      position: relative;
+      border-radius: 0.75rem; /* sama dengan rounded-xl */
+      overflow: hidden;
+      padding: 3rem;
+      background: white;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+    .dropzone::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 3px; /* ketebalan border */
+      background: repeating-linear-gradient(
+        45deg,
+        #fbbf24,
+        #fbbf24 10px,
+        #f59e0b 10px,
+        #f59e0b 20px
+      );
+      -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .dropzone.dragover {
+      box-shadow: 0 0 15px rgba(251,191,36,0.4);
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen bg-black/50 font-sans">
+  <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl p-8 w-full max-w-lg text-center">
+    <h1 class="text-3xl font-bold text-orange-500 mb-2">Mahiru Upload</h1>
+    <p class="text-gray-600 mb-6">Free and Simple File Sharing 🐚</p>
+
+    <!-- Dropzone -->
+    <div id="dropzone" 
+         class="dropzone flex flex-col items-center justify-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 text-orange-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4-4m0 0l-4 4m4-4v12" />
+      </svg>
+      <p class="text-gray-700">Select a file or drag & drop</p>
+      <input type="file" id="fileInput" accept="image/*,video/*" class="hidden"/>
+    </div>
+
+    <!-- Preview nama file -->
+    <div id="filePreview" class="mt-4 text-sm text-gray-700"></div>
+
+    <!-- Tombol upload -->
+    <button onclick="uploadFile()" 
+            class="mt-6 w-full bg-gradient-to-r from-yellow-400 to-orange-400 hover:from-yellow-500 hover:to-orange-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">
+      🚀 Upload
+    </button>
+
+    <!-- Hasil upload -->
+    <div id="result" class="mt-6 text-sm"></div>
+  </div>
+
+  <script>
+  const GITHUB_USERNAME = "Ryuu311";
+  const REPO = "RyuuEnds";
+  const TOKEN = "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"; 
+  const BRANCH = "main";
+
+  const dropzone = document.getElementById("dropzone");
+  const fileInput = document.getElementById("fileInput");
+  const filePreview = document.getElementById("filePreview");
+
+  dropzone.addEventListener("click", () => fileInput.click());
+  dropzone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropzone.classList.add("dragover");
+  });
+  dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+  dropzone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropzone.classList.remove("dragover");
+    fileInput.files = e.dataTransfer.files;
+    showFileName();
+  });
+
+  fileInput.addEventListener("change", showFileName);
+
+  function showFileName() {
+    const file = fileInput.files[0];
+    if (file) {
+      filePreview.innerHTML = `📂 File dipilih: <span class="font-semibold">${file.name}</span>`;
+    } else {
+      filePreview.innerHTML = "";
+    }
+  }
+
+  async function uploadFile() {
+    const file = fileInput.files[0];
+    const result = document.getElementById("result");
+
+    if (!file) {
+      result.innerHTML = "<p class='text-red-500'>⚠️ Pilih file dulu ya</p>";
+      return;
+    }
+    if (file.size > 70 * 1024 * 1024) {
+      result.innerHTML = "<p class='text-red-500'>❌ File terlalu besar (max 70MB)</p>";
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const content = reader.result.split(",")[1];
+      const ext = file.name.split(".").pop() || "bin";
+      const filename = `${Date.now()}_${Math.random().toString(16).slice(2)}.${ext}`;
+      const FILE_PATH = `src/assest/tmp/${filename}`;
+
+      try {
+        result.innerHTML = `
+          <p class='text-gray-700'>📂 File: <span class="font-semibold">${file.name}</span></p>
+          <p class='text-gray-500'>⏳ Mengupload...</p>
+        `;
+
+        await axios.put(
+          `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO}/contents/${FILE_PATH}`,
+          {
+            message: `upload via frontend - ${filename}`,
+            content: content,
+            branch: BRANCH,
+          },
+          {
+            headers: {
+              Authorization: `token ${TOKEN}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const url = `https://api.ryuu-dev.offc.my.id/${FILE_PATH}`;
+        result.innerHTML = `
+          <p class="text-green-600 font-semibold">✅ Berhasil diupload!</p>
+          <p class="text-gray-700">📂 File: <span class="font-semibold">${file.name}</span></p>
+          <button onclick="copyToClipboard('${url}')" 
+            class="mt-3 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md transition relative">
+            Salin Link 📋
+          </button>
+        `;
+      } catch (err) {
+        console.error(err);
+        result.innerHTML = "<p class='text-red-500'>❌ Error saat upload</p>";
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Link berhasil disalin ke clipboard!");
+    });
+  }
+</script>
+</body>
+</html>
