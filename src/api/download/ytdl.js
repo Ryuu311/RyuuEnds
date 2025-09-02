@@ -33,30 +33,31 @@ async function downloadYouTube({ ip, port, username, password, url }) {
 }
 
 
-module.exports = function (app) {
-  app.get("/download/ytplay", async (req, res) => {
-    try {
-      const { url } = req.query;
-      if (!url)
-        return res.status(400).json({ status: false, error: "Masukkan URL YouTube" });
+app.get("/download/ytplay", async (req, res) => {
+  try {
+    const { url } = req.query;
+    if (!url) return res.status(400).json({ status: false, error: "Masukkan URL YouTube" });
 
-      const outputStr = await downloadYouTube({
-        ip: 'ipserver.nauval.cloud',
-        port: 21633,
-        username: 'root',
-        password: 'ryuu65',
-        url: url
-      });
+    const result = await downloadYouTube({
+      ip: 'ipserver.nauval.cloud',
+      port: 21633,
+      username: 'root',
+      password: 'ryuu65',
+      url
+    });
 
-      const parsedOutput = JSON.parse(outputStr);
+    // Pastikan output dari yt.js udah object JSON
+    const output = typeof result.output === "string"
+      ? JSON.parse(result.output) // kalau masih string JSON
+      : result.output; // kalau sudah object
 
-      res.json({
-        creator: "Ryuu Dev",
-        output: parsedOutput,
-      });
-    } catch (err) {
-      res.status(500).json({ status: false, error: err.message });
-    }
-  });
-
+    res.json({
+      status: true,
+      creator: "RyuuDev",
+      output
+    });
+  } catch (err) {
+    res.status(500).json({ status: false, creator: "RyuuDev", error: err.message });
+  }
+});
 };
