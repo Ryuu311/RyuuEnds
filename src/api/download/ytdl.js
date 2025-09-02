@@ -34,27 +34,28 @@ async function downloadYouTube({ ip, port, username, password, url }) {
 
 
 module.exports = function (app) {
-  // 🎵 Endpoint untuk MP3
   app.get("/download/ytplay", async (req, res) => {
     try {
       const { url } = req.query;
       if (!url)
-        return res.json({ status: false, error: "Masukkan URL YouTube" });
+        return res.status(400).json({ status: false, error: "Masukkan URL YouTube" });
 
-      const result = await downloadYouTube({
-      ip: 'ipserver.nauval.cloud',
-      port: 21633,
-      username: 'root',
-      password: 'ryuu65',
-      url: url
-    });
+      const outputStr = await downloadYouTube({
+        ip: 'ipserver.nauval.cloud',
+        port: 21633,
+        username: 'root',
+        password: 'ryuu65',
+        url: url
+      });
+
+      const parsedOutput = JSON.parse(outputStr);
 
       res.json({
         creator: "Ryuu Dev",
-        output: result,
+        output: parsedOutput,
       });
     } catch (err) {
-      res.json({ status: false, error: err.message });
+      res.status(500).json({ status: false, error: err.message });
     }
   });
 
