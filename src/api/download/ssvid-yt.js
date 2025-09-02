@@ -1,89 +1,52 @@
-const fetch = require("node-fetch");
+const ytdl = require("@distube/ytdl-core");
 
 const yt = {
-  get baseUrl() {
-    return { origin: "https://ssvid.net" };
-  },
-
-  get baseHeaders() {
-    return {
-      "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-      "origin": this.baseUrl.origin,
-      "referer": this.baseUrl.origin + "/youtube-to-mp3",
-    };
-  },
-
   validateFormat(userFormat) {
     const validFormat = ["mp3", "360p", "720p", "1080p"];
     if (!validFormat.includes(userFormat))
       throw Error(`invalid format! available formats: ${validFormat.join(", ")}`);
   },
 
-  handleFormat(userFormat, searchJson) {
+  handleFormat(userFormat, info) {
     this.validateFormat(userFormat);
-    let result;
+    let format;
+
     if (userFormat === "mp3") {
-      result = searchJson.links?.mp3?.mp3128?.k;
+      format = ytdl.chooseFormat(info.formats, {
+        quality: "highestaudio",
+        filter: "audioonly",
+      });
     } else {
-      let selectedFormat;
-      const allFormats = Object.entries(searchJson.links.mp4);
-      const quality = allFormats
-        .map((v) => v[1].q)
-        .filter((v) => /\d+p/.test(v))
-        .map((v) => parseInt(v))
-        .sort((a, b) => b - a)
-        .map((v) => v + "p");
+      // cari format dengan resolusi tertentu
+      format = ytdl.chooseFormat(info.formats, {
+        quality: "highestvideo",
+      });
 
-      if (!quality.includes(userFormat)) {
-        selectedFormat = quality[0]; // fallback ke best
-      } else {
-        selectedFormat = userFormat;
-      }
-      const find = allFormats.find((v) => v[1].q === selectedFormat);
-      result = find?.[1]?.k;
+      // coba cari yang match resolusi (360p, 720p, 1080p)
+      const find = info.formats.find(
+        (f) => f.qualityLabel === userFormat && f.mimeType.includes("video")
+      );
+      if (find) format = find;
     }
-    if (!result) throw Error(`${userFormat} gak ada`);
-    return result;
-  },
 
-  async hit(path, payload) {
-    const body = new URLSearchParams(payload);
-    const opts = { headers: this.baseHeaders, body, method: "post" };
-    const r = await fetch(`${this.baseUrl.origin}${path}`, opts);
-    if (!r.ok) throw Error(`${r.status} ${r.statusText}\n${await r.text()}`);
-    return await r.json();
+    if (!format?.url) throw Error(`${userFormat} tidak tersedia`);
+    return format;
   },
 
   async download(queryOrYtUrl, userFormat = "mp3") {
     this.validateFormat(userFormat);
 
-    // first hit
-    let search = await this.hit("/api/ajax/search", {
-      query: queryOrYtUrl,
-      cf_token: "",
-      vt: "youtube",
-    });
+    const info = await ytdl.getInfo(queryOrYtUrl);
+    const format = this.handleFormat(userFormat, info);
 
-    if (search.p === "search") {
-      if (!search?.items?.length)
-        throw Error(`hasil pencarian ${queryOrYtUrl} tidak ada`);
-      const { v } = search.items[0];
-      const videoUrl = "https://www.youtube.com/watch?v=" + v;
-
-      // hit ulang pakai url video
-      search = await this.hit("/api/ajax/search", {
-        query: videoUrl,
-        cf_token: "",
-        vt: "youtube",
-      });
-    }
-
-    const vid = search.vid;
-    const k = this.handleFormat(userFormat, search);
-
-    // convert
-    const convert = await this.hit("/api/ajax/convert", { k, vid });
-    return convert;
+    return {
+      title: info.videoDetails.title,
+      lengthSeconds: info.videoDetails.lengthSeconds,
+      author: info.videoDetails.author.name,
+      thumbnail: info.videoDetails.thumbnails.pop()?.url,
+      format: userFormat,
+      url: format.url, // direct stream url
+    };
   },
 };
 
