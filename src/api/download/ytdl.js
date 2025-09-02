@@ -1,89 +1,61 @@
-const ytdl = require("@distube/ytdl-core");
+const { Client } = require('ssh2');
 
-const yt = {
-  validateFormat(userFormat) {
-    const validFormat = ["mp3", "360p", "720p", "1080p"];
-    if (!validFormat.includes(userFormat))
-      throw Error(`invalid format! available formats: ${validFormat.join(", ")}`);
-  },
+async function downloadYouTube({ ip, port, username, password, url }) {
+  return new Promise((resolve, reject) => {
+    const conn = new Client();
+    let output = '';
 
-  handleFormat(userFormat, info) {
-    this.validateFormat(userFormat);
-    let format;
+    conn.on('ready', () => {
+      // Perintah tinggal panggil yt.js + url
+      const cmd = `node yt.js "${url}"`;
 
-    if (userFormat === "mp3") {
-      format = ytdl.chooseFormat(info.formats, {
-        quality: "highestaudio",
-        filter: "audioonly",
+      conn.exec(cmd, (err, stream) => {
+        if (err) return reject({ success: false, error: err.message });
+
+        stream.on('close', (code, signal) => {
+          conn.end();
+          resolve({ success: true, code, output });
+        }).on('data', (data) => {
+          output += data.toString();
+        }).stderr.on('data', (data) => {
+          output += data.toString();
+        });
       });
-    } else {
-      // cari format dengan resolusi tertentu
-      format = ytdl.chooseFormat(info.formats, {
-        quality: "highestvideo",
-      });
+    }).on('error', (err) => {
+      reject({ success: false, error: err.message });
+    }).connect({
+      host: ip,
+      port: port,
+      username: username,
+      password: password
+    });
+  });
+}
 
-      // coba cari yang match resolusi (360p, 720p, 1080p)
-      const find = info.formats.find(
-        (f) => f.qualityLabel === userFormat && f.mimeType.includes("video")
-      );
-      if (find) format = find;
-    }
-
-    if (!format?.url) throw Error(`${userFormat} tidak tersedia`);
-    return format;
-  },
-
-  async download(queryOrYtUrl, userFormat = "mp3") {
-    this.validateFormat(userFormat);
-
-    const info = await ytdl.getInfo(queryOrYtUrl);
-    const format = this.handleFormat(userFormat, info);
-
-    return {
-      title: info.videoDetails.title,
-      lengthSeconds: info.videoDetails.lengthSeconds,
-      author: info.videoDetails.author.name,
-      thumbnail: info.videoDetails.thumbnails.pop()?.url,
-      format: userFormat,
-      url: format.url, // direct stream url
-    };
-  },
-};
 
 module.exports = function (app) {
   // 🎵 Endpoint untuk MP3
-  app.get("/download/ytmp3", async (req, res) => {
+  app.get("/download/ytplay", async (req, res) => {
     try {
       const { url } = req.query;
       if (!url)
         return res.json({ status: false, error: "Masukkan URL YouTube" });
 
-      const result = await yt.download(url, "mp3");
+      const result = await downloadYouTube({
+      ip: 'ipserver.nauval.cloud',
+      port: 21633,
+      username: 'root',
+      password: 'ryuu65',
+      url: url
+    });
 
       res.json({
         creator: "Ryuu Dev",
-        ...result,
+        output: result,
       });
     } catch (err) {
       res.json({ status: false, error: err.message });
     }
   });
 
-  // 🎬 Endpoint untuk MP4 720p
-  app.get("/download/ytmp4", async (req, res) => {
-    try {
-      const { url } = req.query;
-      if (!url)
-        return res.json({ status: false, error: "Masukkan URL YouTube" });
-
-      const result = await yt.download(url, "720p");
-
-      res.json({
-        creator: "Ryuu Dev",
-        ...result,
-      });
-    } catch (err) {
-      res.json({ status: false, error: err.message });
-    }
-  });
 };
