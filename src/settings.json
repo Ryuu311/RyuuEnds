@@ -342,18 +342,19 @@
           }
         },
         {
-          "name": "YouTube Video",
-          "desc": "Download Video Dari YouTube",
-          "path": "/download/ytmp4?url=",
+          "name": "YouTube Downloader V2",
+          "desc": "Download Video Dari YouTube Menggunakan yt-dlp, lebih premium!!",
+          "path": "/download/yt-dlp?url=&apikey=",
           "status": "ready",
+          "innerDesc": "Buy apikey >> wa.me/6288246552068",
           "params": {
             "url": "Masukan URL nya"
           }
         },
         {
-          "name": "YouTube Audio",
-          "desc": "Download Musik Dari YouTube",
-          "path": "/download/ytmp3?url=",
+          "name": "YouTube Downloader V1",
+          "desc": "Download Musik Dari YouTube menggunakan ytdl-core!!",
+          "path": "/download/ytplay?url=",
           "status": "ready",
           "params": {
             "url": "Masukan URL nya"
