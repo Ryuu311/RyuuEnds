@@ -6,7 +6,7 @@ async function downloadYouTube({ ip, port, username, password, url }) {
     let output = '';
 
     conn.on('ready', () => {
-      const cmd = `node yt.js "${url}"`;
+      const cmd = ` node ytdl-api/ytdl-core.js "${url}"`;
 
       conn.exec(cmd, (err, stream) => {
         if (err) return reject({ success: false, error: err.message });
@@ -38,10 +38,10 @@ module.exports = function(app) {
       if (!url) return res.status(400).json({ status: false, error: "Masukkan URL YouTube" });
 
       const result = await downloadYouTube({
-        ip: 'ipserver.nauval.cloud',
-        port: 21633,
+        ip: '193.143.69.100',
+        port: 35678,
         username: 'root',
-        password: 'ryuu65',
+        password: 'ryuu',
         url
       });
 
