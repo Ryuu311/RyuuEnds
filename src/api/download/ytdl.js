@@ -3,21 +3,23 @@ const { Client } = require('ssh2');
 async function downloadYouTube({ ip, port, username, password, url }) {
   return new Promise((resolve, reject) => {
     const conn = new Client();
-    let output = '';
 
     conn.on('ready', () => {
-      const cmd = ` node ytdl-api/ytdl-core.js "${url}"`;
+      const cmd = `node ytdl-api/ytdl-core.js "${url}"`;
 
       conn.exec(cmd, (err, stream) => {
         if (err) return reject({ success: false, error: err.message });
 
+        let stdout = "";
+        let stderr = "";
+
         stream.on('close', (code, signal) => {
           conn.end();
-          resolve({ success: true, code, output });
+          resolve({ success: true, code, stdout, stderr });
         }).on('data', (data) => {
-          output += data.toString();
+          stdout += data.toString();
         }).stderr.on('data', (data) => {
-          output += data.toString();
+          stderr += data.toString();
         });
       });
     }).on('error', (err) => {
@@ -45,9 +47,12 @@ module.exports = function(app) {
         url
       });
 
-      const output = typeof result.output === "string"
-        ? JSON.parse(result.output)
-        : result.output;
+      let output;
+      try {
+        output = JSON.parse(result.stdout);
+      } catch {
+        output = result.stdout || result.stderr;
+      }
 
       res.json({
         status: true,
