@@ -6,7 +6,7 @@ async function downloadYouTube({ ip, port, username, password, url }) {
     let output = '';  
   
     conn.on('ready', () => {  
-      const cmd = ` node ytdl-api/ytdl-core.js "${url}"`;  
+      const cmd = ` node ytdl-api/ytdl-core-new.js "${url}"`;  
   
       conn.exec(cmd, (err, stream) => {  
         if (err) return reject({ success: false, error: err.message });  
