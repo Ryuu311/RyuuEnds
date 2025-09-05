@@ -14,7 +14,7 @@ module.exports = (app) => {
 
   // Load semua route dari folder API dan hitung total routes
   let totalRoutes = 0;
-  const apiFolder = path.join(__dirname, "./src/api");
+  const apiFolder = path.join(process.cwd(), './src/api');
   fs.readdirSync(apiFolder).forEach((subfolder) => {
     const subfolderPath = path.join(apiFolder, subfolder);
     if (fs.statSync(subfolderPath).isDirectory()) {
