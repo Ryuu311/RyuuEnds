@@ -17,15 +17,32 @@ module.exports = function(app) {
         requestCount = 0;
     }, 1000);
 
-    const totalRoutes = 50
+    // Fungsi hitung total router (file .js di ./src/api dari root project)
+    function countJsFiles(dir) {
+        let count = 0;
+        if (!fs.existsSync(dir)) return 0;
+        const files = fs.readdirSync(dir);
+        for (const file of files) {
+            const fullPath = path.join(dir, file);
+            const stats = fs.statSync(fullPath);
+            if (stats.isDirectory()) {
+                count += countJsFiles(fullPath);
+            } else if (file.endsWith('.js')) {
+                count++;
+            }
+        }
+        return count;
+    }
 
     // Endpoint /stats
     app.get('/stats', (req, res) => {
         const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        const apiFolder = path.join(process.cwd(), 'src', 'api'); // pakai root project
+        const totalRouter = countJsFiles(apiFolder);
         res.json({
             ip,
             rps,
-            totalRouter: totalRoutes
+            fitur: totalRouter
         });
     });
 };
