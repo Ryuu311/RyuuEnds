@@ -17,22 +17,7 @@ module.exports = function(app) {
         requestCount = 0;
     }, 1000);
 
-    // Fungsi hitung total router (file .js di ./src/api dari root project)
-    function countJsFiles(dir) {
-        let count = 0;
-        if (!fs.existsSync(dir)) return 0;
-        const files = fs.readdirSync(dir);
-        for (const file of files) {
-            const fullPath = path.join(dir, file);
-            const stats = fs.statSync(fullPath);
-            if (stats.isDirectory()) {
-                count += countJsFiles(fullPath);
-            } else if (file.endsWith('.js')) {
-                count++;
-            }
-        }
-        return count;
-    }
+    const totalRoutes = require('../../../index.js');
 
     // Endpoint /stats
     app.get('/stats', (req, res) => {
@@ -42,7 +27,7 @@ module.exports = function(app) {
         res.json({
             ip,
             rps,
-            totalRouter
+            totalRouter: totalRoutes
         });
     });
 };
