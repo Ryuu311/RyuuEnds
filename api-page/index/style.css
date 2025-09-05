@@ -55,9 +55,7 @@ header {
 
 /* --- Hero Section --- */
 .hero-section {
-    background: linear-gradient(rgba(255, 255, 75, 0.3), rgba(255, 255, 80, 0.3)),
-                url('https://api.ryuu-dev.offc.my.id/src/assest/mahiru/Mahiru-09.jpg') 
-                no-repeat center center/cover;
+    background: linear-gradient(rgba(255,159,67,0.12), rgba(255,159,67,0.12)), url('https://api.ryuu-dev.offc.my.id/src/assest/mahiru/Mahiru-09.jpg') no-repeat center center/cover;
     color: white;
     padding: 8rem 2rem;
     text-align: left;
