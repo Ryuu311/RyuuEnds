@@ -17,9 +17,10 @@ module.exports = function(app) {
         requestCount = 0;
     }, 1000);
 
-    // Fungsi hitung total router (file .js di ./src/api)
+    // Fungsi hitung total router (file .js di ./src/api dari root project)
     function countJsFiles(dir) {
         let count = 0;
+        if (!fs.existsSync(dir)) return 0;
         const files = fs.readdirSync(dir);
         for (const file of files) {
             const fullPath = path.join(dir, file);
@@ -36,7 +37,8 @@ module.exports = function(app) {
     // Endpoint /stats
     app.get('/stats', (req, res) => {
         const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-        const totalRouter = countJsFiles(path.join(__dirname, '..', 'src', 'api'));
+        const apiFolder = path.join(process.cwd(), 'src', 'api'); // pakai root project
+        const totalRouter = countJsFiles(apiFolder);
         res.json({
             ip,
             rps,
