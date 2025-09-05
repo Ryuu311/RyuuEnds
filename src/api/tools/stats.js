@@ -22,8 +22,6 @@ module.exports = function(app) {
     // Endpoint /stats
     app.get('/stats', (req, res) => {
         const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-        const apiFolder = path.join(process.cwd(), 'src', 'api'); // pakai root project
-        const totalRouter = countJsFiles(apiFolder);
         res.json({
             ip,
             rps,
