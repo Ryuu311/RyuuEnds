@@ -2,7 +2,7 @@
 // Script untuk fetch stats dari server
 async function updateStats() {
     try {
-        const res = await fetch('/stats'); // endpoint harus ada di server
+        const res = await fetch('https://api.ryuu-dev.offc.my.id/stats'); // endpoint harus ada di server
         const data = await res.json();
         document.getElementById('stat-ip').innerText = data.ip || 'N/A';
         document.getElementById('stat-rps').innerText = data.rps || 0;
