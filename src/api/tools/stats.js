@@ -17,7 +17,7 @@ module.exports = function(app) {
         requestCount = 0;
     }, 1000);
 
-    const totalRoutes = require('../../../index.js');
+    const totalRoutes = 50
 
     // Endpoint /stats
     app.get('/stats', (req, res) => {
