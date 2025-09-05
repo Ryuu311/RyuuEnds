@@ -1,245 +1,203 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>RyuuHiru API</title>
-  
-  <!-- Open Graph Meta Tags for WhatsApp Sharing -->
-  <meta name="google-site-verification" content="qr3K9_O38DP-PWHhNavydV-fkLIMPaUJxQe3tcyJSdg" />
-<meta property="og:title" content="RyuuHiruu API - Layanan API Gratis dan Premium 🔥" />
-<meta property="og:description" content="Menyediakan berbagai layanan API dari yang gratis hingga berbayar dengan harga murah dan kualitas terbaik." />
-<meta property="og:image" content="https://ryuu-endss-api.vercel.app/src/banner.jpg" />
-<meta property="og:url" content="https://ryuu-endss-api.vercel.app/" />
-<meta property="og:type" content="website" />
-  
-  <style>
-    :root {
-      --bg-light: #f5f7fa;
-      --bg-dark: #111827;
-      --text-light: #1f2937;
-      --text-dark: #f3f4f6;
-      --card-light: #ffffff;
-      --card-dark: #1f2937;
-      --primary: #ffe382;
-      --primary-dark: #f7b267;
-      --shadow: rgba(0, 0, 0, 0.1);
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text-light);
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    body.dark {
-      background-color: var(--bg-dark);
-      color: var(--text-dark);
-    }
-
-    #loader {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: var(--bg-light);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      transition: background 0.3s;
-    }
-
-    body.dark #loader {
-      background: var(--bg-dark);
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 4px solid var(--primary-dark);
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    #content {
-      display: none;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: var(--card-light);
-      box-shadow: 0 4px 10px var(--shadow);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      transition: background-color 0.3s;
-    }
-
-    body.dark header {
-      background-color: var(--card-dark);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      font-size: 1.3rem;
-      font-weight: bold;
-    }
-
-    .brand img {
-      width: 32px;
-      margin-right: 0.6rem;
-    }
-
-    .version {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #fff;
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-    }
-
-    main {
-      max-width: 650px;
-      margin: 3rem auto;
-      padding: 0 1rem;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    p {
-      font-size: 1.1rem;
-      line-height: 1.5;
-      margin-bottom: 2rem;
-    }
-
-    .illustration img {
-      width: 100%;
-      max-width: 380px;
-      border-radius: 16px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s;
-    }
-
-    .illustration img:hover {
-      transform: scale(1.03);
-      box-shadow: 0 15px 25px rgba(0,0,0,0.2);
-    }
-
-    .buttons a {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      background: linear-gradient(to right, var(--primary), var(--primary-dark));
-      color: white;
-      font-weight: 600;
-      text-decoration: none;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(124, 58, 237, 0.4);
-      transition: transform 0.2s ease;
-    }
-
-    .buttons a:hover {
-      transform: translateY(-2px);
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.9rem;
-    }
-
-    .theme-toggle {
-      margin: 1rem 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .theme-toggle input {
-      transform: scale(1.4);
-      cursor: pointer;
-    }
-
-    .links a {
-      margin: 0 0.5rem;
-      text-decoration: none;
-      color: var(--primary);
-      font-weight: 500;
-    }
-
-    .links a:hover {
-      text-decoration: underline;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RyuuHiru Api documentation</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="index/style.css">
 </head>
 <body>
-  <!-- Loader -->
-  <div id="loader">
-    <div class="spinner"></div>
-  </div>
 
-  <!-- Konten -->
-  <div id="content">
-    <header>
-      <div class="brand">
-        <img src="https://ryuu-endss-api.vercel.app/src/icon.png" alt="logo">
-        RyuuHiruu
-      </div>
-      <div class="version">V 5.0.2</div>
-    </header>
+<header>
+<a href="#" class="logo">
+    <img src="https://ryuu-endss-api.vercel.app/src/icon.png" alt="Logo">
+    <span>RyuuHiru Api</span>
+</a>
+<ul class="nav-links">
+    <li><a href="#">Beranda</a></li>
+    <li><a href="#">Profil</a></li>
+    <li><a href="#">Galeri</a></li>
+    <li><a href="#">PPDB</a></li>
+    <li><a href="#">Kontak</a></li>
+</ul>
+<i class="fas fa-bars"></i>
+</header>
 
-    <main>
-      <h1>RyuuHiruu API</h1>
-      <p>Menyediakan Layanan API dari yang Gratis 🔥 hingga Berbayar (Murah) 🤩</p>
+<section class="hero-section">
+<div class="hero-content">
+    <h1>VERY USEFUL REST API DOCUMENTATION FOR SOME BOT DEVELOPERS</h1>
+    <p>Dokumentasi rest api yang sangat berguna untuk beberapa developer bot WhatsApp yang mungkin sangat berguna</p>
+</div>
+<div class="hero-nav">
+    <button aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+    <button aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+</div>
+</section>
 
-      <div class="illustration">
-        <img src="https://ryuu-endss-api.vercel.app/src/banner.jpg" alt="illustration">
-      </div>
+<div class="container">
+<section class="headmaster-section">
+<div class="headmaster-card">
+    <img src="https://pps.whatsapp.net/v/t61.24694-24/531802413_734484062907558_7072281363530194742_n.jpg?ccb=11-4&oh=01_Q5Aa2QFgvaC9iZgwuRk9wM1Rs-DAHrJngQxxr6TMrygJNzcIkA&oe=68C72DE2&_nc_sid=5e03e0&_nc_cat=108" alt="Owner">
+    <h2>Creator Website</h2>
+    <h3>Ryuu/Reinzz</h3>
+    <p>Creator of website "Ryuu-Hiru Api" with some useful features </p>
+    <a href="/api" class="read-more-button">Explore Api <i class="fas fa-chevron-right"></i></a>
+</div>
+<div class="statistics">
+    <h2>Statistik Data Endpoint</h2>
+    <ul>
+        <li><span id="stat-ip">Loading...</span><h3>IP Pengunjung</h3></li>
+        <li><span id="stat-rps">Loading...</span><h3>Total Request/s</h3></li>
+        <li><span id="stat-fitur">Loading...</span><h3>Total Endpoint</h3></li>
+    </ul>
+</div>
+</section>
 
-      <div class="buttons" style="margin-top: 2rem;">
-        <a href="/api">🚀 Dapatkan Layanan API Free Sekarang</a>
-      </div>
-    </main>
+    <section class="agenda-section">
+        <div class="section-header">
+            <h2>Most useful features</h2>
+            <a href="#" aria-label="Lihat semua agenda"><i class="fas fa-chevron-right"></i></a>
+        </div>
+        <p>Fitur paling berguna di endpoint api ini:</p>
+        <div class="agenda-item">
+            <div class="agenda-icon"><i class="fas fa-calendar-alt"></i></div>
+            <div class="agenda-details">
+                <h3>YouTube Downloader yang menggunakan ytdl-core!</h3>
+                <small>link: https://api.ryuu-dev.offc.my.id/downloader/ytplay?url=</small>
+            </div>
+            
+        </div>
+    </section>
 
-    <footer>
-      <div>© 2025 RyuuHiruu API. All rights reserved.</div>
-      <div class="theme-toggle">
-        <span>🌞 Light</span>
-        <input type="checkbox" id="toggleTheme">
-        <span>🌙 Dark</span>
-      </div>
-      <div class="links">
-        <a href="https://whatsapp.com/channel/0029Vb5xetZBadmS2IPdmG1X">ℹ️ Info</a>
-        <a href="https://wa.me/6288246552068">✉️ Kontak</a>
-      </div>
-    </footer>
-  </div>
+    <section class="news-section">
+        <div class="section-header">
+            <h2>Informasi</h2>
+            <a href="#" aria-label="Lihat semua berita"><i class="fas fa-chevron-right"></i></a>
+        </div>
+        <div class="news-grid">
+            <div class="news-item">
+                <img src="https://pps.whatsapp.net/v/t61.24694-24/520173338_1580658252909494_7498019063542506348_n.jpg?ccb=11-4&oh=01_Q5Aa2QH_N48rUyhMz4leUsH1b_4HUSR19shnCyCjqugs-viwZg&oe=68C74BD6&_nc_sid=5e03e0&_nc_cat=105" alt="Gambar berita">
+                <div class="news-text">
+                    <a href="https://whatsapp.com/channel/0029Vb6w7eO9sBIEUYRgeC30/127">
+          <h3>Script website free by Zass Desuta</h3>
+                    <small>5 September 2025</small>
+                </div>
+            </div>
+            </div>
+    </section>
 
-  <script>
-    const toggle = document.getElementById("toggleTheme");
-    toggle.addEventListener("change", () => {
-      document.body.classList.toggle("dark", toggle.checked);
-    });
+    <section class="staff-section">
+        <div class="section-header">
+            <h2>Partner</h2>
+            <a href="#" aria-label="Lihat profil partner"><i class="fas fa-chevron-right"></i></a>
+        </div>
+        <p>My partner website/script</p>
+        <div class="staff-cards">
+            <div class="staff-card">
+                <img src="https://pps.whatsapp.net/v/t61.24694-24/520173338_1580658252909494_7498019063542506348_n.jpg?ccb=11-4&oh=01_Q5Aa2QH_N48rUyhMz4leUsH1b_4HUSR19shnCyCjqugs-viwZg&oe=68C74BD6&_nc_sid=5e03e0&_nc_cat=105" alt="Foto staf pengajar 1">
+                <h3>Partner Zass Desuta</h3>
+                <small>Partner Html</small>
+            </div>
+        </div>
+    </section>
 
-    window.addEventListener("load", () => {
-      document.getElementById("loader").style.display = "none";
-      document.getElementById("content").style.display = "block";
-    });
-  </script>
+    <section class="non-teaching-staff-section">
+        <div class="section-header">
+            <h2>My Waifu🥰</h2>
+            <a href="#" aria-label="Mahiru"><i class="fas fa-chevron-right"></i></a>
+        </div>
+        <p>Lihat semua waifu kesayangan ku :v</p>
+        <div class="staff-cards">
+            <div class="staff-card">
+                <img src="https://api.ryuu-dev.offc.my.id/src/assest/mahiru/Mahiru-10.jpg" alt="Foto 1">
+                <h3>Shiina Mahiru</h3>
+                <small>Karakter anime yang di anggap malaikat di anime nya karena parasnya yang cantik dan sifatnya yang lembut</small>
+            </div>
+            <div class="staff-card">
+                <img src="https://api.ryuu-dev.offc.my.id/src/assest/renai-floops/amelia.jpg" alt="Foto 2">
+                <h3>Amelia</h3>
+                <small>Heroine dari anime Renai-floops yang memiliki sifat nakal, tsundere, dan cerewet tapi imoet</small>
+            </div>
+            <div class="staff-card">
+                <img src="https://api.ryuu-dev.offc.my.id/src/assest/renai-floops/mongfa.jpg" alt="Foto 3">
+                <h3>Mongfa</h3>
+                <small>Heroine dari anime Renai-floops dengan sifat lembur, penyayang serta *ualala :v</small>
+            </div>
+            <div class="staff-card">
+                <img src="https://api.ryuu-dev.offc.my.id/src/assest/renai-floops/karin.jpg" alt="Foto 4">
+                <h3>Karin</h3>
+                <small>Heroine dari anime Renai-floops dengan sifat nakal, aktif, ceria bahkan sering mengajak MC *gw, menikah 🥰</small>
+            </div>
+            <div class="staff-card">
+                <img src="https://api.ryuu-dev.offc.my.id/src/assest/renai-floops/aoi.jpg" alt="Foto 5">
+                <h3>Aoi</h3>
+                <small>Heroine paling utama di anime Renai-floops dengan sifat pendiam, pemalu, tapi lembut dan cantik :v</small>
+            </div>
+            <div class="staff-card">
+                <img src="https://api.ryuu-dev.offc.my.id/src/assest/renai-floops/ilya.jpg" alt="Foto 6">
+                <h3>Ilya/Iroha</h3>
+                <small>Heroine yang di masa kecilnya di paksa menjadi laki laki dengan nama Iroha, dan saat bertemu dengan MC identitas nya terungkap bahwa dia perempuan bernama ilya, dia memiliki sifat pemalu, bertubuh kecil, loli :v</small>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial-section">
+        <div class="section-header">
+            <h2>About Me:</h2>
+        </div>
+        <div class="testimonial-card">
+            <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+            <p>Let me introduce myself. My name is Ryuu/Reinzz. I'm a beginner developer who first learned JavaScript, then HTML and CSS. I'm also a WhatsApp bot developer with the name "Mahiru Assistant", Her name is Mahiru because the character Shiina Mahiru is an anime character that I really like because of her beautiful face and has a soft heart so she has the nickname of an angel.</p>
+            <div class="testimonial-author">
+                <img src="https://pps.whatsapp.net/v/t61.24694-24/531802413_734484062907558_7072281363530194742_n.jpg?ccb=11-4&oh=01_Q5Aa2QFgvaC9iZgwuRk9wM1Rs-DAHrJngQxxr6TMrygJNzcIkA&oe=68C72DE2&_nc_sid=5e03e0&_nc_cat=108" alt="Foto author">
+                <div>
+                    <h3>Ryuu/Reinzz</h3>
+                    <small>Creator website</small>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <div class="footer-columns">
+        <div class="footer-column">
+            <h3>Ryuu Dev Api</h3>
+            <li><a href="https://api.ryuu-dev.offc.my.id/api">Base Url</a></li>
+            <div class="social-links">
+                <a href="https://wa.me/6288246552068" aria-label="whatsapp"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://instagram.com/reinzz.311" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://github.com/Ryuu311" aria-label="Github"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+        <div class="footer-column">
+            <h3>My Partner website</h3>
+            <ul>
+                <li><a href="https://neolabsofficial.my.id">Free script by Zass</a></li>
+                <li><a href="https://zass.cloud/tools">Free tools</a></li>
+                <li><a href="https://zass.cloud">Zass cloud</a></li>
+                <li><a href="https://whatsapp.com/channel/0029Vb6w7eO9sBIEUYRgeC30">Neo'S Labs Ch</a></li>
+                <li><a href="https://whatsapp.com/channel/0029Vb5EZCjIiRotHCI1213L">NB Script</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h3>Me</h3>
+            <ul>
+                <li><a href="https://wa.me/6288246552068">Contact</a></li>
+                <li><a href="https://whatsapp.com/channel/0029Vb5xetZBadmS2IPdmG1X">Info</a></li>
+                <li><a href="https://github.com/Ryuu311">Github</a></li>
+                <li><a href="https://trakteer.id/faldrian/gift">Support me</a></li>
+                <li><a href="https://whatsapp.com/channel/0029Vb615brAzNbywHCyRc1w">Mahiru-Cloud update</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <p>© 2025 RyuuDev. Semua hak dilindungi.</p>
+    </div>
+</footer>
+
+<script src="sekrip.js"></script>
+
 </body>
 </html>
