@@ -106,7 +106,7 @@ async function uploadFile(){
 /* salin ke clipboard */
 function copyToClipboard(text){
   navigator.clipboard?.writeText(text).then(() => {
-    alert('Link berhasil disalin ke clipboard! 💗');
+    alert('Link berhasil disalin ke clipboard!');
   }).catch((e) => {
     console.error(e);
     alert('Gagal menyalin.');
