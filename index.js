@@ -62,7 +62,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'api-page', 'index.html'));
 });
 
-app.get(['/src', '/src/*', '/api-page', '/api-page/*'], (req, res) => {   res.status(403).sendFile(path.join(__dirname, 'api-page', '403.html'));  
+app.get(['/src', '/src/*', '/api-page', '/uploader/uploader.js', '/api-page/*'], (req, res) => {   res.status(403).sendFile(path.join(__dirname, 'api-page', '403.html'));  
 });
 
 app.use((req, res, next) => {
