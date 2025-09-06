@@ -66,6 +66,16 @@ app.get(['/src', '/src/*', '/api-page', '/api-page/*'], (req, res) => {   res.st
 });
 
 app.use((req, res, next) => {
+    const forbiddenExtensions = ['.js', '.html', '.json'];
+    for (const ext of forbiddenExtensions) {
+        if (req.url.endsWith(ext)) {
+            return res.status(403).sendFile(path.join(__dirname, 'api-page', '403.html'));
+        }
+    }
+    next();
+});
+
+app.use((req, res, next) => {
     res.status(404).sendFile(process.cwd() + "/api-page/404.html");
 });
 
