@@ -18,31 +18,34 @@
 </head>
 <body>
 
-<header>
-<a href="#" class="logo">
-    <img src="https://ryuu-endss.vercel.app/src/icon.png" alt="Logo">
-    <span>RyuuHiru Api</span>
-</a>
-<ul class="nav-links">
-    <li><a href="#">Beranda</a></li>
-    <li><a href="#">Profil</a></li>
-    <li><a href="#">Galeri</a></li>
-    <li><a href="#">Partner</a></li>
-    <li><a href="#">Kontak</a></li>
-</ul>
-<i class="fas fa-bars"></i>
-</header>
 
-<section class="hero-section">
-<div class="hero-content">
-    <h1>VERY USEFUL REST API DOCUMENTATION FOR SOME BOT DEVELOPERS</h1>
-    <p>Dokumentasi rest api yang sangat berguna untuk beberapa developer bot WhatsApp yang mungkin sangat berguna</p>
-</div>
-<div class="hero-nav">
-    <button aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
-    <button aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
-</div>
-</section>
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo">
+            <img src="https://ryuu-endss.vercel.app/src/icon.png" alt="Logo">
+            <span>RyuuHiru Api</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#">Beranda</a></li>
+            <li><a href="#">Profil</a></li>
+            <li><a href="#">Galeri</a></li>
+            <li><a href="#">Partner</a></li>
+            <li><a href="#">Kontak</a></li>
+        </ul>
+        <button id="theme-toggle">🌙 Dark Mode</button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>VERY USEFUL REST API DOCUMENTATION FOR SOME BOT DEVELOPERS</h1>
+            <p>Dokumentasi REST API yang sangat berguna untuk beberapa developer bot WhatsApp.</p>
+        </div>
+        <div class="hero-nav">
+            <button aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+            <button aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
 
 <div class="container">
 <section class="headmaster-section">
@@ -207,6 +210,12 @@
 </footer>
 
 <script>
+    // Theme toggle
+        const toggleBtn = document.getElementById('theme-toggle');
+        toggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark');
+            toggleBtn.innerText = document.body.classList.contains('dark') ? '☀️ Light Mode' : '🌙 Dark Mode';
+        });
 // Script untuk fetch stats dari server
 async function updateStats() {
     try {
@@ -225,7 +234,23 @@ async function updateStats() {
 
 setInterval(updateStats, 1000);
 updateStats();
-</script>
+// Toggle tema gelap/terang
+const toggle = document.getElementById('theme-toggle');
+const body = document.body;
 
+// Cek localStorage
+if(localStorage.getItem('theme') === 'dark') {
+    body.classList.add('dark-mode');
+}
+
+toggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    if(body.classList.contains('dark-mode')){
+        localStorage.setItem('theme', 'dark');
+    } else {
+        localStorage.setItem('theme', 'light');
+    }
+});
+</script>
 </body>
 </html>
