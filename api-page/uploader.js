@@ -57,7 +57,7 @@ function showFileName(){
 async function uploadFile(){
   const file = fileInput.files[0];
   if (!file) {
-    result.innerHTML = '<p class="text-red-600 dark:text-red-400">⚠️ Pilih file dulu ya, Ryuu-kun~</p>';
+    result.innerHTML = '<p class="text-red-600 dark:text-red-400">⚠️ Pilih file dulu</p>';
     return;
   }
   if (file.size > 70 * 1024 * 1024) {
@@ -75,7 +75,7 @@ async function uploadFile(){
       const filename = Date.now() + '_' + Math.random().toString(16).slice(2) + '.' + ext;
       const FILE_PATH = 'src/assest/tmp/' + filename;
 
-      result.innerHTML = `<p class="text-slate-500 dark:text-slate-400">⏳ Mengupload <strong>${escapeHtml(file.name)}</strong>...</p>`;
+      result.innerHTML = `<p class="text-slate-500 dark:text-slate-400">⏳ Uploading <strong>${escapeHtml(file.name)}</strong>...</p>`;
 
       const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO}/contents/${FILE_PATH}`;
       const payload = { message: 'upload via frontend - ' + filename, content: base64, branch: BRANCH };
