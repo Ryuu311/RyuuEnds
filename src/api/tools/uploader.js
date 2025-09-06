@@ -1,63 +1,54 @@
 const axios = require("axios");
-const crypto = require("crypto");
 
-module.exports = function(app) {
-  app.post("/uploader/api", async (req, res) => {
+module.exports = function (app) {
+  // Endpoint POST /upload
+  app.post("/api/upload", async (req, res) => {
     try {
-      // buffer dari body request
-      let chunks = [];
-      req.on("data", chunk => chunks.push(chunk));
-      req.on("end", async () => {
-        const fileBuffer = Buffer.concat(chunks);
-        if (!fileBuffer || fileBuffer.length === 0) {
-          return res.status(400).json({ error: "File wajib dikirim di body request" });
-        }
+      const { filename, content } = req.body;
 
-        const originalName = req.headers["x-filename"] || "file.bin";
-        const mimeType = req.headers["x-mimetype"] || "application/octet-stream";
+      if (!filename || !content) {
+        return res.status(400).json({ error: "Filename dan content wajib ada" });
+      }
 
-        const ext = mimeType.split("/")[1] || "bin";
-        const filenameGit = `${Date.now()}_${crypto.randomBytes(4).toString("hex")}.${ext}`;
-        const FILE_PATH = `src/assest/tmp/${filenameGit}`;
-        const content = fileBuffer.toString("base64");
+      /* ---------- Konfigurasi ---------- */
+      const GITHUB_USERNAME = "Ryuu311";
+      const REPO = "RyuuEnds";
+      const TOKEN = "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";
+      const BRANCH = "main";
+      /* -------------------------------- */
 
-        // === CONFIG GITHUB ===
-        const GITHUB_USERNAME = "Ryuu311";
-        const REPO = "RyuuEnds";
-        const TOKEN = "ghp_Evnn3HcTifAxXYgbgiI4Hi8h1SS85l0khshshsbAJNU";
-        const BRANCH = "main";
+      const FILE_PATH = `src/assest/tmp/${filename}`;
+      const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO}/contents/${FILE_PATH}`;
 
-        await axios.put(
-          `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO}/contents/${FILE_PATH}`,
-          {
-            message: `upload via app - ${filenameGit}`,
-            content: content,
-            branch: BRANCH,
-          },
-          {
-            headers: {
-              Authorization: `token ${TOKEN}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
+      const payload = {
+        message: "upload via backend - " + filename,
+        content, // base64 dari frontend
+        branch: BRANCH,
+      };
 
-        res.json({
-          creator: "RyuuDev",
-          filename: originalName,
-          uploaded_at: new Date().toISOString(),
-          url: `https://api.ryuu-dev.offc.my.id/${FILE_PATH}`
+      const headers = {
+        Authorization: "token " + TOKEN,
+        "Content-Type": "application/json",
+      };
+
+      const resp = await axios.put(apiUrl, payload, { headers });
+
+      if (resp.status === 201 || resp.status === 200) {
+        const url = `https://api.ryuu-dev.offc.my.id/${FILE_PATH}`;
+        return res.status(200).json({
+          success: true,
+          url,
         });
-      });
-
-      req.on("error", (err) => {
-        console.error(err);
-        res.status(500).json({ error: err.message || "Upload gagal" });
-      });
-
+      } else {
+        return res
+          .status(500)
+          .json({ error: "Upload gagal — response tidak terduga" });
+      }
     } catch (err) {
       console.error(err);
-      res.status(500).json({ error: err.message || "Upload gagal" });
+      return res
+        .status(500)
+        .json({ error: "Internal server error", details: err.message });
     }
   });
 };
