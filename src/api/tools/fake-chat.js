@@ -104,7 +104,7 @@ async function createFakeChat({ text, username, profile, color }) {
 
   // Tulis nama pengguna
   ctx.font = `bold 24px Poppins, Noto Color Emoji`;
-  ctx.fillStyle = (color.toLowerCase() === 'hitam' || color.toLowerCase() === 'coklat') ? '#000000' : usernameColor;
+  ctx.fillStyle = (color.toLowerCase() === 'hitam' || color.toLowerCase() === 'coklat') ? '#000000' : '#FFFFFF';
   ctx.fillText(username, chatBoxX + padding, chatBoxY + 30);
 
   // Tulis pesan
