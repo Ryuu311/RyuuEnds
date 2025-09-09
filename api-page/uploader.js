@@ -1,8 +1,7 @@
 /* ---------- Konfigurasi ---------- */
-const GITHUB_USERNAME = "Ryuu311";
-const REPO = "RyuuEnds";
-const TOKEN = "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";
-const BRANCH = "main";
+// nggak perlu simpan token lagi di frontend
+// cukup tau endpoint backend
+const BACKEND_URL = "https://files.ryuu-dev.offc.my.id/api/upload";
 /* -------------------------------- */
 
 const dropzone = document.getElementById('dropzone');
@@ -54,10 +53,11 @@ function showFileName(){
 }
 
 /* upload ke GitHub */
+/* upload ke Backend */
 async function uploadFile(){
   const file = fileInput.files[0];
   if (!file) {
-    result.innerHTML = '<p class="text-red-600 dark:text-red-400">⚠️ Pilih file dulu</p>';
+    result.innerHTML = '<p class="text-red-600 dark:text-red-400">⚠️ Pilih file dulu ya, Ryuu-kun~</p>';
     return;
   }
   if (file.size > 70 * 1024 * 1024) {
@@ -73,17 +73,17 @@ async function uploadFile(){
       const base64 = reader.result.split(',')[1] || '';
       const ext = (file.name.split('.').pop() || 'bin').replace(/[^a-z0-9]/gi,'');
       const filename = Date.now() + '_' + Math.random().toString(16).slice(2) + '.' + ext;
-      const FILE_PATH = 'src/assest/tmp/' + filename;
 
-      result.innerHTML = `<p class="text-slate-500 dark:text-slate-400">⏳ Uploading <strong>${escapeHtml(file.name)}</strong>...</p>`;
+      result.innerHTML = `<p class="text-slate-500 dark:text-slate-400">⏳ Mengupload <strong>${escapeHtml(file.name)}</strong>...</p>`;
 
-      const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO}/contents/${FILE_PATH}`;
-      const payload = { message: 'upload via frontend - ' + filename, content: base64, branch: BRANCH };
-      const headers = { 'Authorization': 'token ' + TOKEN, 'Content-Type': 'application/json' };
+      // kirim ke backend, bukan langsung ke GitHub
+      const resp = await axios.post(BACKEND_URL, {
+        filename,
+        content: base64
+      });
 
-      const resp = await axios.put(apiUrl, payload, { headers });
-      if (resp && (resp.status === 201 || resp.status === 200)) {
-        const url = 'https://api.ryuu-dev.offc.my.id/' + FILE_PATH;
+      if (resp.data.success) {
+        const url = resp.data.url;
         result.innerHTML = `
           <p class="text-green-600 dark:text-green-400 font-semibold">✅ Berhasil diupload!</p>
           <p>📂 File: <strong>${escapeHtml(file.name)}</strong></p>
@@ -92,7 +92,7 @@ async function uploadFile(){
         `;
         document.getElementById('copyBtn').addEventListener('click', () => copyToClipboard(url));
       } else {
-        result.innerHTML = '<p class="text-red-600 dark:text-red-400">❌ Upload gagal (response tidak terduga).</p>';
+        result.innerHTML = '<p class="text-red-600 dark:text-red-400">❌ Upload gagal.</p>';
       }
     } catch (err) {
       console.error(err);
