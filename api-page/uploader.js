@@ -54,52 +54,43 @@ function showFileName(){
 
 /* upload ke GitHub */
 /* upload ke Backend */
-async function uploadFile(){
+async function uploadFile() {
   const file = fileInput.files[0];
   if (!file) {
     result.innerHTML = '<p class="text-red-600 dark:text-red-400">⚠️ Pilih file dulu ya, Ryuu-kun~</p>';
     return;
   }
-  if (file.size > 70 * 1024 * 1024) {
+  if (file.size > 70 * 1024 * 1024) { // max 70MB
     result.innerHTML = '<p class="text-red-600 dark:text-red-400">❌ File terlalu besar (max 70MB)</p>';
     return;
   }
 
-  result.innerHTML = '<p class="text-slate-500 dark:text-slate-400">⏳ Membaca file...</p>';
+  result.innerHTML = `<p class="text-slate-500 dark:text-slate-400">⏳ Mengupload <strong>${escapeHtml(file.name)}</strong>...</p>`;
 
-  const reader = new FileReader();
-  reader.onloadend = async () => {
-    try {
-      const base64 = reader.result.split(',')[1] || '';
-      const ext = (file.name.split('.').pop() || 'bin').replace(/[^a-z0-9]/gi,'');
-      const filename = Date.now() + '_' + Math.random().toString(16).slice(2) + '.' + ext;
+  try {
+    const formData = new FormData();
+    formData.append("file", file); 
 
-      result.innerHTML = `<p class="text-slate-500 dark:text-slate-400">⏳ Mengupload <strong>${escapeHtml(file.name)}</strong>...</p>`;
+    const resp = await axios.post(BACKEND_URL, formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
 
-      // kirim ke backend, bukan langsung ke GitHub
-      const resp = await axios.post(BACKEND_URL, {
-        filename,
-        content: base64
-      });
-
-      if (resp.data.success) {
-        const url = resp.data.url;
-        result.innerHTML = `
-          <p class="text-green-600 dark:text-green-400 font-semibold">✅ Berhasil diupload!</p>
-          <p>📂 File: <strong>${escapeHtml(file.name)}</strong></p>
-          <button id="copyBtn" class="mt-3 px-4 py-2 rounded neon-btn text-white">Salin Link 📋</button>
-          <p class="text-slate-500 dark:text-slate-400 mt-2">${escapeHtml(url)}</p>
-        `;
-        document.getElementById('copyBtn').addEventListener('click', () => copyToClipboard(url));
-      } else {
-        result.innerHTML = '<p class="text-red-600 dark:text-red-400">❌ Upload gagal.</p>';
-      }
-    } catch (err) {
-      console.error(err);
-      result.innerHTML = '<p class="text-red-600 dark:text-red-400">❌ Error saat upload — cek console.</p>';
+    if (resp.data.success) {
+      const url = resp.data.url;
+      result.innerHTML = `
+        <p class="text-green-600 dark:text-green-400 font-semibold">✅ Berhasil diupload!</p>
+        <p>📂 File: <strong>${escapeHtml(file.name)}</strong></p>
+        <button id="copyBtn" class="mt-3 px-4 py-2 rounded neon-btn text-white">Salin Link 📋</button>
+        <p class="text-slate-500 dark:text-slate-400 mt-2">${escapeHtml(url)}</p>
+      `;
+      document.getElementById('copyBtn').addEventListener('click', () => copyToClipboard(url));
+    } else {
+      result.innerHTML = '<p class="text-red-600 dark:text-red-400">❌ Upload gagal.</p>';
     }
-  };
-  reader.readAsDataURL(file);
+  } catch (err) {
+    console.error(err);
+    result.innerHTML = '<p class="text-red-600 dark:text-red-400">❌ Error saat upload — cek console.</p>';
+  }
 }
 
 /* salin ke clipboard */
