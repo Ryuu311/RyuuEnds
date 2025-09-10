@@ -60,8 +60,8 @@ async function uploadFile() {
     result.innerHTML = '<p class="text-red-600 dark:text-red-400">⚠️ Pilih file dulu ya, Ryuu-kun~</p>';
     return;
   }
-  if (file.size > 70 * 1024 * 1024) { // max 70MB
-    result.innerHTML = '<p class="text-red-600 dark:text-red-400">❌ File terlalu besar (max 70MB)</p>';
+  if (file.size > 20 * 1024 * 1024) { // max 20MB
+    result.innerHTML = '<p class="text-red-600 dark:text-red-400">❌ File terlalu besar (max 20MB)</p>';
     return;
   }
 
