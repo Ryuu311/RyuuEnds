@@ -52,10 +52,10 @@ module.exports = function(app) {
       }
 
       const result = await downloadYouTube({  
-        ip: '193.143.69.100',  
-        port: 35678,  
+        ip: '193.143.69.126',  
+        port: 34907,  
         username: 'root',  
-        password: 'ryuu',  
+        password: 'ryuu123',  
         url  
       });  
 
