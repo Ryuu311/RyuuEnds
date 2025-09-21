@@ -10,7 +10,7 @@
   "author": "Skyzopedia",
   "license": "MIT",
   "dependencies": {
-    "@ffmpeg/ffmpeg": "0.12.15",
+    "@ffmpeg/ffmpeg": "0.10.1",
     "@napi-rs/canvas": "^0.1.43",
     "ssh2": "^1.11.0",
     "axios": "^1.6.8",
