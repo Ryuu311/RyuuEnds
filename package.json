@@ -10,7 +10,7 @@
   "author": "Skyzopedia",
   "license": "MIT",
   "dependencies": {
-    "@rynn-k/proxy-agent": "latest",
+    "@ffmpeg/ffmpeg": "0.12.15",
     "@napi-rs/canvas": "^0.1.43",
     "ssh2": "^1.11.0",
     "axios": "^1.6.8",
@@ -37,6 +37,7 @@
     "jimp": "^0.16.1",
     "jsdom": "^22.1.0",
     "moment-timezone": "^0.5.34",
+    "multer": "^2.0.2",
     "node-upload-images": "^1.0.1",
     "nodemon": "^3.1.7",
     "path": "^0.12.7",
