@@ -212,6 +212,14 @@
           }
         },
         {
+          "name": "Flux Unlimited",
+          "desc": "Generate gambar AI (NSFW core)",
+          "path": "/imagecreator/flux-unli?prompt=",
+          "params": {
+            "prompt": "Teks deskripsi gambar yang ingin dibuat (wajib)"
+            }
+          },
+        {
           "name": "Animage IMG",
           "desc": "Generate gambar AI dengan gaya anime",
           "path": "/imagecreator/animage?prompt=",
