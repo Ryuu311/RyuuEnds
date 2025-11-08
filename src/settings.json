@@ -350,6 +350,15 @@
           }
         },
         {
+          "name": "Vidfly YouTube Downloader",
+          "desc": "Download Video Dari YouTube",
+          "path": "/download/vidfly-yt?url=",
+          "status": "ready",
+          "params": {
+            "url": "Masukan URL nya"
+          }
+        },
+        {
           "name": "YouTube Downloader V2",
           "desc": "Download Video Dari YouTube Menggunakan yt-dlp, lebih premium!!",
           "path": "/download/yt-dlp?url=&apikey=",
@@ -413,8 +422,8 @@
       "items": [
         {
           "name": "Create Panel",
-          "desc": "Buat panel dengan versi node.js 21",
-          "path": "/tools/cpanel?capikey=&apikey=&ram=&disk=&name=&nestID=&egg=&location=&cpu=&domain=",
+          "desc": "Buat panel dengan versi node.js 1 - 24",
+          "path": "/tools/cpanel?capikey=&apikey=&ram=&disk=&name=&nestID=&egg=&location=&cpu=&domain=&node=",
           "status": "ready",
           "params": {
             "capikey": " apikey ptlc",
@@ -427,6 +436,7 @@
             "location": "location egg",
             "domain": "domain panel mu",
             "cpu": "penggunaan maksimal cpu server"
+            "node": "versi node.js"
           }
         },
         {
