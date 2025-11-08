@@ -423,11 +423,11 @@
         {
           "name": "Create Panel",
           "desc": "Buat panel dengan versi node.js 1 - 24",
-          "path": "/tools/cpanel?capikey=&apikey=&ram=&disk=&name=&nestID=&egg=&location=&cpu=&domain=&node=",
+          "path": "/tools/cpanel?capikey=&aapikey=&ram=&disk=&name=&nestID=&egg=&location=&cpu=&domain=&node=",
           "status": "ready",
           "params": {
             "capikey": " apikey ptlc",
-            "apikey": "apikey ptla",
+            "aapikey": "apikey ptla",
             "ram": "jumlah ram",
             "disk": "jumlah disk",
             "name": "nama user + server",
