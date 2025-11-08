@@ -435,7 +435,7 @@
             "egg": "egg server",
             "location": "location egg",
             "domain": "domain panel mu",
-            "cpu": "penggunaan maksimal cpu server"
+            "cpu": "penggunaan maksimal cpu server",
             "node": "versi node.js"
           }
         },
