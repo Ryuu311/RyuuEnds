@@ -7,18 +7,19 @@ module.exports = function(app) {
       const {
         domain,
         capikey,
-        apikey,
+        aapikey,
         ram,
         disk,
         name,
         nestID,
         egg,
         location,
-        cpu
+        cpu,
+        node
       } = req.query;
 
       if (!domain) return res.status(400).json({ status: false, message: 'Parameter domain wajib diisi' });
-      if (!capikey || !apikey) return res.status(400).json({ status: false, message: 'capikey & apikey wajib diisi' });
+      if (!capikey || !aapikey) return res.status(400).json({ status: false, message: 'capikey & aapikey wajib diisi' });
       if (!name) return res.status(400).json({ status: false, message: 'Parameter name wajib diisi' });
       if (!egg) return res.status(400).json({ status: false, message: 'Parameter egg wajib diisi' });
       if (!location) return res.status(400).json({ status: false, message: 'Parameter location wajib diisi' });
@@ -26,19 +27,20 @@ module.exports = function(app) {
       if (!disk) return res.status(400).json({ status: false, message: 'Parameter disk wajib diisi' });
       if (!ram) return res.status(400).json({ status: false, message: 'Parameter ram wajib diisi' });
       if (!cpu) return res.status(400).json({ status: false, message: 'Parameter cpu wajib diisi' });
+      if (!node) return res.status(400).json({ status: false, message: 'Parameter node wajib diisi' });
 
 
 
       const username = name;
       const password = username + "001";
-      const email = username + "@reinz-user.com";
+      const email = username + "@api.ryuu-dev.offc.my.id";
 
       const userResp = await fetch(`${domain}/api/application/users`, {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apikey}`
+          'Authorization': `Bearer ${aapikey}`
         },
         body: JSON.stringify({
           email,
@@ -61,7 +63,7 @@ module.exports = function(app) {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apikey}`
+          'Authorization': `Bearer ${aapikey}`
         }
       });
       const eggData = await eggResp.json();
@@ -71,14 +73,14 @@ module.exports = function(app) {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apikey}`
+          'Authorization': `Bearer ${aapikey}`
         },
         body: JSON.stringify({
           name,
           description: " ",
           user: userId,
           egg: parseInt(egg),
-          docker_image: "ghcr.io/parkervcp/yolks:nodejs_21",
+          docker_image: `ghcr.io/parkervcp/yolks:nodejs_${node}`,
           startup: "if [[ -d .git ]] && [[ ${AUTO_UPDATE} == \"1\" ]]; then git pull; fi; if [[ ! -z ${NODE_PACKAGES} ]]; then /usr/local/bin/npm install ${NODE_PACKAGES}; fi; if [[ ! -z ${UNNODE_PACKAGES} ]]; then /usr/local/bin/npm uninstall ${UNNODE_PACKAGES}; fi; if [ -f /home/container/package.json ]; then /usr/local/bin/npm install; fi; /usr/local/bin/${CMD_RUN}",
           environment: {
             INST: "npm",
