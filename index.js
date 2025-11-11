@@ -11,8 +11,9 @@ const PORT = process.env.PORT || 3000;
 app.enable("trust proxy");
 app.set("json spaces", 2);
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// Naikin limit jadi 70MB
+app.use(express.json({ limit: '70mb' }));
+app.use(express.urlencoded({ limit: '70mb', extended: true }));
 app.use(cors());
 app.use('/', express.static(path.join(__dirname, 'api-page')));
 app.use('/src', express.static(path.join(__dirname, 'src')));
@@ -64,6 +65,16 @@ app.get('/', (req, res) => {
 
 app.get(['/src', '/src/*', '/api-page', '/api-page/*'], (req, res) => {   res.status(403).sendFile(path.join(__dirname, 'api-page', '403.html'));  
 });
+
+app.use('/src/assest/bot', express.static(path.join(__dirname, 'src'), {  
+  setHeaders(res, filePath) {  
+    if (filePath.endsWith('.js')) {  
+      res.setHeader('Content-Type', 'application/javascript; charset=utf-8');  
+      res.setHeader('Access-Control-Allow-Origin', '*');  
+      res.setHeader('Cache-Control', 'public, max-age=3600');  
+    }  
+  }  
+}));
 
 app.use((req, res, next) => {
     const forbiddenExtensions = ['.js', '.html', '.json'];
