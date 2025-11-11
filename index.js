@@ -68,7 +68,7 @@ app.get(['/src', '/src/*', '/api-page', '/api-page/*'], (req, res) => {   res.st
 
 app.use('/src/assest/bot', express.static(path.join(__dirname, 'src'), {  
   setHeaders(res, filePath) {  
-    if (filePath.endsWith('.js')) {  
+    if (filePath.endsWith('.js') || filePath.endsWith('.mjs')) {  
       res.setHeader('Content-Type', 'application/javascript; charset=utf-8');  
       res.setHeader('Access-Control-Allow-Origin', '*');  
       res.setHeader('Cache-Control', 'public, max-age=3600');  
