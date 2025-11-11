@@ -1,8 +1,4 @@
-import fs from 'fs';
-import fetch from "node-fetch";
-import chalk from "chalk";
-
-export async function checkWhitelist() {
+export async function checkWhitelist({ fs, fetch, chalk }) {
   const url = "https://api.ryuu-dev.offc.my.id/src/assest/bot/whitelist.json";
   const nomorBot = global.nomorbot || "6281234567890";
   const ownerName = global.namaowner || "Ryuu";
