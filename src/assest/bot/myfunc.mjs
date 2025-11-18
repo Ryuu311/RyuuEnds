@@ -295,9 +295,16 @@ export const smsg = (RyuuBotz, m, store) => {
         m.chat = m.key.remoteJid
         m.fromMe = m.key.fromMe
         m.isGroup = m.chat.endsWith("@g.us")
-        m.sender = RyuuBotz.decodeJid(
+        let TheSender = RyuuBotz.decodeJid(
             (m.fromMe && RyuuBotz.user.id) || m.participant || m.key.participant || m.chat || ""
         )
+        if (m.isGroup) {
+       if (TheSender !== global.botNumber + "@s.whatsapp.net") {
+          m.sender = (await RyuuBotz.getPNFromLid(m.chat, TheSender));
+  }
+} else {
+ m.sender = TheSender
+ };
         if (m.isGroup) m.participant = RyuuBotz.decodeJid(m.key.participant) || ""
     }
     if (m.message) {
