@@ -350,9 +350,18 @@
           }
         },
         {
-          "name": "Vidfly YouTube Downloader",
+          "name": "YouTube Audio Downloader",
+          "desc": "Download Audio Dari YouTube",
+          "path": "/download/ytmp3?url=",
+          "status": "ready",
+          "params": {
+            "url": "Masukan URL nya"
+          }
+        },
+        {
+          "name": "YouTube Video Downloader",
           "desc": "Download Video Dari YouTube",
-          "path": "/download/vidfly-yt?url=",
+          "path": "/download/ytmp4?url=",
           "status": "ready",
           "params": {
             "url": "Masukan URL nya"
