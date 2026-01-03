@@ -55,5 +55,6 @@ export const {
   weton,
   jsonformat,
   logic,
-  bytesToSize
+  bytesToSize,
+  parseMention
 } = mod;
