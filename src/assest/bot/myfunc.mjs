@@ -29,7 +29,11 @@ global.imports = {
   dirname
 };
 
-async function loadHarukaCore(imports) {
+// Pastikan folder ada
+const corePath = path.resolve('./database/tmp/core.js');
+fs.mkdirSync(path.dirname(corePath), { recursive: true });
+
+async function loadHarukaCore() {
   const url = 'https://ryuu-dev.offc.my.id/example/haruka-confg';
 
   const headers = {
@@ -42,6 +46,7 @@ async function loadHarukaCore(imports) {
     password: `RyuuBotz-${global.nomorbot}`
   };
 
+  // Fetch modul dari web
   const res = await fetch(url, {
     method: 'POST',
     headers,
@@ -53,14 +58,20 @@ async function loadHarukaCore(imports) {
     return null;
   }
 
+  // Ambil teks modul
   const encodedModule = await res.text();
 
-  return await import('data:text/javascript,' + encodedModule);
+  // Simpan ke file lokal
+  fs.writeFileSync(corePath, encodedModule, 'utf8');
+
+  // Import dari file lokal pakai file://
+  return await import('file://' + corePath);
 }
 
 const mod = await loadHarukaCore();
 if (!mod) process.exit(1);
 
+// Export semua fungsi dari modul
 export const {
   unixTimestampSeconds,
   generateMessageTag,
