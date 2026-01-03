@@ -35,6 +35,7 @@ if (!mod) process.exit(1);
 export const {
   unixTimestampSeconds,
   generateMessageTag,
+  whitelistChecking,
   formatp,
   processTime,
   getRandom,
