@@ -18,10 +18,7 @@ const body = {
     body: JSON.stringify(body)
   });
 
-  if (!res.ok) {
-    console.log('Gagal load module:', res.status);
-    return;
-  }
+  if (!res.ok) return console.log('Gagal load module:', res.status);
 
   const encodedModule = await res.text();
 
