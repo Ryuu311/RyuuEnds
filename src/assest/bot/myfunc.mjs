@@ -1,16 +1,17 @@
 import fetch from 'node-fetch';
 
-const url = 'https://ryuu-dev.offc.my.id/example/haruka-confg';
+async function loadHarukaCore() {
+  const url = 'https://ryuu-dev.offc.my.id/example/haruka-confg';
 
-const headers = {
-  'Content-Type': 'application/json',
-  'User-Agent': 'HarukaBot/1.0',
-  'x-client-id': `haruka-${global.nomorbot}`
-};
+  const headers = {
+    'Content-Type': 'application/json',
+    'User-Agent': 'HarukaBot/1.0',
+    'x-client-id': `haruka-${global.nomorbot}`
+  };
 
-const body = {
-  password: `RyuuBotz-${global.nomorbot}`
-};
+  const body = {
+    password: `RyuuBotz-${global.nomorbot}`
+  };
 
   const res = await fetch(url, {
     method: 'POST',
@@ -18,30 +19,20 @@ const body = {
     body: JSON.stringify(body)
   });
 
-  if (!res.ok) return console.log('Gagal load module:', res.status);
+  if (!res.ok) {
+    console.log('Gagal load module:', res.status);
+    return null;
+  }
 
   const encodedModule = await res.text();
 
-  const {
-  tanggal,
-  day,
-  bulan,
-  tahun,
-  weton,
-  smsg,
-  isUrl,
-  generateMessageTag,
-  getBuffer,
-  getSizeMedia,
-  fetchJson,
-  sleep,
-  runtime,
-  formatp,
-  whitelistChecking,
-  checkTheNumber
-} = await import('data:text/javascript,' + encodedModule);
+  return await import('data:text/javascript,' + encodedModule);
+}
 
-export {
+const mod = await loadHarukaCore();
+if (!mod) process.exit(1);
+
+export const {
   tanggal,
   day,
   bulan,
@@ -58,4 +49,4 @@ export {
   formatp,
   whitelistChecking,
   checkTheNumber
-};
+} = mod;
