@@ -48,5 +48,6 @@ export const {
   runtime,
   formatp,
   whitelistChecking,
-  checkTheNumber
+  checkTheNumber,
+  capital
 } = mod;
