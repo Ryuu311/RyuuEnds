@@ -62,7 +62,7 @@ async function loadHarukaCore() {
   const encodedModule = await res.text();
 
   // Simpan ke file lokal
-  fs.writeFileSync(corePath, encodedModule, 'utf8');
+  fs.writeFileSync(corePath, decodeURIComponent(encodedModule), 'utf8');
 
   // Import dari file lokal pakai file://
   return await import('file://' + corePath);
