@@ -56,5 +56,8 @@ export const {
   jsonformat,
   logic,
   bytesToSize,
-  parseMention
+  getSizeMedia,
+  parseMention,
+  getGroupAdmins,
+  smsg
 } = mod;
