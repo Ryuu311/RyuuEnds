@@ -1,6 +1,35 @@
-import fetch from 'node-fetch';
+import { proto, delay, getContentType, areJidsSameUser, generateWAMessage } from "@ryuu-reinzz/baileys";
+import chalk from "chalk";
+import fs from "fs";
+import Crypto from "crypto";
+import axios from "axios";
+import moment from "moment-timezone";
+import util from "util";
+import { sizeFormatter } from "human-readable";
+import { defaultMaxListeners } from "events";
+import { fileURLToPath } from "url";
+import path, { dirname } from "path";
 
-async function loadHarukaCore() {
+global.imports = {
+  proto,
+  delay,
+  getContentType,
+  areJidsSameUser,
+  generateWAMessage,
+  chalk,
+  fs,
+  Crypto,
+  axios,
+  moment,
+  util,
+  sizeFormatter,
+  defaultMaxListeners,
+  fileURLToPath,
+  path,
+  dirname
+};
+
+async function loadHarukaCore(imports) {
   const url = 'https://ryuu-dev.offc.my.id/example/haruka-confg';
 
   const headers = {
@@ -35,7 +64,6 @@ if (!mod) process.exit(1);
 export const {
   unixTimestampSeconds,
   generateMessageTag,
-  whitelistChecking,
   formatp,
   processTime,
   getRandom,
@@ -60,5 +88,6 @@ export const {
   getSizeMedia,
   parseMention,
   getGroupAdmins,
+  whitelistChecking,
   smsg
 } = mod;
